@@ -1,0 +1,35 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Fênix Valley</title>
+  <desc id="desc">Logotipo Fênix Valley com texto laranja e azul e símbolo de fênix azul.</desc>
+  <defs>
+    <linearGradient id="orange" x1="80" y1="360" x2="790" y2="690" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff9d16"/>
+      <stop offset=".48" stop-color="#ff7a00"/>
+      <stop offset="1" stop-color="#e95500"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="300" y1="590" x2="910" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b64b6"/>
+      <stop offset=".5" stop-color="#064a94"/>
+      <stop offset="1" stop-color="#053978"/>
+    </linearGradient>
+    <linearGradient id="phoenix" x1="720" y1="130" x2="1140" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6fc4ee"/>
+      <stop offset=".38" stop-color="#1680d2"/>
+      <stop offset="1" stop-color="#06408d"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1200" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="8" stdDeviation="5" flood-color="#0f172a" flood-opacity=".25"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="1" flood-color="#ffffff" flood-opacity=".75"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="900" fill="#fff"/>
+  <g filter="url(#shadow)">
+    <path d="M104 522V360h146v38H151v35h85v38h-85v51h-47Zm170 0V360h131v38h-84v23h72v37h-72v26h89v38H274Zm38-184 34-51 35 51h-35l-13-17-13 17h-8Zm121 184V360h54l99 103V360h46v162h-52l-101-105v105h-46Zm230 0V360h47v162h-47Zm75 0 66-85-63-77h57l37 47 36-47h56l-62 78 68 84h-58l-41-53-40 53h-56Z" fill="url(#orange)" stroke="#c74600" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M306 637h56l45 103 45-103h55l-75 158h-51l-75-158Zm205 158V637h47v158h-47Zm75 0V600h47v195h-47Zm75 0V600h47v195h-47Zm206-48c-10 33-39 52-79 52-53 0-90-34-90-82 0-50 36-84 84-84 51 0 82 33 82 86 0 5-.2 10-.7 14H746c4 20 20 31 43 31 18 0 30-6 38-19l40 2Zm-42-43c-3-21-19-33-42-33-21 0-35 12-38 33h80Zm63 147 34-70-65-144h53l38 88 38-88h52l-99 214h-51Z" fill="url(#blue)" stroke="#032f67" stroke-width="6" stroke-linejoin="round"/>
+    <g stroke="#044184" stroke-width="5" stroke-linejoin="round">
+      <path d="M948 166c-82-8-165 23-213 90-26 36-37 78-32 119-31-20-45-46-38-76-26 31-30 75-10 118-20-3-37-9-51-21 8 34 31 63 65 82-21 6-41 7-61 3 33 30 79 43 126 34-23 23-42 49-56 79 43-8 82-29 111-63 23 2 44-3 63-16-12 29-14 58-4 88 16-37 40-63 72-78-9 25-12 49-7 73 12-42 40-75 83-99 28 8 51 26 65 51 19 35 17 79-4 117-25 46-77 76-142 76-62 0-114-25-151-67 26 72 92 116 174 116 91 0 168-57 190-137 14-52 2-104-30-144 29-3 55 4 79 21-13-37-40-61-80-71 20-23 46-39 77-48-61-9-111 8-151 48-35-19-73-26-111-22 17-34 20-66 10-96-17 31-39 47-67 48 6-34-6-62-36-83-34-23-77-15-100 17 24-8 45-5 61 9-29 5-51 19-66 44 38-16 72-14 102 5-18 39-50 65-96 78-59 16-112 3-155-37 63 0 114-29 154-86 51-72 123-107 214-103 58 3 107 23 147 61-33-79-96-121-182-128Z" fill="url(#phoenix)"/>
+      <path d="M818 347c25-19 53-20 84-4" stroke="#b7e4ff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M724 248c58-52 126-75 205-68 51 5 95 22 132 52" stroke="#b7e4ff" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>
