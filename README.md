@@ -24,13 +24,14 @@ economia local mais diversa, tecnologica e colaborativa.
 Instale as dependencias:
 
 ```bash
-npm install
+corepack enable
+yarn install
 ```
 
 Execute o servidor local:
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 Abra:
@@ -42,23 +43,51 @@ http://127.0.0.1:3000
 ## Scripts
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
+yarn dev
+yarn build
+yarn start
+yarn lint
+yarn preview
+yarn deploy
+yarn upload
+yarn cf-typegen
+```
+
+## Deploy Cloudflare Workers
+
+O projeto esta configurado para deploy via OpenNext Cloudflare.
+
+Arquivos principais:
+
+- `wrangler.jsonc`
+- `open-next.config.ts`
+- `.dev.vars`
+- `public/_headers`
+
+Preview no runtime da Cloudflare:
+
+```bash
+yarn preview
+```
+
+Deploy:
+
+```bash
+yarn deploy
+```
+
+Gerar tipos de bindings:
+
+```bash
+yarn cf-typegen
 ```
 
 ## Backlog
 
 O backlog inicial do produto esta em [`docs/backlog`](docs/backlog/README.md).
 
-A migracao para Yarn esta planejada na issue:
-
-```text
-[Epic] Fundacao tecnica e migracao para Yarn
-```
-
-Enquanto a migracao nao for concluida, o projeto usa `package-lock.json`.
+O projeto usa Yarn Berry (`packageManager` fixado no `package.json`) com
+`nodeLinker: node-modules` para compatibilidade com Next.js, OpenNext e Wrangler.
 
 ## Licenca
 

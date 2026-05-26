@@ -1,6 +1,15 @@
 .next/
+.open-next/
+.wrangler/
 node_modules/
 .playwright-mcp/
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/patches
+!.yarn/sdks
+!.yarn/versions
 
 out/
 dist/

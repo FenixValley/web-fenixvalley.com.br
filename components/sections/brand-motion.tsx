@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { motion } from "motion/react";
@@ -32,10 +33,11 @@ export function BrandMotion() {
 
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[430px]" aria-hidden="true">
-      <div ref={pulseRef} className="absolute inset-[12%] rounded-full border border-blue-300 bg-white/55" />
+      <div className="absolute inset-[8%] rounded-full bg-sky-400/10 blur-3xl" />
+      <div ref={pulseRef} className="absolute inset-[12%] rounded-full border border-sky-300/25 bg-slate-950/40" />
       <div
         ref={ringRef}
-        className="absolute inset-[6%] rounded-full border-2 border-dashed border-orange-300/80"
+        className="absolute inset-[6%] rounded-full border-2 border-dashed border-orange-300/70"
       />
       <motion.div
         initial={{ y: 18, opacity: 0 }}
@@ -43,7 +45,7 @@ export function BrandMotion() {
         transition={{ duration: 0.65, ease: "easeOut" }}
         className="absolute left-8 top-12"
       >
-        <Badge variant="secondary">Betim Tech</Badge>
+        <Badge variant="secondary" className="border border-white/10">Betim Tech</Badge>
       </motion.div>
       <motion.div
         initial={{ y: -12, opacity: 0 }}
@@ -51,7 +53,7 @@ export function BrandMotion() {
         transition={{ delay: 0.18, duration: 0.65, ease: "easeOut" }}
         className="absolute bottom-16 right-4"
       >
-        <Badge variant="accent">Nova economia</Badge>
+        <Badge variant="accent" className="border border-white/10">Nova economia</Badge>
       </motion.div>
       <motion.div
         initial={{ scale: 0.92, opacity: 0 }}
@@ -59,8 +61,15 @@ export function BrandMotion() {
         transition={{ delay: 0.08, duration: 0.75, ease: "easeOut" }}
         className="absolute inset-0 flex items-center justify-center"
       >
-        <div className="flex h-44 w-44 items-center justify-center rounded-full bg-secondary text-7xl font-black text-white shadow-crisp sm:h-56 sm:w-56">
-          FV
+        <div className="flex h-52 w-52 items-center justify-center rounded-full bg-white/92 p-5 shadow-crisp ring-1 ring-sky-200/40 backdrop-blur sm:h-64 sm:w-64">
+          <Image
+            src="/logo-fenix-valley.png"
+            alt=""
+            width={240}
+            height={240}
+            priority
+            className="h-auto w-full"
+          />
         </div>
       </motion.div>
     </div>

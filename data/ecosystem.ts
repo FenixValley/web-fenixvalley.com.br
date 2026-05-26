@@ -34,7 +34,48 @@ export const pillars = [
 ];
 
 export const metrics = [
-  { value: "1", label: "cidade em foco", detail: "Betim como laboratório de inovação" },
-  { value: "6", label: "frentes de ação", detail: "talento, startups, capital, pesquisa, empresas e comunidade" },
-  { value: "100%", label: "colaboração", detail: "respeito, propósito e construção coletiva" }
+  { value: "Mapa", label: "do ecossistema", detail: "base viva de atores e conexoes" },
+  { value: "Agenda", label: "de oportunidades", detail: "eventos, editais, desafios e chamadas" },
+  { value: "Rede", label: "de colaboracao", detail: "startups, empresas, universidades e capital" }
+];
+
+export const programs = [
+  {
+    title: "Pre-aceleracao",
+    description: "Da ideia ao problema validado, com pesquisa, modelo de negocio, MVP e pitch inicial.",
+    tag: "Ideacao"
+  },
+  {
+    title: "Inovacao aberta",
+    description: "Empresas publicam desafios reais e conectam startups, pesquisadores e talentos.",
+    tag: "Empresas"
+  },
+  {
+    title: "Residencia tecnologica",
+    description: "Estudantes e profissionais aplicam tecnologia em projetos praticos da cidade.",
+    tag: "Talentos"
+  }
+];
+
+export const ecosystemActors = [
+  { name: "Startups", count: "cadastro aberto", x: "18%", y: "28%" },
+  { name: "Universidades", count: "parcerias", x: "68%", y: "22%" },
+  { name: "Empresas", count: "desafios", x: "76%", y: "62%" },
+  { name: "Mentores", count: "curadoria", x: "34%", y: "70%" },
+  { name: "Investidores", count: "conexoes", x: "48%", y: "43%" }
+];
+
+export const newsItems = [
+  {
+    title: "Mapa Fenix Valley",
+    description: "Primeira base para cadastrar startups, instituicoes, empresas, mentores e espacos."
+  },
+  {
+    title: "Agenda do ecossistema",
+    description: "Meetups, mentorias e programas em uma trilha visivel para a comunidade."
+  },
+  {
+    title: "Codigo de colaboracao",
+    description: "Respeito, foco em Betim e divulgacoes alinhadas ao proposito do movimento."
+  }
 ];

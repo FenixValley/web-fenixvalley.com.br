@@ -6,7 +6,7 @@ export function SiteFooter() {
     <footer className="bg-slate-950 py-10 text-white">
       <div className="section-shell flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-3">
-          <Image src="/logo-fenix-valley.svg" alt="Fênix Valley" width={180} height={135} className="h-16 w-auto rounded bg-white p-1" />
+          <Image src="/logo-fenix-valley.png" alt="Fênix Valley" width={180} height={180} className="h-16 w-auto" />
           <p className="max-w-lg text-sm leading-6 text-slate-300">
             O empreendedorismo pode mudar vidas, transformar cidades e mudar o mundo.
           </p>
