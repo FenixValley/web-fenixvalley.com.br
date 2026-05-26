@@ -1,4 +1,17 @@
-import { Building2, GraduationCap, Handshake, Lightbulb, Rocket, Sprout } from "lucide-react";
+import {
+  BadgeDollarSign,
+  BookOpen,
+  Building2,
+  Factory,
+  GraduationCap,
+  Handshake,
+  Lightbulb,
+  MapPinned,
+  Newspaper,
+  Rocket,
+  Sprout,
+  UsersRound
+} from "lucide-react";
 
 export const pillars = [
   {
@@ -34,9 +47,9 @@ export const pillars = [
 ];
 
 export const metrics = [
-  { value: "Mapa", label: "do ecossistema", detail: "base viva de atores e conexoes" },
+  { value: "Mapa", label: "do ecossistema", detail: "base viva de atores e conexões" },
   { value: "Agenda", label: "de oportunidades", detail: "eventos, editais, desafios e chamadas" },
-  { value: "Rede", label: "de colaboracao", detail: "startups, empresas, universidades e capital" }
+  { value: "Rede", label: "de colaboração", detail: "startups, empresas, universidades e capital" }
 ];
 
 export const programs = [
@@ -62,20 +75,96 @@ export const ecosystemActors = [
   { name: "Universidades", count: "parcerias", x: "68%", y: "22%" },
   { name: "Empresas", count: "desafios", x: "76%", y: "62%" },
   { name: "Mentores", count: "curadoria", x: "34%", y: "70%" },
-  { name: "Investidores", count: "conexoes", x: "48%", y: "43%" }
+  { name: "Investidores", count: "conexões", x: "48%", y: "43%" }
 ];
 
 export const newsItems = [
   {
-    title: "Mapa Fenix Valley",
-    description: "Primeira base para cadastrar startups, instituicoes, empresas, mentores e espacos."
+    title: "Mapa Fênix Valley",
+    description: "Primeira base para cadastrar startups, instituições, empresas, mentores e espaços."
   },
   {
     title: "Agenda do ecossistema",
     description: "Meetups, mentorias e programas em uma trilha visivel para a comunidade."
   },
   {
-    title: "Codigo de colaboracao",
-    description: "Respeito, foco em Betim e divulgacoes alinhadas ao proposito do movimento."
+    title: "Código de colaboração",
+    description: "Respeito, foco em Betim e divulgações alinhadas ao propósito do movimento."
+  }
+];
+
+export const audienceJourneys = [
+  {
+    title: "Quero empreender",
+    description: "Valide uma ideia, encontre mentores, monte time e publique sua startup no mapa.",
+    cta: "Cadastrar startup",
+    href: "#participar",
+    icon: Rocket
+  },
+  {
+    title: "Quero inovar na empresa",
+    description: "Publique desafios, encontre solucoes locais e conecte pesquisadores e startups.",
+    cta: "Divulgar desafio",
+    href: "#participar",
+    icon: Factory
+  },
+  {
+    title: "Quero formar talentos",
+    description: "Conecte cursos, estudantes, laboratórios e projetos aplicados ao mercado.",
+    cta: "Conectar instituição",
+    href: "#participar",
+    icon: GraduationCap
+  },
+  {
+    title: "Quero apoiar",
+    description: "Atue como mentor, investidor, parceiro institucional ou patrocinador de programas.",
+    cta: "Ser parceiro",
+    href: "#participar",
+    icon: Handshake
+  }
+];
+
+export const ecosystemMapLayers = [
+  {
+    title: "Base de atores",
+    description: "Startups, empresas, universidades, mentores, investidores, espaços e comunidades.",
+    icon: MapPinned
+  },
+  {
+    title: "Sinais de oportunidade",
+    description: "Eventos, editais, desafios, chamadas, vagas, mentorias e programas em andamento.",
+    icon: BadgeDollarSign
+  },
+  {
+    title: "Conexões recomendadas",
+    description: "Matching entre problemas, talentos, capital, parceiros e soluções para Betim.",
+    icon: UsersRound
+  }
+];
+
+export const partnerBands = [
+  "Parceiros fundadores",
+  "Universidades",
+  "Empresas mantenedoras",
+  "Investidores",
+  "Comunidades",
+  "Poder público"
+];
+
+export const contentTracks = [
+  {
+    title: "Noticias do ecossistema",
+    description: "Novos atores, eventos, resultados de programas e chamadas relevantes para Betim.",
+    icon: Newspaper
+  },
+  {
+    title: "Guias e trilhas",
+    description: "Materiais para tirar ideias do papel, validar MVP, vender, captar e inovar.",
+    icon: BookOpen
+  },
+  {
+    title: "Cases e impacto",
+    description: "Histórias de empreendedores, empresas, estudantes e projetos aplicados na cidade.",
+    icon: Sprout
   }
 ];

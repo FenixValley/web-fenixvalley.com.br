@@ -1,49 +1,49 @@
+import Link from "next/link";
+import { ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { programs } from "@/data/ecosystem";
+
+const programSteps = ["Mapear", "Validar", "Conectar", "Acelerar"];
 
 export function ProgramsSection() {
   return (
-    <section id="programas" className="py-16 sm:py-20">
-      <div className="section-shell space-y-10">
-
-        <div className="max-w-3xl space-y-4">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">
-            Programas
-          </p>
-          <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-            Trilhas para quem quer criar, crescer e impactar Betim.
+    <section id="programas" className="warm-band py-16 sm:py-20">
+      <div className="section-shell grid gap-10 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+        <div className="space-y-6">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">Programas</p>
+          <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
+            Uma esteira para transformar intenção em projeto, projeto em negócio e negócio em impacto.
           </h2>
-          <p className="text-lg leading-8 text-muted-foreground">
-            Do problema à solução validada — estruturas abertas para diferentes
-            momentos da jornada empreendedora.
+          <p className="text-lg leading-8 text-slate-600">
+            Os programas dão ritmo ao ecossistema: desafios corporativos, formação de talentos,
+            pré-aceleração e conexões com mercado, capital e instituições.
           </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {programSteps.map((step) => (
+              <div key={step} className="rounded-lg border border-slate-200 bg-white p-4 text-center shadow-sm">
+                <CheckCircle2 className="mx-auto mb-2 h-5 w-5 text-accent" />
+                <p className="text-sm font-bold text-slate-950">{step}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          {programs.map((program, index) => (
-            <article
-              key={program.title}
-              className="surface-panel rounded-lg p-6 flex flex-col gap-5"
-            >
-              <div className="flex items-start justify-between">
-                <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+        <div className="grid gap-4">
+          {programs.map((program) => (
+            <article key={program.title} className="rounded-lg border border-slate-200 bg-white p-6 shadow-crisp">
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <Badge variant="outline" className="border-orange-200 bg-orange-50 text-orange-700">
                   {program.tag}
-                </span>
-                <span className="font-[var(--font-space)] text-3xl font-black text-white/10 select-none">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
+                </Badge>
+                <Link href="#participar" className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950" aria-label={`Participar de ${program.title}`}>
+                  <ArrowUpRight className="h-5 w-5" />
+                </Link>
               </div>
-              <div className="space-y-2">
-                <h3 className="font-[var(--font-space)] text-lg font-bold text-foreground">
-                  {program.title}
-                </h3>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  {program.description}
-                </p>
-              </div>
+              <h3 className="font-[var(--font-space)] text-2xl font-black text-slate-950">{program.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-slate-600">{program.description}</p>
             </article>
           ))}
         </div>
-
       </div>
     </section>
   );
