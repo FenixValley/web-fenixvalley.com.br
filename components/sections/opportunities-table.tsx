@@ -44,6 +44,7 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
     initialData
   });
 
+
   const columns = useMemo<ColumnDef<Opportunity>[]>(
     () => [
       {

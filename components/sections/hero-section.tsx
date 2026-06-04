@@ -1,10 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, CalendarPlus, MapPinned, MessageCircle, Play, Rocket } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { metrics } from "@/data/ecosystem";
 import { BrandMotion } from "./brand-motion";
+
 
 export function HeroSection() {
   return (
@@ -12,18 +8,7 @@ export function HeroSection() {
       <div className="brand-grid absolute inset-x-0 top-0 h-[620px]" aria-hidden="true" />
       <div className="section-shell relative grid items-center gap-10 lg:grid-cols-[1.08fr_.92fr]">
         <div className="space-y-8">
-          <Badge variant="outline" className="border-white/15 bg-white/8 text-slate-100">
-            Betim, Tecnologia e Empreendedorismo
-          </Badge>
           <div className="space-y-5">
-            <Image
-              src="/logo-fenix-valley.png"
-              alt="Fênix Valley"
-              width={560}
-              height={560}
-              priority
-              className="h-auto w-full max-w-[390px]"
-            />
             <h1 className="max-w-4xl font-[var(--font-space)] text-4xl font-black leading-tight tracking-normal text-balance text-white sm:text-5xl lg:text-6xl">
               Inovação que transforma. Tecnologia que conecta. Empreendedorismo que impulsiona Betim.
             </h1>
@@ -33,38 +18,7 @@ export function HeroSection() {
               sustentável para Betim.
             </p>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            <Button asChild size="lg">
-              <Link href="#ecossistema">
-                <MapPinned className="h-5 w-5" />
-                Ecossistema
-              </Link>
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <Link href="https://chat.whatsapp.com/EtCfWvncoQZ6tx7I8obFzX" target="_blank" rel="noreferrer">
-                <MessageCircle className="h-5 w-5" />
-                Faça Parte
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white/15 bg-white/8 text-white hover:bg-white/14">
-              <Link href="#participar">
-                <Rocket className="h-5 w-5" />
-                Startup
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white/15 bg-white/8 text-white hover:bg-white/14">
-              <Link href="#oportunidades">
-                <CalendarPlus className="h-5 w-5" />
-                Evento
-              </Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg" className="text-slate-100 hover:bg-white/10 hover:text-white">
-              <Link href="#sobre">
-                <Play className="h-5 w-5" />
-                Vídeo
-              </Link>
-            </Button>
-          </div>
+
           <div className="grid gap-3 sm:grid-cols-3">
             {metrics.map((metric) => (
               <div key={metric.label} className="surface-panel rounded-lg p-4">
