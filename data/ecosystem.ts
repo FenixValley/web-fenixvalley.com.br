@@ -41,18 +41,18 @@ export const metrics = [
 
 export const programs = [
   {
-    title: "Pre-aceleracao",
-    description: "Da ideia ao problema validado, com pesquisa, modelo de negocio, MVP e pitch inicial.",
-    tag: "Ideacao"
+    title: "Pré-aceleração",
+    description: "Da ideia ao problema validado, com pesquisa, modelo de negócio, MVP e pitch inicial.",
+    tag: "Ideação"
   },
   {
-    title: "Inovacao aberta",
+    title: "Inovação aberta",
     description: "Empresas publicam desafios reais e conectam startups, pesquisadores e talentos.",
     tag: "Empresas"
   },
   {
-    title: "Residencia tecnologica",
-    description: "Estudantes e profissionais aplicam tecnologia em projetos praticos da cidade.",
+    title: "Residência tecnológica",
+    description: "Estudantes e profissionais aplicam tecnologia em projetos práticos da cidade.",
     tag: "Talentos"
   }
 ];
