@@ -50,7 +50,7 @@ function StageBadge({ stage }: { stage: string }) {
 
 function TypeBadge({ type }: { type: string }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-orange-500/30 bg-orange-500/10 px-2.5 py-0.5 text-xs font-semibold text-orange-400">
+    <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
       {type}
     </span>
   );
@@ -71,43 +71,43 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
         accessorKey: "title",
         header: ({ column }) => (
           <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-slate-300 hover:text-white">
+            className="text-muted-foreground hover:text-foreground">
             Oportunidade
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         ),
-        cell: ({ row }) => <span className="font-semibold text-white">{row.original.title}</span>
+        cell: ({ row }) => <span className="font-semibold text-foreground">{row.original.title}</span>
       },
       {
         accessorKey: "type",
-        header: () => <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Tipo</span>,
+        header: () => <span className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Tipo</span>,
         cell: ({ row }) => <TypeBadge type={row.original.type} />
       },
       {
         accessorKey: "stage",
-        header: () => <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Status</span>,
+        header: () => <span className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Status</span>,
         cell: ({ row }) => <StageBadge stage={row.original.stage} />
       },
       {
         accessorKey: "audience",
-        header: () => <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Público</span>,
-        cell: ({ row }) => <span className="text-slate-300 text-sm">{row.original.audience}</span>
+        header: () => <span className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Público</span>,
+        cell: ({ row }) => <span className="text-muted-foreground text-sm">{row.original.audience}</span>
       },
       {
         accessorKey: "date",
         header: ({ column }) => (
           <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-slate-300 hover:text-white">
+            className="text-muted-foreground hover:text-foreground">
             Data
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         ),
-        cell: ({ row }) => <span className="text-slate-300 text-sm">{formatDate(row.original.date)}</span>
+        cell: ({ row }) => <span className="text-muted-foreground text-sm">{formatDate(row.original.date)}</span>
       },
       {
         accessorKey: "owner",
-        header: () => <span className="text-slate-400 text-xs font-bold uppercase tracking-wider">Responsável</span>,
-        cell: ({ row }) => <span className="text-slate-300 text-sm">{row.original.owner}</span>
+        header: () => <span className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Responsável</span>,
+        cell: ({ row }) => <span className="text-muted-foreground text-sm">{row.original.owner}</span>
       }
     ],
     []
@@ -128,25 +128,25 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
     <div className="space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />
+          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
             placeholder="Buscar por tema, público ou status"
-            className="pl-9 bg-slate-900/60 border-white/10 text-white placeholder:text-slate-500 focus:border-orange-500/40"
+            className="pl-9 bg-card/60 border-border text-foreground placeholder:text-muted-foreground focus:border-primary/40"
           />
         </div>
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-muted-foreground">
           {isFetching ? "Atualizando..." : `${table.getRowModel().rows.length} itens`}
         </span>
       </div>
-      <div className="rounded-xl border border-white/10 bg-slate-900/60 overflow-hidden">
+      <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-white/10 hover:bg-transparent">
+              <TableRow key={headerGroup.id} className="border-border hover:bg-transparent">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="border-white/10">
+                  <TableHead key={header.id} className="border-border">
                     {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
@@ -155,7 +155,7 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} className="border-white/10 hover:bg-white/5 transition-colors">
+              <TableRow key={row.id} className="border-border hover:bg-muted/5 transition-colors">
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

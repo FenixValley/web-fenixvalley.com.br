@@ -1,5 +1,3 @@
-"use client";
-
 import { pillars } from "@/data/ecosystem";
 
 export function EcosystemSection() {
