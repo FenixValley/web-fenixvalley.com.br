@@ -25,10 +25,10 @@ const footerGroups = [
   {
     title: "Programas",
     links: [
-      { label: "Pré-aceleração", href: "/#programas" },
-      { label: "Inovação aberta", href: "/#programas" },
-      { label: "Residência tecnológica", href: "/#programas" },
-      { label: "Formação de talentos", href: "/#programas" }
+      { label: "Todos os programas", href: "/programas" },
+      { label: "Pré-aceleração", href: "/programas/pre-aceleracao" },
+      { label: "Inovação aberta", href: "/programas/inovacao-aberta" },
+      { label: "Residência tecnológica", href: "/programas/residencia-tecnologica" }
     ]
   },
   {

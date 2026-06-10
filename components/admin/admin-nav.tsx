@@ -8,6 +8,7 @@ const links = [
   { href: "/admin", label: "Visão geral" },
   { href: "/admin/voluntarios", label: "Voluntários" },
   { href: "/admin/atores", label: "Atores do mapa" },
+  { href: "/admin/programas", label: "Programas" },
   { href: "/admin/oportunidades", label: "Oportunidades" },
   { href: "/admin/leads", label: "Leads" }
 ];

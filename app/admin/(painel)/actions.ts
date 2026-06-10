@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { actors, auditLogs, opportunities, volunteers } from "@/db/schema";
+import { actors, auditLogs, opportunities, programApplications, programSettings, volunteers } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { actorSchema, opportunitySchema } from "@/lib/schemas";
@@ -42,6 +42,26 @@ export async function setOpportunityStatus(id: number, status: "published" | "ar
   await logAudit(adminEmail, status, "opportunity", id);
   revalidatePath("/admin/oportunidades");
   revalidatePath("/admin");
+}
+
+export async function setProgramInscriptions(slug: string, open: boolean) {
+  const adminEmail = await requireAdmin();
+  await getDb()
+    .insert(programSettings)
+    .values({ slug, inscriptionsOpen: open ? 1 : 0 })
+    .onConflictDoUpdate({
+      target: programSettings.slug,
+      set: { inscriptionsOpen: open ? 1 : 0 }
+    });
+  await logAudit(adminEmail, open ? "open-inscriptions" : "close-inscriptions", "program", null, slug);
+  revalidatePath("/admin/programas");
+}
+
+export async function setProgramApplicationStatus(id: number, status: "approved" | "rejected") {
+  const adminEmail = await requireAdmin();
+  await getDb().update(programApplications).set({ status }).where(eq(programApplications.id, id));
+  await logAudit(adminEmail, status, "program-application", id);
+  revalidatePath("/admin/programas");
 }
 
 export type FormState = { error?: string };

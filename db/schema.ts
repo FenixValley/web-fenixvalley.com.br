@@ -48,6 +48,22 @@ export const opportunities = sqliteTable("opportunities", {
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
+export const programSettings = sqliteTable("program_settings", {
+  slug: text("slug").primaryKey(),
+  inscriptionsOpen: integer("inscriptions_open").notNull().default(0)
+});
+
+export const programApplications = sqliteTable("program_applications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  programSlug: text("program_slug").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  organization: text("organization"),
+  motivation: text("motivation").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
 export const auditLogs = sqliteTable("audit_logs", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   actorEmail: text("actor_email").notNull(),

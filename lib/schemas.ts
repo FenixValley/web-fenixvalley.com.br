@@ -113,3 +113,14 @@ export const opportunitySchema = z.object({
 });
 
 export type OpportunityInput = z.infer<typeof opportunitySchema>;
+
+export const programApplicationSchema = z.object({
+  programSlug: z.string().min(2),
+  name: z.string().min(3, "Informe seu nome completo."),
+  email: z.string().email("Informe um e-mail válido."),
+  organization: z.string().optional().or(z.literal("")),
+  motivation: z.string().min(10, "Conte em uma frase por que quer participar."),
+  consent: z.literal(true, { message: "É preciso autorizar o uso dos dados." })
+});
+
+export type ProgramApplicationInput = z.infer<typeof programApplicationSchema>;

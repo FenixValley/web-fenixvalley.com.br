@@ -56,17 +56,20 @@ export const programs = [
   {
     title: "Pré-aceleração",
     description: "Da ideia ao problema validado, com pesquisa, modelo de negócio, MVP e pitch inicial.",
-    tag: "Ideação"
+    tag: "Ideação",
+    href: "/programas/pre-aceleracao"
   },
   {
     title: "Inovação aberta",
     description: "Empresas publicam desafios reais e conectam startups, pesquisadores e talentos.",
-    tag: "Empresas"
+    tag: "Empresas",
+    href: "/programas/inovacao-aberta"
   },
   {
     title: "Residência tecnológica",
     description: "Estudantes e profissionais aplicam tecnologia em projetos práticos da cidade.",
-    tag: "Talentos"
+    tag: "Talentos",
+    href: "/programas/residencia-tecnologica"
   }
 ];
 

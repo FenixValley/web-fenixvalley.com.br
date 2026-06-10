@@ -37,7 +37,7 @@ export function ProgramsSection() {
                   <Badge variant="outline" className="border-orange-200 bg-orange-50 text-orange-700">
                     {program.tag}
                   </Badge>
-                  <Link href="#participar" className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950" aria-label={`Participar de ${program.title}`}>
+                  <Link href={program.href} className="rounded-md p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950" aria-label={`Conhecer ${program.title}`}>
                     <ArrowUpRight className="h-5 w-5" />
                   </Link>
                 </div>

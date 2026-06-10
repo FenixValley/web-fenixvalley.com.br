@@ -21,8 +21,8 @@ const navItems = [
     label: "Ecossistema",
     links: [
       { href: "/mapa", label: "Mapa do ecossistema" },
-      { href: "/#ecossistema", label: "Pilares e mapa vivo" },
-      { href: "/#participar", label: "Startups e empresas" }
+      { href: "/programas", label: "Programas" },
+      { href: "/#ecossistema", label: "Pilares e mapa vivo" }
     ]
   },
   {
