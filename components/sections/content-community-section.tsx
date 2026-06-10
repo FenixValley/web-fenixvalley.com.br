@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FadeIn } from "@/components/ui/motion";
 import { contentTracks, newsItems, partnerBands } from "@/data/ecosystem";
 
 export function ContentCommunitySection() {
@@ -8,7 +9,7 @@ export function ContentCommunitySection() {
     <section className="light-band border-y border-slate-200 py-16 sm:py-20">
       <div className="section-shell space-y-12">
         <div className="grid gap-8 lg:grid-cols-[.85fr_1.15fr]">
-          <div className="space-y-4">
+          <FadeIn className="space-y-4">
             <p className="text-sm font-bold uppercase tracking-[0.16em] text-secondary">Conteúdo e comunidade</p>
             <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight text-slate-950 sm:text-4xl">
               Um portal para acompanhar o que acontece e aprender com quem está construindo.
@@ -17,7 +18,7 @@ export function ContentCommunitySection() {
               Notícias, guias, histórias e trilhas dão continuidade à comunidade entre eventos,
               programas e conexões presenciais.
             </p>
-          </div>
+          </FadeIn>
 
           <div className="grid gap-4 md:grid-cols-3">
             {contentTracks.map((track) => {

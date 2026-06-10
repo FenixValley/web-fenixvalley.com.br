@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { audienceJourneys } from "@/data/ecosystem";
+import { Stagger, StaggerItem } from "@/components/ui/motion";
 
 export function AudienceSection() {
   return (
@@ -19,27 +20,29 @@ export function AudienceSection() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Stagger className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {audienceJourneys.map((journey) => {
             const Icon = journey.icon;
             return (
-              <article key={journey.title} className="surface-panel group rounded-lg p-5 transition-transform hover:-translate-y-1">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-white/10 text-orange-300">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-[var(--font-space)] text-xl font-bold text-white">{journey.title}</h3>
-                <p className="mt-3 min-h-24 text-sm leading-6 text-slate-300">{journey.description}</p>
-                <Link
-                  href={journey.href}
-                  className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
-                >
-                  {journey.cta}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </article>
+              <StaggerItem key={journey.title} className="h-full">
+                <article className="surface-panel group h-full rounded-lg p-5 transition-transform hover:-translate-y-1">
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-white/10 text-orange-300">
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <h3 className="font-[var(--font-space)] text-xl font-bold text-white">{journey.title}</h3>
+                  <p className="mt-3 min-h-24 text-sm leading-6 text-slate-300">{journey.description}</p>
+                  <Link
+                    href={journey.href}
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
+                  >
+                    {journey.cta}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </article>
+              </StaggerItem>
             );
           })}
-        </div>
+        </Stagger>
       </div>
     </section>
   );
