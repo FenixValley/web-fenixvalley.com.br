@@ -8,46 +8,61 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const navItems = [
   {
-    href: "/#sobre",
+    href: "/sobre",
     label: "Sobre",
     links: [
-      { href: "/#sobre", label: "História e propósito" },
-      { href: "/#ecossistema", label: "Cinco pilares" },
-      { href: "/#participar", label: "Código de colaboração" }
+      { href: "/sobre", label: "Quem somos" },
+      { href: "/comunidade", label: "Comunidade" },
+      { href: "/impacto", label: "Impacto" },
+      { href: "/contato", label: "Contato" }
     ]
   },
   {
-    href: "/mapa",
+    href: "/ecossistema",
     label: "Ecossistema",
     links: [
       { href: "/mapa", label: "Mapa do ecossistema" },
-      { href: "/programas", label: "Programas" },
-      { href: "/#ecossistema", label: "Pilares e mapa vivo" }
+      { href: "/startups", label: "Startups" },
+      { href: "/empresas", label: "Empresas" },
+      { href: "/universidades", label: "Universidades" },
+      { href: "/mentores", label: "Mentores" },
+      { href: "/espacos", label: "Espaços" }
     ]
   },
   {
-    href: "/#oportunidades",
+    href: "/programas",
+    label: "Programas",
+    links: [
+      { href: "/programas", label: "Todos os programas" },
+      { href: "/programas/pre-aceleracao", label: "Pré-aceleração" },
+      { href: "/programas/inovacao-aberta", label: "Inovação aberta" },
+      { href: "/programas/programas-estudantis", label: "Para estudantes" }
+    ]
+  },
+  {
+    href: "/oportunidades",
     label: "Oportunidades",
     links: [
-      { href: "/#oportunidades", label: "Agenda aberta" },
-      { href: "/#oportunidades", label: "Editais e chamadas" },
-      { href: "/#participar", label: "Divulgar evento" }
+      { href: "/oportunidades", label: "Agenda aberta" },
+      { href: "/eventos", label: "Eventos" },
+      { href: "/conteudos", label: "Conteúdos" }
     ]
   },
   {
     href: "/#participar",
     label: "Faça Parte",
     links: [
-      { href: "/#participar", label: "Cadastrar perfil" },
+      { href: "/faca-parte", label: "Cadastrar perfil" },
       { href: "/mapa", label: "Cadastrar organização no mapa" },
-      { href: "/voluntarie-se", label: "Ser voluntário(a)" }
+      { href: "/voluntarie-se", label: "Ser voluntário(a)" },
+      { href: "/seja-parceiro", label: "Seja um parceiro" }
     ]
   }
 ];
 
 const quickActions = [
   { href: "/mapa", label: "Mapa do ecossistema" },
-  { href: "/#oportunidades", label: "Divulgar evento" },
+  { href: "/eventos", label: "Divulgar evento" },
   { href: "/voluntarie-se", label: "Ser voluntário(a)" }
 ];
 

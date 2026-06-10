@@ -6,20 +6,20 @@ const footerGroups = [
   {
     title: "Institucional",
     links: [
-      { label: "Sobre nós", href: "/#sobre" },
-      { label: "Missão e visão", href: "/#sobre" },
-      { label: "Governança", href: "/#participar" },
-      { label: "Impacto", href: "/#ecossistema" }
+      { label: "Sobre nós", href: "/sobre" },
+      { label: "Comunidade", href: "/comunidade" },
+      { label: "Impacto", href: "/impacto" },
+      { label: "Contato", href: "/contato" }
     ]
   },
   {
     title: "Ecossistema",
     links: [
       { label: "Mapa do ecossistema", href: "/mapa" },
-      { label: "Startups", href: "/mapa" },
-      { label: "Empresas", href: "/mapa" },
-      { label: "Universidades", href: "/mapa" },
-      { label: "Voluntariado", href: "/voluntarie-se" }
+      { label: "Startups", href: "/startups" },
+      { label: "Empresas", href: "/empresas" },
+      { label: "Universidades", href: "/universidades" },
+      { label: "Espaços", href: "/espacos" }
     ]
   },
   {
@@ -34,10 +34,10 @@ const footerGroups = [
   {
     title: "Oportunidades",
     links: [
-      { label: "Eventos", href: "/#oportunidades" },
-      { label: "Editais", href: "/#oportunidades" },
-      { label: "Desafios corporativos", href: "/#oportunidades" },
-      { label: "Divulgar oportunidade", href: "/#participar" }
+      { label: "Agenda aberta", href: "/oportunidades" },
+      { label: "Eventos", href: "/eventos" },
+      { label: "Conteúdos", href: "/conteudos" },
+      { label: "Seja um parceiro", href: "/seja-parceiro" }
     ]
   }
 ];
