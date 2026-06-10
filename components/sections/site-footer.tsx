@@ -6,43 +6,47 @@ const footerGroups = [
   {
     title: "Institucional",
     links: [
-      { label: "Sobre nós", href: "#sobre" },
-      { label: "Missão e visão", href: "#sobre" },
-      { label: "Governança", href: "#participar" },
-      { label: "Impacto", href: "#ecossistema" }
+      { label: "Sobre nós", href: "/#sobre" },
+      { label: "Missão e visão", href: "/#sobre" },
+      { label: "Governança", href: "/#participar" },
+      { label: "Impacto", href: "/#ecossistema" }
     ]
   },
   {
     title: "Ecossistema",
     links: [
-      { label: "Mapa do ecossistema", href: "#ecossistema" },
-      { label: "Startups", href: "#participar" },
-      { label: "Empresas", href: "#participar" },
-      { label: "Universidades", href: "#participar" },
-      { label: "Mentores", href: "#participar" }
+      { label: "Mapa do ecossistema", href: "/mapa" },
+      { label: "Startups", href: "/mapa" },
+      { label: "Empresas", href: "/mapa" },
+      { label: "Universidades", href: "/mapa" },
+      { label: "Voluntariado", href: "/voluntarie-se" }
     ]
   },
   {
     title: "Programas",
     links: [
-      { label: "Pré-aceleração", href: "#ecossistema" },
-      { label: "Inovação aberta", href: "#oportunidades" },
-      { label: "Residência tecnológica", href: "#participar" },
-      { label: "Formação de talentos", href: "#participar" }
+      { label: "Pré-aceleração", href: "/#programas" },
+      { label: "Inovação aberta", href: "/#programas" },
+      { label: "Residência tecnológica", href: "/#programas" },
+      { label: "Formação de talentos", href: "/#programas" }
     ]
   },
   {
     title: "Oportunidades",
     links: [
-      { label: "Eventos", href: "#oportunidades" },
-      { label: "Editais", href: "#oportunidades" },
-      { label: "Desafios corporativos", href: "#oportunidades" },
-      { label: "Divulgar oportunidade", href: "#participar" }
+      { label: "Eventos", href: "/#oportunidades" },
+      { label: "Editais", href: "/#oportunidades" },
+      { label: "Desafios corporativos", href: "/#oportunidades" },
+      { label: "Divulgar oportunidade", href: "/#participar" }
     ]
   }
 ];
 
-const legalLinks = ["Privacidade", "Termos", "Cookies", "Código de conduta", "LGPD"];
+const legalLinks = [
+  { label: "Privacidade", href: "/privacidade" },
+  { label: "LGPD", href: "/privacidade" },
+  { label: "Código de conduta", href: "/#participar" }
+];
 
 export function SiteFooter() {
   return (
@@ -119,9 +123,9 @@ export function SiteFooter() {
         <div className="flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
           <p>© 2026 Fênix Valley. Betim renascendo pela inovação.</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
-            {legalLinks.map((label) => (
-              <Link key={label} href="#participar" className="hover:text-slate-200">
-                {label}
+            {legalLinks.map((link) => (
+              <Link key={link.label} href={link.href} className="hover:text-slate-200">
+                {link.label}
               </Link>
             ))}
           </div>

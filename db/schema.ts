@@ -48,6 +48,16 @@ export const opportunities = sqliteTable("opportunities", {
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
+export const auditLogs = sqliteTable("audit_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  actorEmail: text("actor_email").notNull(),
+  action: text("action").notNull(),
+  entity: text("entity").notNull(),
+  entityId: integer("entity_id"),
+  detail: text("detail"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
 export const leads = sqliteTable("leads", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),

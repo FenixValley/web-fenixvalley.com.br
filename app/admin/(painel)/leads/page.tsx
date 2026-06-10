@@ -1,4 +1,6 @@
 import { desc } from "drizzle-orm";
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { leads } from "@/db/schema";
 import { getDb } from "@/lib/db";
@@ -10,7 +12,15 @@ export default async function AdminLeadsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Leads (Faça Parte)</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Leads (Faça Parte)</h1>
+        <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+          <a href="/admin/exportar?type=leads" download>
+            <Download className="h-4 w-4" />
+            Exportar CSV
+          </a>
+        </Button>
+      </div>
       {rows.length === 0 ? (
         <p className="text-sm text-slate-400">Nenhum lead recebido ainda.</p>
       ) : (

@@ -1,5 +1,5 @@
 import { desc } from "drizzle-orm";
-import { Check, X } from "lucide-react";
+import { Check, Download, X } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -14,7 +14,15 @@ export default async function AdminVolunteersPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Voluntários</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Voluntários</h1>
+        <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+          <a href="/admin/exportar?type=volunteers" download>
+            <Download className="h-4 w-4" />
+            Exportar CSV
+          </a>
+        </Button>
+      </div>
       {rows.length === 0 ? (
         <p className="text-sm text-slate-400">Nenhuma inscrição recebida ainda.</p>
       ) : (
