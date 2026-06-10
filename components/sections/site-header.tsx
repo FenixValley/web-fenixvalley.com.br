@@ -8,47 +8,47 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 const navItems = [
   {
-    href: "#sobre",
+    href: "/#sobre",
     label: "Sobre",
     links: [
-      { href: "#sobre", label: "História e propósito" },
-      { href: "#ecossistema", label: "Cinco pilares" },
-      { href: "#participar", label: "Código de colaboração" }
+      { href: "/#sobre", label: "História e propósito" },
+      { href: "/#ecossistema", label: "Cinco pilares" },
+      { href: "/#participar", label: "Código de colaboração" }
     ]
   },
   {
-    href: "#ecossistema",
+    href: "/mapa",
     label: "Ecossistema",
     links: [
-      { href: "#ecossistema", label: "Mapa vivo" },
-      { href: "#participar", label: "Startups e empresas" },
-      { href: "#participar", label: "Universidades e mentores" }
+      { href: "/mapa", label: "Mapa do ecossistema" },
+      { href: "/#ecossistema", label: "Pilares e mapa vivo" },
+      { href: "/#participar", label: "Startups e empresas" }
     ]
   },
   {
-    href: "#oportunidades",
+    href: "/#oportunidades",
     label: "Oportunidades",
     links: [
-      { href: "#oportunidades", label: "Agenda aberta" },
-      { href: "#oportunidades", label: "Editais e chamadas" },
-      { href: "#participar", label: "Divulgar evento" }
+      { href: "/#oportunidades", label: "Agenda aberta" },
+      { href: "/#oportunidades", label: "Editais e chamadas" },
+      { href: "/#participar", label: "Divulgar evento" }
     ]
   },
   {
-    href: "#participar",
+    href: "/#participar",
     label: "Faça Parte",
     links: [
-      { href: "#participar", label: "Cadastrar perfil" },
-      { href: "#participar", label: "Cadastrar startup" },
-      { href: "#participar", label: "Ser parceiro" }
+      { href: "/#participar", label: "Cadastrar perfil" },
+      { href: "/mapa", label: "Cadastrar organização no mapa" },
+      { href: "/voluntarie-se", label: "Ser voluntário(a)" }
     ]
   }
 ];
 
 const quickActions = [
-  { href: "#participar", label: "Cadastrar startup" },
-  { href: "#oportunidades", label: "Divulgar evento" },
-  { href: "#participar", label: "Ser mentor" }
+  { href: "/mapa", label: "Mapa do ecossistema" },
+  { href: "/#oportunidades", label: "Divulgar evento" },
+  { href: "/voluntarie-se", label: "Ser voluntário(a)" }
 ];
 
 export function SiteHeader() {
@@ -56,7 +56,7 @@ export function SiteHeader() {
     <header className="site-header sticky top-0 z-40 border-b border-white/10 bg-slate-950/86 text-white backdrop-blur-xl">
       <div className="site-header-top hidden border-b border-white/10 bg-slate-950/70 md:block">
         <div className="section-shell flex h-9 items-center justify-between text-xs text-slate-300">
-          <Link href="#ecossistema" className="inline-flex items-center gap-2 hover:text-white">
+          <Link href="/mapa" className="inline-flex items-center gap-2 hover:text-white">
             <MapPinned className="h-3.5 w-3.5 text-orange-300" />
             Betim renascendo pela inovação
           </Link>
@@ -70,7 +70,7 @@ export function SiteHeader() {
         </div>
       </div>
       <div className="section-shell flex min-h-16 items-center justify-between gap-4 py-2">
-        <Link href="#" className="flex min-w-0 items-center gap-3" aria-label="Fênix Valley">
+        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Fênix Valley">
           <Image src="/logo-fenix-valley.png" alt="" width={150} height={150} priority className="h-12 w-auto shrink-0" />
           <span className="hidden max-w-40 text-xs font-semibold leading-5 text-slate-300 xl:block">
             Ecossistema de inovação de Betim
