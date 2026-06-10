@@ -24,6 +24,14 @@
       "service": "web-fenixvalley-com-br"
     }
   ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fenixvalley-db",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "db/migrations"
+    }
+  ],
   "observability": {
     "enabled": true
   }
