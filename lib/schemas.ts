@@ -72,7 +72,22 @@ export const actorSchema = z.object({
   segment: z.string().min(2, "Informe o segmento ou área."),
   neighborhood: z.string().min(2, "Informe o bairro ou região."),
   description: z.string().min(10, "Descreva a organização em uma frase."),
-  site: z.string().url("Informe uma URL válida.").optional().or(z.literal("")),
+  site: z
+    .string()
+    .url("Informe uma URL válida.")
+    .refine(
+      (value) => {
+        try {
+          const protocol = new URL(value).protocol;
+          return protocol === "https:" || protocol === "http:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Use uma URL http(s)." }
+    )
+    .optional()
+    .or(z.literal("")),
   lat: z.preprocess(
     (value) => (value === "" || value === null ? undefined : value),
     z.coerce.number().min(-90).max(90).optional()

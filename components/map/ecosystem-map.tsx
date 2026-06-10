@@ -21,6 +21,15 @@ const MapCanvas = dynamic(() => import("@/components/map/map-canvas"), {
   )
 });
 
+function isHttpUrl(value: string): boolean {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "https:" || protocol === "http:";
+  } catch {
+    return false;
+  }
+}
+
 async function fetchActors(): Promise<MapActor[]> {
   const response = await fetch("/api/actors");
   if (!response.ok) throw new Error("Não foi possível carregar o mapa.");
@@ -145,7 +154,7 @@ export function EcosystemMap() {
                 {selected.neighborhood} · {selected.segment}
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-300">{selected.description}</p>
-              {selected.site ? (
+              {selected.site && isHttpUrl(selected.site) ? (
                 <a
                   href={selected.site}
                   target="_blank"
