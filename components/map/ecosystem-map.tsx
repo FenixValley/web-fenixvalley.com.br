@@ -168,7 +168,7 @@ export function EcosystemMap() {
             </div>
           ) : null}
         </div>
-        <aside className="max-h-[540px] space-y-2 overflow-y-auto">
+        <div className="max-h-[540px] space-y-2 overflow-y-auto" aria-label="Lista de atores do mapa">
           <p className="text-sm text-slate-400">{visibleActors.length} atores no mapa</p>
           {visibleActors.map((actor) => (
             <button
@@ -188,7 +188,7 @@ export function EcosystemMap() {
               </p>
             </button>
           ))}
-        </aside>
+        </div>
       </div>
     </div>
   );

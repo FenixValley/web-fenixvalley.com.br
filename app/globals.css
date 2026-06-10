@@ -12,7 +12,8 @@
   --card: 218 35% 12%;
   --card-foreground: 210 40% 98%;
   --primary: 26 95% 50%;
-  --primary-foreground: 0 0% 100%;
+  /* Texto escuro sobre o laranja: branco fica em 2.87:1, abaixo do mínimo WCAG AA de 4.5:1 */
+  --primary-foreground: 222 47% 11%;
   --secondary: 205 91% 42%;
   --secondary-foreground: 0 0% 100%;
   --muted: 216 26% 17%;

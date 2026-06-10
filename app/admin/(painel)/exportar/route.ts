@@ -7,7 +7,9 @@ export const dynamic = "force-dynamic";
 
 function toCsv(headers: string[], rows: (string | null)[][]): string {
   const escapeCell = (value: string | null) => {
-    const cell = value ?? "";
+    let cell = value ?? "";
+    // Evita execução de fórmula ao abrir no Excel/Sheets (CSV injection)
+    if (/^[=+\-@\t\r]/.test(cell)) cell = `'${cell}`;
     return /[",\n;]/.test(cell) ? `"${cell.replaceAll('"', '""')}"` : cell;
   };
   return [headers, ...rows].map((row) => row.map(escapeCell).join(",")).join("\n");

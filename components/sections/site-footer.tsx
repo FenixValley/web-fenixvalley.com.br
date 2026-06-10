@@ -72,7 +72,7 @@ export function SiteFooter() {
               placeholder="seu@email.com"
               className="h-11 rounded-md border border-white/10 bg-slate-900 px-3 text-sm text-white outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-orange-400"
             />
-            <button type="button" className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-white transition-colors hover:bg-orange-600">
+            <button type="button" className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-orange-600">
               Inscrever
               <ArrowUpRight className="h-4 w-4" />
             </button>
@@ -120,7 +120,7 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 md:flex-row md:items-center md:justify-between">
           <p>© 2026 Fênix Valley. Betim renascendo pela inovação.</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {legalLinks.map((link) => (

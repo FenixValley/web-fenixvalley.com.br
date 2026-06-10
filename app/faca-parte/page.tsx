@@ -36,6 +36,7 @@ export default function FacaPartePage() {
             )}
             <iframe
               src={googleFormUrl}
+              title="Formulário de cadastro Faça Parte"
               width="100%"
               height="800"
               frameBorder="0"
