@@ -1,8 +1,23 @@
+import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import { opportunities } from "@/data/opportunities";
+import { opportunities } from "@/db/schema";
+import { getDb } from "@/lib/db";
 
-export const dynamic = "force-static";
+export async function GET() {
+  const rows = await getDb()
+    .select()
+    .from(opportunities)
+    .where(eq(opportunities.status, "published"));
 
-export function GET() {
-  return NextResponse.json(opportunities);
+  return NextResponse.json(
+    rows.map((row) => ({
+      id: String(row.id),
+      title: row.title,
+      type: row.type,
+      stage: row.stage,
+      audience: row.audience,
+      date: row.date,
+      owner: row.owner
+    }))
+  );
 }
