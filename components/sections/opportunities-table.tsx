@@ -11,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ArrowUpDown, Search } from "lucide-react";
+import { ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
 import { Opportunity } from "@/data/opportunities";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -56,13 +56,23 @@ function TypeBadge({ type }: { type: string }) {
   );
 }
 
+const WEEK_IN_MS = 7 * 24 * 60 * 60 * 1000;
+
+function isClosingSoon(date: string) {
+  const deadline = new Date(`${date}T23:59:59`).getTime();
+  const now = Date.now();
+  return deadline >= now && deadline - now <= WEEK_IN_MS;
+}
+
 export function OpportunitiesTable({ initialData }: { initialData: Opportunity[] }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const { data = initialData, isFetching } = useQuery({
     queryKey: ["opportunities"],
     queryFn: fetchOpportunities,
-    initialData
+    initialData,
+    // initialData é o snapshot estático do build; busca a versão viva ao montar
+    staleTime: 0
   });
 
   const columns = useMemo<ColumnDef<Opportunity>[]>(
@@ -76,7 +86,17 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         ),
-        cell: ({ row }) => <span className="font-semibold text-foreground">{row.original.title}</span>
+        cell: ({ row }) => (
+          <span className="inline-flex flex-wrap items-center gap-2">
+            <span className="font-semibold text-foreground">{row.original.title}</span>
+            {row.original.featured ? (
+              <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[11px] font-semibold text-amber-300">
+                <Star className="h-3 w-3" />
+                Destaque
+              </span>
+            ) : null}
+          </span>
+        )
       },
       {
         accessorKey: "type",
@@ -102,12 +122,38 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
             <ArrowUpDown className="h-4 w-4" />
           </Button>
         ),
-        cell: ({ row }) => <span className="text-muted-foreground text-sm">{formatDate(row.original.date)}</span>
+        cell: ({ row }) => (
+          <span className="inline-flex flex-wrap items-center gap-2">
+            <span className="text-muted-foreground text-sm">{formatDate(row.original.date)}</span>
+            {isClosingSoon(row.original.date) ? (
+              <span className="inline-flex items-center rounded-full border border-rose-400/40 bg-rose-400/10 px-2 py-0.5 text-[11px] font-semibold text-rose-300">
+                Encerra em breve
+              </span>
+            ) : null}
+          </span>
+        )
       },
       {
         accessorKey: "owner",
         header: () => <span className="text-muted-foreground text-xs font-bold uppercase tracking-wider">Responsável</span>,
         cell: ({ row }) => <span className="text-muted-foreground text-sm">{row.original.owner}</span>
+      },
+      {
+        id: "link",
+        header: () => <span className="sr-only">Inscrição</span>,
+        cell: ({ row }) =>
+          row.original.link ? (
+            <a
+              href={row.original.link}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-orange-400"
+              aria-label={`Inscrever-se em ${row.original.title}`}
+            >
+              Inscrever
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          ) : null
       }
     ],
     []

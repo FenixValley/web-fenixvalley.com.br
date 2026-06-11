@@ -16,6 +16,7 @@ type OpportunityFormValues = {
   audience: string;
   date: string;
   owner: string;
+  link: string | null;
 };
 
 export function OpportunityForm({
@@ -70,6 +71,10 @@ export function OpportunityForm({
       <label className="block space-y-2 text-sm font-semibold text-slate-200">
         Público
         <Input name="audience" required defaultValue={initialValues?.audience} />
+      </label>
+      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        Link de inscrição externa (opcional)
+        <Input name="link" type="url" placeholder="https://" defaultValue={initialValues?.link ?? ""} />
       </label>
       {state.error ? <p className="text-sm font-medium text-destructive">{state.error}</p> : null}
       <Button type="submit" disabled={isPending}>

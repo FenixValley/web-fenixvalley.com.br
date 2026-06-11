@@ -37,6 +37,16 @@ export async function setActorStatus(id: number, status: "approved" | "rejected"
   revalidatePath("/admin");
 }
 
+export async function setOpportunityFeatured(id: number, featured: boolean) {
+  const adminEmail = await requireAdmin();
+  await getDb()
+    .update(opportunities)
+    .set({ featured: featured ? 1 : 0 })
+    .where(eq(opportunities.id, id));
+  await logAudit(adminEmail, featured ? "feature" : "unfeature", "opportunity", id);
+  revalidatePath("/admin/oportunidades");
+}
+
 export async function setOpportunityStatus(id: number, status: "published" | "archived") {
   const adminEmail = await requireAdmin();
   await getDb().update(opportunities).set({ status }).where(eq(opportunities.id, id));
@@ -107,16 +117,17 @@ export async function upsertOpportunity(
     const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
     return { error: first ?? "Revise os campos." };
   }
+  const data = { ...parsed.data, link: parsed.data.link || null };
   const db = getDb();
   if (id === null) {
     const [created] = await db
       .insert(opportunities)
-      .values({ ...parsed.data, status: "published" })
+      .values({ ...data, status: "published" })
       .returning({ id: opportunities.id });
-    await logAudit(adminEmail, "create", "opportunity", created?.id ?? null, parsed.data.title);
+    await logAudit(adminEmail, "create", "opportunity", created?.id ?? null, data.title);
   } else {
-    await db.update(opportunities).set(parsed.data).where(eq(opportunities.id, id));
-    await logAudit(adminEmail, "update", "opportunity", id, parsed.data.title);
+    await db.update(opportunities).set(data).where(eq(opportunities.id, id));
+    await logAudit(adminEmail, "update", "opportunity", id, data.title);
   }
   revalidatePath("/admin/oportunidades");
   redirect("/admin/oportunidades");

@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { desc } from "drizzle-orm";
-import { Archive, Pencil, Plus, Upload } from "lucide-react";
+import { Archive, Pencil, Plus, Star, Upload } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { opportunities } from "@/db/schema";
 import { getDb } from "@/lib/db";
-import { setOpportunityStatus } from "../actions";
+import { setOpportunityFeatured, setOpportunityStatus } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -52,6 +52,21 @@ export default async function AdminOpportunitiesPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
+                      <form
+                        action={async () => {
+                          "use server";
+                          await setOpportunityFeatured(opportunity.id, !opportunity.featured);
+                        }}
+                      >
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className={opportunity.featured ? "text-amber-300 hover:text-amber-200" : "text-slate-400 hover:text-amber-300"}
+                        >
+                          <Star className="h-4 w-4" />
+                          {opportunity.featured ? "Remover destaque" : "Destacar"}
+                        </Button>
+                      </form>
                       {opportunity.status === "published" ? (
                         <form
                           action={async () => {

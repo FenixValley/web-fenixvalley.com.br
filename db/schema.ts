@@ -46,6 +46,8 @@ export const opportunities = sqliteTable("opportunities", {
   audience: text("audience").notNull(),
   date: text("date").notNull(),
   owner: text("owner").notNull(),
+  link: text("link"),
+  featured: integer("featured").notNull().default(0),
   status: text("status").notNull().default("published"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });

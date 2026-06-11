@@ -112,7 +112,21 @@ export const actorRegisterSchema = actorSchema.extend({
 
 export type ActorRegisterInput = z.infer<typeof actorRegisterSchema>;
 
-export const opportunityTypes = ["Meetup", "Programa", "Mentoria", "Comunidade", "Capital"] as const;
+export const opportunityTypes = [
+  "Meetup",
+  "Programa",
+  "Mentoria",
+  "Comunidade",
+  "Capital",
+  "Edital",
+  "Bolsa",
+  "Vaga",
+  "Estágio",
+  "Desafio",
+  "Evento",
+  "Parceria",
+  "Premiação"
+] as const;
 export const opportunityStages = ["Aberto", "Curadoria", "Em breve"] as const;
 
 export const opportunitySchema = z.object({
@@ -121,7 +135,23 @@ export const opportunitySchema = z.object({
   stage: z.enum(opportunityStages, { message: "Escolha o estágio." }),
   audience: z.string().min(3, "Informe o público."),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD."),
-  owner: z.string().min(2, "Informe o responsável.")
+  owner: z.string().min(2, "Informe o responsável."),
+  link: z
+    .string()
+    .url("Informe uma URL válida.")
+    .refine(
+      (value) => {
+        try {
+          const protocol = new URL(value).protocol;
+          return protocol === "https:" || protocol === "http:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Use uma URL http(s)." }
+    )
+    .optional()
+    .or(z.literal(""))
 });
 
 export type OpportunityInput = z.infer<typeof opportunitySchema>;

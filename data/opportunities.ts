@@ -1,11 +1,13 @@
 export type Opportunity = {
   id: string;
   title: string;
-  type: "Meetup" | "Programa" | "Mentoria" | "Comunidade" | "Capital";
+  type: string;
   stage: "Aberto" | "Curadoria" | "Em breve";
   audience: string;
   date: string;
   owner: string;
+  link?: string | null;
+  featured?: boolean;
 };
 
 export const opportunities: Opportunity[] = [
