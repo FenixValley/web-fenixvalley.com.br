@@ -193,27 +193,6 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "eventos",
-    title: "Eventos",
-    kicker: "Agenda do ecossistema",
-    description:
-      "Meetups, palestras, workshops, hackathons e demo days mantêm a comunidade viva e conectada ao longo do ano.",
-    sections: [
-      {
-        title: "Agenda aberta",
-        body: "Os próximos encontros, mentorias e chamadas aparecem na agenda de oportunidades do portal e são divulgados na comunidade do WhatsApp."
-      },
-      {
-        title: "Divulgue seu evento",
-        body: "Organizadores podem divulgar eventos alinhados ao propósito do movimento. A agenda completa com calendário, inscrição e filtros está no roadmap do portal."
-      }
-    ],
-    ctas: [
-      { label: "Ver a agenda aberta", href: "/oportunidades" },
-      { label: "Divulgar um evento", href: "/contato" }
-    ]
-  },
-  {
     slug: "conteudos",
     title: "Conteúdos",
     kicker: "Aprender com quem constrói",

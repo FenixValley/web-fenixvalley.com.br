@@ -156,6 +156,54 @@ export const opportunitySchema = z.object({
 
 export type OpportunityInput = z.infer<typeof opportunitySchema>;
 
+export const eventCategories = [
+  "Meetup",
+  "Palestra",
+  "Workshop",
+  "Hackathon",
+  "Conferência",
+  "Demo Day",
+  "Curso",
+  "Networking",
+  "Acadêmico"
+] as const;
+
+export const eventModes = ["Presencial", "Online", "Híbrido"] as const;
+
+const httpUrlField = (message: string) =>
+  z
+    .string()
+    .url(message)
+    .refine(
+      (value) => {
+        try {
+          const protocol = new URL(value).protocol;
+          return protocol === "https:" || protocol === "http:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Use uma URL http(s)." }
+    );
+
+export const eventSchema = z.object({
+  title: z.string().min(3, "Informe o nome do evento."),
+  category: z.enum(eventCategories, { message: "Escolha a categoria." }),
+  description: z.string().min(10, "Descreva o evento em uma frase."),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD."),
+  time: z.string().regex(/^\d{2}:\d{2}$/, "Use o formato HH:MM."),
+  mode: z.enum(eventModes, { message: "Escolha a modalidade." }),
+  location: z.string().min(3, "Informe o local ou o link da transmissão."),
+  link: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  audience: z.string().optional().or(z.literal("")),
+  schedule: z.string().optional().or(z.literal("")),
+  organizer: z.string().min(2, "Informe quem organiza."),
+  organizerEmail: z.string().email("Informe um e-mail válido."),
+  consent: consentField("É preciso autorizar a publicação dos dados.")
+});
+
+export type EventInput = z.infer<typeof eventSchema>;
+
 export const programApplicationSchema = z.object({
   programSlug: z.string().min(2),
   name: z.string().min(3, "Informe seu nome completo."),

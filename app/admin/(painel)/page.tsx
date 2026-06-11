@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { count, eq } from "drizzle-orm";
-import { actors, leads, opportunities, volunteers } from "@/db/schema";
+import { actors, events, leads, opportunities, volunteers } from "@/db/schema";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -19,10 +19,15 @@ async function getCounts() {
     .select({ value: count() })
     .from(opportunities)
     .where(eq(opportunities.status, "published"));
+  const [pendingEvents] = await db
+    .select({ value: count() })
+    .from(events)
+    .where(eq(events.status, "pending"));
   const [totalLeads] = await db.select({ value: count() }).from(leads);
   return {
     pendingVolunteers: pendingVolunteers.value,
     pendingActors: pendingActors.value,
+    pendingEvents: pendingEvents.value,
     publishedOpportunities: publishedOpportunities.value,
     totalLeads: totalLeads.value
   };
@@ -33,6 +38,7 @@ export default async function AdminDashboardPage() {
   const cards = [
     { label: "Voluntários pendentes", value: counts.pendingVolunteers, href: "/admin/voluntarios" },
     { label: "Atores pendentes", value: counts.pendingActors, href: "/admin/atores" },
+    { label: "Eventos pendentes", value: counts.pendingEvents, href: "/admin/eventos" },
     { label: "Oportunidades publicadas", value: counts.publishedOpportunities, href: "/admin/oportunidades" },
     { label: "Leads recebidos", value: counts.totalLeads, href: "/admin/leads" }
   ];

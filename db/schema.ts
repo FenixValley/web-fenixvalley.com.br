@@ -52,6 +52,25 @@ export const opportunities = sqliteTable("opportunities", {
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
+export const events = sqliteTable("events", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").unique(),
+  title: text("title").notNull(),
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  date: text("date").notNull(),
+  time: text("time").notNull(),
+  mode: text("mode").notNull(),
+  location: text("location").notNull(),
+  link: text("link"),
+  audience: text("audience"),
+  schedule: text("schedule"),
+  organizer: text("organizer").notNull(),
+  organizerEmail: text("organizer_email").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
 export const programSettings = sqliteTable("program_settings", {
   slug: text("slug").primaryKey(),
   inscriptionsOpen: integer("inscriptions_open").notNull().default(0)

@@ -3,7 +3,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { actors, auditLogs, opportunities, programApplications, programSettings, volunteers } from "@/db/schema";
+import { actors, auditLogs, events, opportunities, programApplications, programSettings, volunteers } from "@/db/schema";
 import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
@@ -53,6 +53,15 @@ export async function setOpportunityStatus(id: number, status: "published" | "ar
   await logAudit(adminEmail, status, "opportunity", id);
   revalidatePath("/admin/oportunidades");
   revalidatePath("/admin");
+}
+
+export async function setEventStatus(id: number, status: "approved" | "rejected" | "archived") {
+  const adminEmail = await requireAdmin();
+  await getDb().update(events).set({ status }).where(eq(events.id, id));
+  await logAudit(adminEmail, status, "event", id);
+  revalidatePath("/admin/eventos");
+  revalidatePath("/admin");
+  revalidatePath("/eventos");
 }
 
 export async function setProgramInscriptions(slug: string, open: boolean) {
