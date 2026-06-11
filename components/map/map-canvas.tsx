@@ -6,6 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 
 export type MapActor = {
   id: number;
+  slug: string | null;
   name: string;
   type: string;
   segment: string;

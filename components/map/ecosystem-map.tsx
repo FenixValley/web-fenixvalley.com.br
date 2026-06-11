@@ -1,9 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ExternalLink, MapPin, Plus, Search, X } from "lucide-react";
+import { ArrowRight, ExternalLink, MapPin, Plus, Search, X } from "lucide-react";
 import { ActorRegisterForm } from "@/components/map/actor-register-form";
 import type { MapActor } from "@/components/map/map-canvas";
 import { Button } from "@/components/ui/button";
@@ -154,17 +155,28 @@ export function EcosystemMap() {
                 {selected.neighborhood} · {selected.segment}
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-300">{selected.description}</p>
-              {selected.site && isHttpUrl(selected.site) ? (
-                <a
-                  href={selected.site}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center gap-1 text-sm font-bold text-orange-300 hover:text-orange-200"
-                >
-                  Visitar site
-                  <ExternalLink className="h-3.5 w-3.5" />
-                </a>
-              ) : null}
+              <div className="mt-3 flex flex-wrap items-center gap-4">
+                {selected.slug ? (
+                  <Link
+                    href={`/atores/${selected.slug}`}
+                    className="inline-flex items-center gap-1 text-sm font-bold text-orange-300 hover:text-orange-200"
+                  >
+                    Ver perfil completo
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : null}
+                {selected.site && isHttpUrl(selected.site) ? (
+                  <a
+                    href={selected.site}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-bold text-slate-300 hover:text-white"
+                  >
+                    Visitar site
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                ) : null}
+              </div>
             </div>
           ) : null}
         </div>

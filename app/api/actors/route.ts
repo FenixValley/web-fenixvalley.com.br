@@ -1,8 +1,9 @@
 import { and, eq, like, or } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { actors } from "@/db/schema";
+import { uniqueActorSlug } from "@/lib/actor-slug";
 import { getDb } from "@/lib/db";
-import { actorSchema } from "@/lib/schemas";
+import { actorRegisterSchema } from "@/lib/schemas";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
@@ -27,7 +28,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const payload = await request.json().catch(() => null);
-  const parsed = actorSchema.safeParse(payload);
+  const parsed = actorRegisterSchema.safeParse(payload);
 
   if (!parsed.success) {
     return NextResponse.json(
@@ -36,10 +37,13 @@ export async function POST(request: Request) {
     );
   }
 
-  const data = parsed.data;
-  await getDb().insert(actors).values({
+  const { consent: _consent, ...data } = parsed.data;
+  const db = getDb();
+  await db.insert(actors).values({
     ...data,
+    slug: await uniqueActorSlug(db, data.name),
     site: data.site || null,
+    email: data.email || null,
     lat: data.lat ?? BETIM_CENTER.lat,
     lng: data.lng ?? BETIM_CENTER.lng,
     status: "pending"

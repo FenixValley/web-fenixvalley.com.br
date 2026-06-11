@@ -24,12 +24,14 @@ export const volunteers = sqliteTable("volunteers", {
 
 export const actors = sqliteTable("actors", {
   id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").unique(),
   name: text("name").notNull(),
   type: text("type").notNull(),
   segment: text("segment").notNull(),
   neighborhood: text("neighborhood").notNull(),
   description: text("description").notNull(),
   site: text("site"),
+  email: text("email"),
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
   status: text("status").notNull().default("pending"),

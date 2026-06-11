@@ -9,6 +9,11 @@ export const leadSchema = z.object({
 
 export type LeadInput = z.infer<typeof leadSchema>;
 
+// z.literal(true, { message }) não aplica a mensagem customizada (invalid_literal);
+// o refine garante o aviso em pt-BR nos formulários.
+const consentField = (message: string) =>
+  z.boolean({ message }).refine((value) => value === true, { message });
+
 export const volunteerAreas = [
   "Tecnologia e produto",
   "Design e conteúdo",
@@ -31,7 +36,7 @@ export const volunteerSchema = z.object({
   area: z.enum(volunteerAreas, { message: "Escolha uma área de atuação." }),
   availability: z.enum(volunteerAvailabilities, { message: "Escolha sua disponibilidade." }),
   motivation: z.string().min(10, "Conte em uma frase por que quer ser voluntário(a)."),
-  consent: z.literal(true, { message: "É preciso autorizar o uso dos dados." })
+  consent: consentField("É preciso autorizar o uso dos dados.")
 });
 
 export type VolunteerInput = z.infer<typeof volunteerSchema>;
@@ -72,6 +77,7 @@ export const actorSchema = z.object({
   segment: z.string().min(2, "Informe o segmento ou área."),
   neighborhood: z.string().min(2, "Informe o bairro ou região."),
   description: z.string().min(10, "Descreva a organização em uma frase."),
+  email: z.string().email("Informe um e-mail válido.").optional().or(z.literal("")),
   site: z
     .string()
     .url("Informe uma URL válida.")
@@ -100,6 +106,12 @@ export const actorSchema = z.object({
 
 export type ActorInput = z.infer<typeof actorSchema>;
 
+export const actorRegisterSchema = actorSchema.extend({
+  consent: consentField("É preciso autorizar a publicação dos dados.")
+});
+
+export type ActorRegisterInput = z.infer<typeof actorRegisterSchema>;
+
 export const opportunityTypes = ["Meetup", "Programa", "Mentoria", "Comunidade", "Capital"] as const;
 export const opportunityStages = ["Aberto", "Curadoria", "Em breve"] as const;
 
@@ -120,7 +132,7 @@ export const programApplicationSchema = z.object({
   email: z.string().email("Informe um e-mail válido."),
   organization: z.string().optional().or(z.literal("")),
   motivation: z.string().min(10, "Conte em uma frase por que quer participar."),
-  consent: z.literal(true, { message: "É preciso autorizar o uso dos dados." })
+  consent: consentField("É preciso autorizar o uso dos dados.")
 });
 
 export type ProgramApplicationInput = z.infer<typeof programApplicationSchema>;

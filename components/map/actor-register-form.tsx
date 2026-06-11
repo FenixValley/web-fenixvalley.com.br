@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ActorInput, actorSchema, actorTypeLabels, actorTypes } from "@/lib/schemas";
+import { ActorRegisterInput, actorRegisterSchema, actorTypeLabels, actorTypes } from "@/lib/schemas";
 
 const selectClassName =
   "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
@@ -20,12 +20,12 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm<ActorInput>({
-    resolver: zodResolver(actorSchema),
-    defaultValues: { name: "", segment: "", neighborhood: "", description: "", site: "" }
+  } = useForm<ActorRegisterInput>({
+    resolver: zodResolver(actorRegisterSchema),
+    defaultValues: { name: "", segment: "", neighborhood: "", description: "", site: "", email: "" }
   });
 
-  function onSubmit(values: ActorInput) {
+  function onSubmit(values: ActorRegisterInput) {
     setMessage(null);
     startTransition(async () => {
       const response = await fetch("/api/actors", {
@@ -87,6 +87,11 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
         </label>
       </div>
       <label className="block space-y-2 text-sm font-semibold">
+        E-mail de contato (opcional)
+        <Input placeholder="contato@organizacao.com.br" type="email" {...register("email")} />
+        {errors.email ? <span className="block text-xs text-destructive">{errors.email.message}</span> : null}
+      </label>
+      <label className="block space-y-2 text-sm font-semibold">
         Descrição
         <Textarea
           placeholder="O que a organização faz e como participa do ecossistema"
@@ -96,6 +101,11 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
           <span className="block text-xs text-destructive">{errors.description.message}</span>
         ) : null}
       </label>
+      <label className="flex items-start gap-3 text-sm leading-6 text-muted-foreground">
+        <input type="checkbox" className="mt-1 h-4 w-4" {...register("consent")} />
+        Autorizo a publicação destes dados no mapa público após aprovação da curadoria.
+      </label>
+      {errors.consent ? <span className="block text-xs text-destructive">{errors.consent.message}</span> : null}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <Button type="submit" disabled={isPending}>
           <Send className="h-4 w-4" />

@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { actors, auditLogs, opportunities, programApplications, programSettings, volunteers } from "@/db/schema";
+import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { actorSchema, opportunitySchema } from "@/lib/schemas";
@@ -76,12 +77,16 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
   const data = {
     ...parsed.data,
     site: parsed.data.site || null,
+    email: parsed.data.email || null,
     lat: parsed.data.lat ?? BETIM_CENTER.lat,
     lng: parsed.data.lng ?? BETIM_CENTER.lng
   };
   const db = getDb();
   if (id === null) {
-    const [created] = await db.insert(actors).values({ ...data, status: "approved" }).returning({ id: actors.id });
+    const [created] = await db
+      .insert(actors)
+      .values({ ...data, slug: await uniqueActorSlug(db, data.name), status: "approved" })
+      .returning({ id: actors.id });
     await logAudit(adminEmail, "create", "actor", created?.id ?? null, data.name);
   } else {
     await db.update(actors).set(data).where(eq(actors.id, id));
