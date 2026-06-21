@@ -7,16 +7,16 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ExternalLink, MapPin, Plus, Search, X } from "lucide-react";
 import { ActorRegisterForm } from "@/components/map/actor-register-form";
 import type { MapActor } from "@/components/map/map-canvas";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { actorTypeLabels, actorTypes } from "@/lib/schemas";
-import { cn } from "@/lib/utils";
 
 const MapCanvas = dynamic(() => import("@/components/map/map-canvas"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-full w-full items-center justify-center bg-slate-900 text-sm text-slate-400">
+    <div
+      className="flex h-full w-full items-center justify-center font-mono text-xs uppercase tracking-[0.18em]"
+      style={{ background: "var(--fx-surface)", color: "var(--fx-muted)" }}
+    >
       Carregando mapa...
     </div>
   )
@@ -63,54 +63,72 @@ export function EcosystemMap() {
 
   const selected = visibleActors.find((actor) => actor.id === selectedId) ?? null;
 
+  const chipClass =
+    "rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors";
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setTypeFilter(null)}
-            className={cn(
-              "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+            className={chipClass}
+            style={
               typeFilter === null
-                ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
-            )}
+                ? { background: "var(--fx-accent)", borderColor: "var(--fx-accent)", color: "#ffffff" }
+                : { background: "var(--fx-paper)", borderColor: "var(--fx-line)", color: "var(--fx-muted)" }
+            }
           >
             Todos
           </button>
-          {availableTypes.map((type) => (
-            <button
-              key={type}
-              type="button"
-              onClick={() => setTypeFilter(typeFilter === type ? null : type)}
-              className={cn(
-                "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
-                typeFilter === type
-                  ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
-              )}
-            >
-              {actorTypeLabels[type]}
-            </button>
-          ))}
+          {availableTypes.map((type) => {
+            const active = typeFilter === type;
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setTypeFilter(active ? null : type)}
+                className={chipClass}
+                style={
+                  active
+                    ? { background: "var(--fx-accent)", borderColor: "var(--fx-accent)", color: "#ffffff" }
+                    : { background: "var(--fx-paper)", borderColor: "var(--fx-line)", color: "var(--fx-muted)" }
+                }
+              >
+                {actorTypeLabels[type]}
+              </button>
+            );
+          })}
         </div>
         <div className="flex items-center gap-2">
           <div className="relative w-full sm:w-64">
-            <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />
-            <Input
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
+              style={{ color: "var(--fx-muted)" }}
+            />
+            <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome, bairro ou segmento"
-              className="pl-9"
+              className="w-full rounded-full border py-2.5 pl-9 pr-3 font-body text-sm outline-none transition-colors placeholder:opacity-60 focus:border-[var(--fx-accent)]"
+              style={{
+                background: "var(--fx-paper)",
+                borderColor: "var(--fx-line)",
+                color: "var(--fx-ink)"
+              }}
             />
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size="sm" className="shrink-0">
+              <button
+                type="button"
+                className="inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 font-mono text-[12px] uppercase tracking-[0.12em] transition-opacity hover:opacity-90"
+                style={{ background: "var(--fx-accent)", color: "#ffffff" }}
+              >
                 <Plus className="h-4 w-4" />
                 Cadastre sua organização
-              </Button>
+              </button>
             </DialogTrigger>
             <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
               <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
@@ -125,42 +143,63 @@ export function EcosystemMap() {
       </div>
 
       {isError ? (
-        <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
+        <p
+          className="rounded-lg border p-4 font-body text-sm"
+          style={{ borderColor: "rgba(190,18,60,0.30)", background: "rgba(190,18,60,0.06)", color: "#9f1239" }}
+        >
           Não foi possível carregar os atores do mapa. Tente novamente em instantes.
         </p>
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
-        <div className="relative h-[420px] overflow-hidden rounded-lg border border-white/10 sm:h-[540px]">
+        <div
+          className="relative h-[420px] overflow-hidden rounded-lg border sm:h-[540px]"
+          style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}
+        >
           <MapCanvas actors={visibleActors} selectedId={selectedId} onSelect={setSelectedId} />
           {selected ? (
-            <div className="absolute bottom-4 left-4 right-4 z-10 max-w-md rounded-lg border border-white/10 bg-slate-950/95 p-4 shadow-2xl backdrop-blur sm:right-auto">
+            <div
+              className="absolute bottom-4 left-4 right-4 z-10 max-w-md rounded-lg border p-4 shadow-xl backdrop-blur sm:right-auto"
+              style={{ borderColor: "var(--fx-line)", background: "var(--fx-paper)" }}
+            >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-orange-300">
+                  <p
+                    className="font-mono text-[11px] uppercase tracking-[0.16em]"
+                    style={{ color: "var(--fx-accent)" }}
+                  >
                     {actorTypeLabels[selected.type as keyof typeof actorTypeLabels] ?? selected.type}
                   </p>
-                  <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{selected.name}</h3>
+                  <h3 className="font-display text-lg font-semibold" style={{ color: "var(--fx-ink)" }}>
+                    {selected.name}
+                  </h3>
                 </div>
                 <button
                   type="button"
                   onClick={() => setSelectedId(null)}
                   aria-label="Fechar detalhes"
-                  className="rounded-md p-1 text-slate-400 hover:bg-white/10 hover:text-white"
+                  className="rounded-md p-1 transition-colors hover:bg-[var(--fx-surface)]"
+                  style={{ color: "var(--fx-muted)" }}
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
-              <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
+              <p
+                className="mt-1 flex items-center gap-1 font-body text-xs"
+                style={{ color: "var(--fx-muted)" }}
+              >
                 <MapPin className="h-3.5 w-3.5" />
                 {selected.neighborhood} · {selected.segment}
               </p>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{selected.description}</p>
+              <p className="mt-2 font-body text-sm leading-6" style={{ color: "var(--fx-ink)" }}>
+                {selected.description}
+              </p>
               <div className="mt-3 flex flex-wrap items-center gap-4">
                 {selected.slug ? (
                   <Link
                     href={`/atores/${selected.slug}`}
-                    className="inline-flex items-center gap-1 text-sm font-bold text-orange-300 hover:text-orange-200"
+                    className="inline-flex items-center gap-1 font-mono text-[12px] uppercase tracking-[0.1em] transition-opacity hover:opacity-80"
+                    style={{ color: "var(--fx-accent)" }}
                   >
                     Ver perfil completo
                     <ArrowRight className="h-3.5 w-3.5" />
@@ -171,7 +210,8 @@ export function EcosystemMap() {
                     href={selected.site}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-bold text-slate-300 hover:text-white"
+                    className="inline-flex items-center gap-1 font-mono text-[12px] uppercase tracking-[0.1em] transition-opacity hover:opacity-80"
+                    style={{ color: "var(--fx-muted)" }}
                   >
                     Visitar site
                     <ExternalLink className="h-3.5 w-3.5" />
@@ -182,25 +222,32 @@ export function EcosystemMap() {
           ) : null}
         </div>
         <div className="max-h-[540px] space-y-2 overflow-y-auto" aria-label="Lista de atores do mapa">
-          <p className="text-sm text-slate-400">{visibleActors.length} atores no mapa</p>
-          {visibleActors.map((actor) => (
-            <button
-              key={actor.id}
-              type="button"
-              onClick={() => setSelectedId(actor.id)}
-              className={cn(
-                "w-full rounded-lg border p-3 text-left transition-colors",
-                selectedId === actor.id
-                  ? "border-orange-400/60 bg-orange-500/10"
-                  : "border-white/10 bg-white/5 hover:bg-white/10"
-              )}
-            >
-              <p className="text-sm font-bold text-white">{actor.name}</p>
-              <p className="text-xs text-slate-400">
-                {actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type} · {actor.neighborhood}
-              </p>
-            </button>
-          ))}
+          <p className="font-mono text-[11px] uppercase tracking-[0.12em]" style={{ color: "var(--fx-muted)" }}>
+            {visibleActors.length} atores no mapa
+          </p>
+          {visibleActors.map((actor) => {
+            const active = selectedId === actor.id;
+            return (
+              <button
+                key={actor.id}
+                type="button"
+                onClick={() => setSelectedId(actor.id)}
+                className="w-full rounded-lg border p-3 text-left transition-colors"
+                style={
+                  active
+                    ? { borderColor: "var(--fx-accent)", background: "var(--fx-accent-soft)" }
+                    : { borderColor: "var(--fx-line)", background: "var(--fx-paper)" }
+                }
+              >
+                <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
+                  {actor.name}
+                </p>
+                <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>
+                  {actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type} · {actor.neighborhood}
+                </p>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
