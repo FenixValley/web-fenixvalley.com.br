@@ -13,7 +13,7 @@ export function EditorialHero() {
         className="pointer-events-none absolute inset-[-10%] z-0"
         style={{
           background:
-            "radial-gradient(62% 54% at 16% 82%, rgba(45,88,128,0.16), transparent 69%), radial-gradient(58% 48% at 86% 10%, rgba(217,119,87,0.20), transparent 70%), linear-gradient(135deg, rgba(217,119,87,0.05) 0%, transparent 42%, rgba(45,88,128,0.05) 100%)"
+            "radial-gradient(58% 50% at 84% 8%, rgba(27,59,255,0.16), transparent 68%), radial-gradient(60% 52% at 12% 88%, rgba(27,59,255,0.10), transparent 70%), radial-gradient(40% 40% at 70% 60%, rgba(56,189,248,0.10), transparent 72%), linear-gradient(135deg, rgba(27,59,255,0.05) 0%, transparent 46%, rgba(27,59,255,0.04) 100%)"
         }}
       />
 
@@ -27,7 +27,7 @@ export function EditorialHero() {
           </p>
           <span
             className="mt-3 block h-px w-full"
-            style={{ background: "rgba(17,16,13,0.14)" }}
+            style={{ background: "var(--fx-line)" }}
           />
         </EditorialReveal>
 
@@ -65,7 +65,7 @@ export function EditorialHero() {
               <Link
                 href="/mapa"
                 className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
-                style={{ background: "var(--fx-ink)", color: "var(--fx-paper)" }}
+                style={{ background: "var(--fx-accent)", color: "#ffffff" }}
               >
                 Explorar o mapa
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -73,7 +73,7 @@ export function EditorialHero() {
               <Link
                 href="/#participar"
                 className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
-                style={{ border: "1px solid rgba(17,16,13,0.22)", color: "var(--fx-ink)" }}
+                style={{ border: "1px solid rgba(10,16,32,0.20)", color: "var(--fx-ink)" }}
               >
                 Faça parte
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

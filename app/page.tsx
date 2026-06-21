@@ -24,10 +24,12 @@ export default function HomePage() {
       className="min-h-screen font-body"
       style={
         {
-          "--fx-paper": "#f6f0e6",
-          "--fx-ink": "#11100d",
-          "--fx-muted": "#4f463b",
-          "--fx-accent": "#d97757",
+          "--fx-paper": "#ffffff",
+          "--fx-surface": "#f2f5ff",
+          "--fx-ink": "#0a1020",
+          "--fx-muted": "#5a647e",
+          "--fx-accent": "#1b3bff",
+          "--fx-line": "rgba(10,16,32,0.10)",
           background: "var(--fx-paper)",
           color: "var(--fx-ink)"
         } as React.CSSProperties
@@ -58,7 +60,7 @@ export default function HomePage() {
         {/* índice do ecossistema */}
         <section className="mx-auto w-full max-w-[1180px] px-6 pb-24 sm:px-10">
           <EditorialReveal>
-            <div className="flex items-baseline justify-between border-t pt-6" style={{ borderColor: "rgba(17,16,13,0.16)" }}>
+            <div className="flex items-baseline justify-between border-t pt-6" style={{ borderColor: "var(--fx-line)" }}>
               <h2 className="font-display text-[28px] font-semibold sm:text-[34px]">O que vive no Vale</h2>
               <span className="font-mono text-[12px] uppercase tracking-[0.2em]" style={{ color: "var(--fx-muted)" }}>
                 seis frentes
@@ -71,7 +73,7 @@ export default function HomePage() {
               <EditorialReveal key={pilar.title} delay={index * 0.05}>
                 <li
                   className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 border-t py-6 sm:grid-cols-[5rem_minmax(0,22rem)_1fr] sm:items-baseline"
-                  style={{ borderColor: "rgba(17,16,13,0.12)" }}
+                  style={{ borderColor: "var(--fx-line)" }}
                 >
                   <span className="font-mono text-[13px]" style={{ color: "var(--fx-accent)" }}>
                     {String(index + 1).padStart(2, "0")}
@@ -89,7 +91,7 @@ export default function HomePage() {
 
       <footer
         className="border-t"
-        style={{ borderColor: "rgba(17,16,13,0.16)" }}
+        style={{ borderColor: "var(--fx-line)" }}
       >
         <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-3 px-6 py-8 font-mono text-[12px] uppercase tracking-[0.16em] sm:flex-row sm:items-center sm:justify-between sm:px-10" style={{ color: "var(--fx-muted)" }}>
           <span>Fênix Valley — Betim · MG</span>
