@@ -6,17 +6,17 @@ import { ArrowRight, ExternalLink, Menu, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 const leftNav = [
-  { href: "/#sobre", label: "Sobre" },
+  { href: "/sobre", label: "Sobre" },
   { href: "/#ecossistema", label: "Ecossistema" },
   { href: "/#programas", label: "Programas" }
 ];
 
 const rightNav = [
-  { href: "/#oportunidades", label: "Oportunidades" },
-  { href: "/#eventos", label: "Eventos" },
+  { href: "/eventos", label: "Eventos" },
   { href: "/faca-parte", label: "Faça Parte", highlight: true }
 ];
 
@@ -33,13 +33,13 @@ const searchItems: SearchItem[] = [
     title: "Sobre o Movimento",
     description: "Conheça o propósito, a missão e a visão do Fênix Valley.",
     category: "Geral",
-    href: "/#sobre"
+    href: "/sobre"
   },
   {
     title: "Propósito, Missão e Visão",
     description: "O que impulsiona o ecossistema de Betim.",
     category: "Geral",
-    href: "/#sobre"
+    href: "/sobre"
   },
   {
     title: "Ecossistema de Inovação",
@@ -75,7 +75,7 @@ const searchItems: SearchItem[] = [
     title: "Eventos e Agenda",
     description: "Chamadas e encontros ativos organizados no polo.",
     category: "Eventos",
-    href: "/#oportunidades"
+    href: "/eventos"
   },
   {
     title: "Faça Parte (Formulário)",
@@ -96,6 +96,7 @@ const searchItems: SearchItem[] = [
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  const { user, isAdmin } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -201,6 +202,19 @@ export function SiteHeader() {
 
           {/* right nav — desktop */}
           <nav className="hidden flex-1 items-center justify-end gap-6 text-sm font-semibold text-slate-300 lg:flex">
+            {!user ? (
+              <Link href="/auth" className="transition-colors hover:text-white">
+                Fazer Login
+              </Link>
+            ) : (
+              <Link 
+                href={isAdmin ? "/admin/dashboard" : "/eventos"} 
+                className="rounded-full bg-emerald-500 px-4 py-1.5 text-white shadow-sm shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-md hover:shadow-emerald-500/25"
+              >
+                {isAdmin ? "Painel Admin" : "Minha Conta"}
+              </Link>
+            )}
+
             {rightNav.map((item) => (
               <Link
                 key={item.href}
@@ -315,7 +329,36 @@ export function SiteHeader() {
             className="overflow-hidden border-b border-white/10 bg-slate-950/95 backdrop-blur-xl lg:hidden"
           >
             <nav className="section-shell flex flex-col gap-1 py-4">
-              {[...leftNav, ...rightNav].map((item) => (
+              {leftNav.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              {!user ? (
+                <Link
+                  href="/auth"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                >
+                  Fazer Login
+                </Link>
+              ) : (
+                <Link
+                  href={isAdmin ? "/admin/dashboard" : "/eventos"}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
+                >
+                  {isAdmin ? "Painel Admin" : "Minha Conta"}
+                </Link>
+              )}
+
+              {rightNav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

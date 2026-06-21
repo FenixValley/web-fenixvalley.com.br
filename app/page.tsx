@@ -1,4 +1,3 @@
-import { opportunities } from "@/data/opportunities";
 import { EcosystemSection } from "@/components/sections/ecosystem-section";
 import { FacaParteSection } from "@/components/sections/faca-parte-section";
 import { HeroSection } from "@/components/sections/hero-section";
@@ -17,7 +16,7 @@ export default function HomePage() {
         <EcosystemSection />
         <ProgramsSection />
         <IndicatorsSection />
-        <OpportunitiesSection opportunities={opportunities} />
+        <OpportunitiesSection />
         <FacaParteSection />
       </main>
       <SiteFooter />
