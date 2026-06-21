@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+    // Funções auxiliares
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      // Substitua pelo email real de admin configurado no sistema
+      return request.auth != null && request.auth.token.email == "betim.fenixvalley2026@gmail.com";
+    }
+
+    // Regras para a coleção "eventos"
+    match /eventos/{eventId} {
+      // Qualquer um pode ler a lista de eventos
+      allow read: if true;
+      // Apenas o administrador pode criar, atualizar ou deletar eventos
+      allow write: if isAdmin();
+    }
+
+    // Regras para os "rsvps" globais dos eventos
+    match /rsvps/{rsvpId} {
+      // Qualquer um pode ver quem confirmou presença num evento
+      allow read: if true;
+      // O usuário logado pode confirmar/desconfirmar sua própria presença
+      allow create, delete: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      // O admin pode gerenciar (opcional)
+      allow update, delete: if isAdmin();
+    }
+
+    // Regras para os "userRsvps" (relacionamento inverso)
+    match /userRsvps/{userId} {
+      // O usuário pode ler e atualizar sua própria lista de confirmações
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+  }
+}

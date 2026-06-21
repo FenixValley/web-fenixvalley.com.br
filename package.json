@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.2",
+    "firebase": "^12.15.0",
     "gsap": "^3.12.5",
     "lucide-react": "^0.468.0",
     "maplibre-gl": "^5.24.0",
