@@ -112,10 +112,11 @@ export function EcosystemMap() {
                 Cadastre sua organização
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-h-[85vh] overflow-y-auto p-6">
+            <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
               <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
               <p className="text-sm text-muted-foreground">
-                O cadastro passa pela curadoria do Fênix Valley antes de aparecer no mapa.
+                Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As
+                respostas ajudam a curadoria a conectar os atores da região.
               </p>
               <ActorRegisterForm />
             </DialogContent>
