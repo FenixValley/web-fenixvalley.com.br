@@ -34,6 +34,7 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
+  const [networkError, setNetworkError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const role = (values[ROLE_FIELD] as string) ?? "";
@@ -84,6 +85,7 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setNetworkError(false);
     if (!validate()) return;
 
     startTransition(async () => {
@@ -100,8 +102,9 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
       }
 
       try {
-        // Google Forms não envia cabeçalhos CORS: usamos no-cors (resposta opaca).
-        // O envio é aceito mesmo sem conseguirmos ler o status da resposta.
+        // Google Forms não envia cabeçalhos CORS: usamos no-cors. A resposta é
+        // opaca (não dá pra ler o status), mas o envio é aceito normalmente.
+        // fetch só rejeita em falha de rede real (offline/DNS) — aí, sim, falhou.
         await fetch(GOOGLE_FORM_ACTION, {
           method: "POST",
           mode: "no-cors",
@@ -109,7 +112,8 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
           body: body.toString(),
         });
       } catch {
-        // rede/opaco — seguimos com confirmação otimista
+        setNetworkError(true);
+        return;
       }
 
       setDone(true);
@@ -166,12 +170,17 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
           As informações vão para o mapeamento oficial do Fênix Valley.
         </p>
       </div>
+      {networkError ? (
+        <p className="text-sm font-medium text-destructive">
+          Não conseguimos enviar agora. Verifique sua conexão e tente novamente.
+        </p>
+      ) : null}
     </form>
   );
 }
 
 const selectClassName =
-  "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+  "flex h-11 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
 
 function FormSection({
   section,
