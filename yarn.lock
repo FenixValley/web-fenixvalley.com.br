@@ -936,6 +936,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chenglou/pretext@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "@chenglou/pretext@npm:0.0.8"
+  checksum: 10c0/530342538cd751c7868e8d038372533ee8c39bd13c2ae8726d008e633d6b165b96aebebab82c67df42ee2a15e776147e94fbc32db2e34dcd4f6212ff5fc21eae
+  languageName: node
+  linkType: hard
+
 "@cloudflare/kv-asset-handler@npm:0.5.0":
   version: 0.5.0
   resolution: "@cloudflare/kv-asset-handler@npm:0.5.0"
@@ -10108,6 +10115,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web-fenixvalley-com-br@workspace:."
   dependencies:
+    "@chenglou/pretext": "npm:^0.0.8"
     "@hookform/resolvers": "npm:^3.9.1"
     "@opennextjs/cloudflare": "npm:^1.19.11"
     "@radix-ui/react-dialog": "npm:^1.1.16"
