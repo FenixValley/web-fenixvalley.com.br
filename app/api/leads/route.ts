@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { leads } from "@/db/schema";
+import { getDb } from "@/lib/db";
 import { leadSchema } from "@/lib/schemas";
 
 export async function POST(request: Request) {
@@ -14,6 +16,8 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   }
+
+  await getDb().insert(leads).values(parsed.data);
 
   return NextResponse.json({
     ok: true,

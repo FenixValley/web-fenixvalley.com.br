@@ -1,5 +1,7 @@
 import { metrics } from "@/data/ecosystem";
+import { FadeIn } from "@/components/ui/motion";
 import { BrandMotion } from "./brand-motion";
+import { HeroVideoDialog } from "./hero-video-dialog";
 
 
 export function HeroSection() {
@@ -8,7 +10,7 @@ export function HeroSection() {
       <div className="brand-grid absolute inset-x-0 top-0 h-[620px]" aria-hidden="true" />
       <div className="section-shell relative grid items-center gap-10 lg:grid-cols-[1.08fr_.92fr]">
         <div className="space-y-8">
-          <div className="space-y-5">
+          <FadeIn className="space-y-5">
             <h1 className="max-w-4xl font-[var(--font-space)] text-4xl font-black leading-tight tracking-normal text-balance text-white sm:text-5xl lg:text-6xl">
               Inovação que transforma. Tecnologia que conecta. Empreendedorismo que impulsiona Betim.
             </h1>
@@ -17,7 +19,8 @@ export function HeroSection() {
               instituições e oportunidades para construir um futuro próspero, tecnológico e
               sustentável para Betim.
             </p>
-          </div>
+            <HeroVideoDialog />
+          </FadeIn>
 
           <div className="grid gap-3 sm:grid-cols-3">
             {metrics.map((metric) => (

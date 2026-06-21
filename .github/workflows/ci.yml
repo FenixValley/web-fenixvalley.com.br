@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      - name: Habilitar corepack (Yarn Berry)
+        run: corepack enable
+
+      - name: Instalar dependências
+        run: yarn install --immutable
+
+      - name: Testes
+        run: yarn test
+
+      - name: Build (inclui lint e type-check)
+        run: yarn build
