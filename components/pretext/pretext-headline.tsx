@@ -20,6 +20,8 @@ type PretextHeadlineProps = {
   leading?: number;
   /** trecho colorido com o acento (case-insensitive). */
   accent?: string;
+  /** nível semântico do heading (1 = h1). */
+  level?: 1 | 2 | 3;
   className?: string;
 };
 
@@ -34,6 +36,7 @@ export function PretextHeadline({
   maxSize = 92,
   leading = 0.94,
   accent,
+  level = 1,
   className
 }: PretextHeadlineProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,7 +90,7 @@ export function PretextHeadline({
       ref={containerRef}
       className={className}
       role="heading"
-      aria-level={1}
+      aria-level={level}
       aria-label={text}
       style={{
         position: "relative",

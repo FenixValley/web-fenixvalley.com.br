@@ -15,10 +15,19 @@ export function EditorialHeader({ active }: { active?: string }) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="transition-opacity hover:opacity-60"
+                className="group relative"
                 style={{ color: isActive ? "var(--fx-accent)" : "var(--fx-muted)" }}
               >
                 {item.label}
+                <span
+                  aria-hidden
+                  className="absolute -bottom-1 left-0 h-px origin-left transition-transform duration-300 ease-out group-hover:scale-x-100"
+                  style={{
+                    width: "100%",
+                    background: "var(--fx-accent)",
+                    transform: isActive ? "scaleX(1)" : "scaleX(0)"
+                  }}
+                />
               </Link>
             );
           })}

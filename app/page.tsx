@@ -1,5 +1,8 @@
+import { fraunces } from "@/app/fonts";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { IndexList } from "@/components/editorial/index-list";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { PretextHeadline } from "@/components/pretext/pretext-headline";
 import { EditorialHero } from "@/components/sections/editorial-hero";
 
 const PILARES = [
@@ -18,32 +21,29 @@ export default function HomePage() {
 
       <section className="mx-auto w-full max-w-[1180px] px-6 pb-24 sm:px-10">
         <EditorialReveal>
-          <div className="flex items-baseline justify-between border-t pt-6" style={{ borderColor: "var(--fx-line)" }}>
-            <h2 className="font-display text-[28px] font-semibold sm:text-[34px]">O que vive no Vale</h2>
-            <span className="font-mono text-[12px] uppercase tracking-[0.2em]" style={{ color: "var(--fx-muted)" }}>
+          <div className="flex items-end justify-between gap-6 border-t pt-6" style={{ borderColor: "var(--fx-line)" }}>
+            <div className="max-w-[680px]">
+              <PretextHeadline
+                text="O que vive no Vale"
+                fontFamily={fraunces.style.fontFamily}
+                weight={600}
+                level={2}
+                accent="Vale"
+                sizeRatio={0.06}
+                minSize={26}
+                maxSize={40}
+                leading={1}
+              />
+            </div>
+            <span className="shrink-0 font-mono text-[12px] uppercase tracking-[0.2em]" style={{ color: "var(--fx-muted)" }}>
               seis frentes
             </span>
           </div>
         </EditorialReveal>
 
-        <ol className="mt-4">
-          {PILARES.map((pilar, index) => (
-            <EditorialReveal key={pilar.title} delay={index * 0.05}>
-              <li
-                className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1 border-t py-6 sm:grid-cols-[5rem_minmax(0,22rem)_1fr] sm:items-baseline"
-                style={{ borderColor: "var(--fx-line)" }}
-              >
-                <span className="font-mono text-[13px]" style={{ color: "var(--fx-accent)" }}>
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display text-[21px] font-medium sm:text-[23px]">{pilar.title}</h3>
-                <p className="col-start-2 font-body text-[16px] leading-[1.6] sm:col-start-3" style={{ color: "var(--fx-muted)" }}>
-                  {pilar.description}
-                </p>
-              </li>
-            </EditorialReveal>
-          ))}
-        </ol>
+        <div className="mt-4">
+          <IndexList items={PILARES} />
+        </div>
       </section>
     </EditorialShell>
   );
