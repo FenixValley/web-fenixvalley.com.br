@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { EcosystemMap } from "@/components/map/ecosystem-map";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
 
 export const metadata: Metadata = {
   title: "Mapa do ecossistema | Fênix Valley",
@@ -11,27 +12,19 @@ export const metadata: Metadata = {
 
 export default function MapPage() {
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-12 sm:py-16">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative space-y-8">
-            <div className="max-w-3xl space-y-4">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-300">Mapa Fênix Valley</p>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                Quem constrói o ecossistema de inovação de Betim.
-              </h1>
-              <p className="text-lg leading-8 text-slate-300">
-                Startups, universidades, empresas, hubs e espaços em um mapa vivo. Filtre por tipo,
-                busque por bairro e cadastre sua organização.
-              </p>
-            </div>
-            <EcosystemMap />
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+    <EditorialShell active="/mapa">
+      <PageHeader
+        kicker="Mapa Fênix Valley"
+        title="Quem constrói o ecossistema de inovação de Betim."
+        accent="constrói"
+        lede="Startups, universidades, empresas, hubs e espaços em um mapa vivo. Filtre por tipo, busque por bairro e cadastre sua organização."
+      />
+
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10">
+        <EditorialReveal>
+          <EcosystemMap />
+        </EditorialReveal>
+      </section>
+    </EditorialShell>
   );
 }

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { programsCatalog } from "@/data/programs";
-import { Badge } from "@/components/ui/badge";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 
 export const metadata: Metadata = {
   title: "Programas | Fênix Valley",
@@ -14,45 +14,47 @@ export const metadata: Metadata = {
 
 export default function ProgramsPage() {
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-16 sm:py-20">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative space-y-10">
-            <div className="max-w-3xl space-y-4">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Programas</p>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                Uma esteira para transformar intenção em projeto, projeto em negócio e negócio em impacto.
-              </h1>
-              <p className="text-lg leading-8 text-slate-300">
-                Cada programa atende um momento da jornada — da primeira ideia à conexão com mercado,
-                capital e talentos.
-              </p>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {programsCatalog.map((program) => (
-                <Link
-                  key={program.slug}
-                  href={`/programas/${program.slug}`}
-                  className="surface-panel group flex flex-col rounded-lg p-6 transition-transform hover:-translate-y-1"
+    <EditorialShell active="/programas">
+      <PageHeader
+        kicker="Programas"
+        title="Uma esteira que transforma intenção em negócio."
+        accent="negócio"
+        lede="Cada programa atende um momento da jornada — da primeira ideia à conexão com mercado, capital e talentos."
+      />
+
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {programsCatalog.map((program, index) => (
+            <EditorialReveal key={program.slug} delay={index * 0.06}>
+              <Link
+                href={`/programas/${program.slug}`}
+                className="group flex h-full flex-col p-6 transition-transform hover:-translate-y-1"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
+                <span
+                  className="w-fit px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em]"
+                  style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
                 >
-                  <Badge variant="outline" className="mb-4 w-fit border-orange-300/40 bg-orange-500/10 text-orange-300">
-                    {program.tag}
-                  </Badge>
-                  <h2 className="font-[var(--font-space)] text-xl font-bold text-white">{program.title}</h2>
-                  <p className="mt-3 flex-1 text-sm leading-6 text-slate-300">{program.summary}</p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
-                    Conhecer programa
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+                  {program.tag}
+                </span>
+                <h2 className="mt-5 font-display text-[22px] font-semibold leading-[1.1]" style={{ color: "var(--fx-ink)" }}>
+                  {program.title}
+                </h2>
+                <p className="mt-3 flex-1 font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                  {program.summary}
+                </p>
+                <span
+                  className="mt-6 inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em]"
+                  style={{ color: "var(--fx-accent)" }}
+                >
+                  Conhecer programa
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
+              </Link>
+            </EditorialReveal>
+          ))}
+        </div>
+      </section>
+    </EditorialShell>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 import {
+  ArrowUpRight,
   CalendarDays,
   ChevronRight,
   Clock,
@@ -12,10 +13,8 @@ import {
   Users
 } from "lucide-react";
 import { events } from "@/db/schema";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -64,88 +63,150 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
 
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative max-w-3xl space-y-8">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-400">
-              <Link href="/" className="hover:text-orange-200">
+    <EditorialShell active="/eventos">
+      <section className="relative overflow-hidden border-b" style={{ borderColor: "var(--fx-line)" }}>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-[-20%] z-0"
+          style={{
+            background:
+              "radial-gradient(50% 60% at 88% 0%, rgba(27,59,255,0.12), transparent 70%), radial-gradient(40% 50% at 6% 100%, rgba(56,189,248,0.08), transparent 72%)"
+          }}
+        />
+        <div className="relative z-10 mx-auto w-full max-w-[820px] px-6 pb-14 pt-14 sm:px-10 sm:pt-20">
+          <EditorialReveal>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em]"
+              style={{ color: "var(--fx-muted)" }}
+            >
+              <Link href="/" className="transition-colors hover:text-[var(--fx-accent)]">
                 Início
               </Link>
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <Link href="/eventos" className="hover:text-orange-200">
+              <Link href="/eventos" className="transition-colors hover:text-[var(--fx-accent)]">
                 Eventos
               </Link>
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="font-semibold text-slate-200">{event.title}</span>
+              <span className="truncate normal-case tracking-normal" style={{ color: "var(--fx-ink)" }}>
+                {event.title}
+              </span>
             </nav>
+          </EditorialReveal>
 
-            <div className="space-y-4">
+          <div className="mt-7 space-y-5">
+            <EditorialReveal delay={0.05}>
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                <span
+                  className="rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em]"
+                  style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+                >
                   {event.category}
-                </Badge>
-                <Badge variant="outline" className="border-sky-300/40 bg-sky-500/10 text-sky-300">
+                </span>
+                <span
+                  className="rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em]"
+                  style={{ borderColor: "var(--fx-line)", color: "var(--fx-muted)" }}
+                >
                   {event.mode}
-                </Badge>
+                </span>
               </div>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
+            </EditorialReveal>
+            <EditorialReveal delay={0.1}>
+              <h1 className="font-display text-4xl leading-[1.02] sm:text-5xl" style={{ color: "var(--fx-ink)" }}>
                 {event.title}
               </h1>
-              <p className="text-lg leading-8 text-slate-300">{event.description}</p>
-            </div>
-
-            <div className="surface-panel space-y-3 rounded-lg p-5 text-sm text-slate-300">
-              <p className="flex items-center gap-2">
-                <CalendarDays className="h-4 w-4 shrink-0 text-orange-300" />
-                <span className="capitalize">{formatFullDate(event.date)}</span>
+            </EditorialReveal>
+            <EditorialReveal delay={0.16}>
+              <p className="max-w-[58ch] font-body text-[18px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                {event.description}
               </p>
-              <p className="flex items-center gap-2">
-                <Clock className="h-4 w-4 shrink-0 text-sky-300" />
-                {event.time}
-              </p>
-              <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 shrink-0 text-emerald-300" />
-                {event.location}
-              </p>
-              {event.audience ? (
-                <p className="flex items-center gap-2">
-                  <Users className="h-4 w-4 shrink-0 text-amber-300" />
-                  {event.audience}
-                </p>
-              ) : null}
-              <p className="pt-2 text-xs text-slate-400">Organização: {event.organizer}</p>
-            </div>
-
-            {event.schedule ? (
-              <div className="space-y-3">
-                <h2 className="font-[var(--font-space)] text-xl font-bold text-white">Programação</h2>
-                <p className="whitespace-pre-line text-sm leading-7 text-slate-300">{event.schedule}</p>
-              </div>
-            ) : null}
-
-            <div className="flex flex-wrap gap-3">
-              {event.link && isHttpUrl(event.link) ? (
-                <Button asChild>
-                  <a href={event.link} target="_blank" rel="noreferrer">
-                    <ExternalLink className="h-4 w-4" />
-                    Inscrever-se
-                  </a>
-                </Button>
-              ) : null}
-              <Button asChild variant="ghost">
-                <a href={whatsappShareUrl} target="_blank" rel="noreferrer">
-                  <MessageCircle className="h-4 w-4" />
-                  Compartilhar no WhatsApp
-                </a>
-              </Button>
-            </div>
+            </EditorialReveal>
           </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-[820px] space-y-10 px-6 py-14 sm:px-10 sm:py-18">
+        <EditorialReveal>
+          <div
+            className="space-y-3 rounded-2xl border p-6 font-mono text-[12px] uppercase tracking-[0.08em]"
+            style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)", color: "var(--fx-muted)" }}
+          >
+            <p className="flex items-center gap-2">
+              <CalendarDays className="h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
+              <span style={{ color: "var(--fx-ink)" }}>{formatFullDate(event.date)}</span>
+            </p>
+            <p className="flex items-center gap-2">
+              <Clock className="h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
+              {event.time}
+            </p>
+            <p className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
+              <span className="normal-case tracking-normal">{event.location}</span>
+            </p>
+            {event.audience ? (
+              <p className="flex items-center gap-2">
+                <Users className="h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
+                <span className="normal-case tracking-normal">{event.audience}</span>
+              </p>
+            ) : null}
+            <p className="pt-2 normal-case tracking-normal" style={{ color: "var(--fx-muted)" }}>
+              Organização: <span style={{ color: "var(--fx-ink)" }}>{event.organizer}</span>
+            </p>
+          </div>
+        </EditorialReveal>
+
+        {event.schedule ? (
+          <EditorialReveal delay={0.08}>
+            <div className="space-y-3">
+              <h2
+                className="font-mono text-[12px] uppercase tracking-[0.28em]"
+                style={{ color: "var(--fx-accent)" }}
+              >
+                Programação
+              </h2>
+              <p
+                className="whitespace-pre-line font-body text-[16px] leading-[1.7]"
+                style={{ color: "var(--fx-muted)" }}
+              >
+                {event.schedule}
+              </p>
+            </div>
+          </EditorialReveal>
+        ) : null}
+
+        <EditorialReveal delay={0.12}>
+          <div className="flex flex-wrap gap-3">
+            {event.link && isHttpUrl(event.link) ? (
+              <a
+                href={event.link}
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+                style={{ background: "var(--fx-accent)", color: "#ffffff" }}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  Inscrever-se
+                </span>
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            ) : null}
+            <a
+              href={whatsappShareUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+              style={{ border: "1px solid var(--fx-line)", color: "var(--fx-ink)" }}
+            >
+              <span className="inline-flex items-center gap-2">
+                <MessageCircle className="h-4 w-4" />
+                Compartilhar no WhatsApp
+              </span>
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          </div>
+        </EditorialReveal>
+      </section>
+    </EditorialShell>
   );
 }

@@ -15,6 +15,11 @@ out/
 dist/
 build/
 coverage/
+*.tsbuildinfo
+
+# Screenshots de verificação (não versionar)
+/*.png
+/*.jpeg
 
 .env
 .env*.local

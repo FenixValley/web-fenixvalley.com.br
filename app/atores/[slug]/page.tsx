@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import { ChevronRight, ExternalLink, Mail, MapPin, MapPinned } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Mail, MapPin, MapPinned } from "lucide-react";
 import { actors } from "@/db/schema";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 import { actorTypeLabels } from "@/lib/schemas";
 
@@ -46,79 +45,112 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
   const typeLabel = actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type;
 
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative max-w-3xl space-y-8">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-400">
-              <Link href="/" className="hover:text-orange-200">
-                Início
-              </Link>
-              <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <Link href="/mapa" className="hover:text-orange-200">
-                Mapa do ecossistema
-              </Link>
-              <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="font-semibold text-slate-200">{actor.name}</span>
-            </nav>
+    <EditorialShell active="/mapa">
+      <PageHeader kicker={typeLabel} title={actor.name} />
 
-            <div className="space-y-4">
-              <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
-                {typeLabel}
-              </Badge>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                {actor.name}
-              </h1>
-              <p className="flex items-center gap-2 text-sm text-slate-400">
-                <MapPin className="h-4 w-4 text-emerald-300" />
+      <section className="mx-auto w-full max-w-[1180px] px-6 pb-20 pt-12 sm:px-10">
+        <EditorialReveal>
+          <nav
+            aria-label="Breadcrumb"
+            className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em]"
+            style={{ color: "var(--fx-muted)" }}
+          >
+            <Link href="/" className="transition-colors hover:text-[color:var(--fx-accent)]">
+              Início
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+            <Link href="/mapa" className="transition-colors hover:text-[color:var(--fx-accent)]">
+              Mapa do ecossistema
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
+            <span style={{ color: "var(--fx-ink)" }}>{actor.name}</span>
+          </nav>
+        </EditorialReveal>
+
+        <div className="mt-10 grid gap-x-12 gap-y-10 md:grid-cols-[1.5fr_1fr] md:items-start">
+          <EditorialReveal delay={0.1}>
+            <div className="max-w-[58ch] space-y-6">
+              <p
+                className="flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em]"
+                style={{ color: "var(--fx-muted)" }}
+              >
+                <MapPin className="h-4 w-4" style={{ color: "var(--fx-accent)" }} aria-hidden="true" />
                 {actor.neighborhood}, Betim · {actor.segment}
               </p>
-            </div>
-
-            <div className="surface-panel rounded-lg p-6">
-              <p className="text-base leading-8 text-slate-300">{actor.description}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              {actor.email ? (
-                <Button asChild>
-                  <a href={`mailto:${actor.email}`}>
-                    <Mail className="h-4 w-4" />
-                    Entrar em contato
-                  </a>
-                </Button>
-              ) : null}
-              {actor.site && isHttpUrl(actor.site) ? (
-                <Button asChild variant={actor.email ? "ghost" : "default"}>
-                  <a href={actor.site} target="_blank" rel="noreferrer">
-                    <ExternalLink className="h-4 w-4" />
-                    Visitar site
-                  </a>
-                </Button>
-              ) : null}
-              <Button asChild variant="ghost">
-                <Link href="/mapa">
-                  <MapPinned className="h-4 w-4" />
-                  Ver no mapa
-                </Link>
-              </Button>
-            </div>
-
-            {!actor.email && !actor.site ? (
-              <p className="text-sm leading-6 text-slate-400">
-                Esta organização ainda não informou canais de contato. Fale com a coordenação em{" "}
-                <Link href="/contato" className="text-orange-300 hover:text-orange-200">
-                  /contato
-                </Link>{" "}
-                para chegar até ela.
+              <p className="font-body text-[18px] leading-[1.7]" style={{ color: "var(--fx-ink)" }}>
+                {actor.description}
               </p>
-            ) : null}
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+            </div>
+          </EditorialReveal>
+
+          <EditorialReveal delay={0.2}>
+            <aside
+              className="flex flex-col gap-3 border p-6"
+              style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}
+            >
+              <p
+                className="font-mono text-[11px] uppercase tracking-[0.24em]"
+                style={{ color: "var(--fx-accent)" }}
+              >
+                Contato
+              </p>
+
+              {actor.email ? (
+                <a
+                  href={`mailto:${actor.email}`}
+                  className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+                  style={{ background: "var(--fx-accent)", color: "#ffffff" }}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <Mail className="h-4 w-4" aria-hidden="true" />
+                    Entrar em contato
+                  </span>
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              ) : null}
+
+              {actor.site && isHttpUrl(actor.site) ? (
+                <a
+                  href={actor.site}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+                  style={
+                    actor.email
+                      ? { border: "1px solid var(--fx-line)", color: "var(--fx-ink)" }
+                      : { background: "var(--fx-accent)", color: "#ffffff" }
+                  }
+                >
+                  Visitar site
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </a>
+              ) : null}
+
+              <Link
+                href="/mapa"
+                className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+                style={{ border: "1px solid var(--fx-line)", color: "var(--fx-ink)" }}
+              >
+                <span className="inline-flex items-center gap-2">
+                  <MapPinned className="h-4 w-4" aria-hidden="true" />
+                  Ver no mapa
+                </span>
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </Link>
+
+              {!actor.email && !actor.site ? (
+                <p className="font-body text-[14px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                  Esta organização ainda não informou canais de contato. Fale com a coordenação em{" "}
+                  <Link href="/contato" className="underline transition-colors hover:text-[color:var(--fx-accent)]">
+                    /contato
+                  </Link>{" "}
+                  para chegar até ela.
+                </p>
+              ) : null}
+            </aside>
+          </EditorialReveal>
+        </div>
+      </section>
+    </EditorialShell>
   );
 }

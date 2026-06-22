@@ -4,10 +4,10 @@ import { eq } from "drizzle-orm";
 import { CalendarDays, CheckCircle2, Users } from "lucide-react";
 import { getProgram } from "@/data/programs";
 import { programSettings } from "@/db/schema";
-import { Badge } from "@/components/ui/badge";
 import { ProgramApplyForm } from "@/components/sections/program-apply-form";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -33,66 +33,78 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
   const inscriptionsOpen = Boolean(settings?.inscriptionsOpen);
 
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-16 sm:py-20">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
-                  {program.tag}
-                </Badge>
-                <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                  {program.title}
-                </h1>
-                <p className="text-lg leading-8 text-slate-300">{program.description}</p>
-              </div>
+    <EditorialShell active="/programas">
+      <PageHeader kicker={program.tag} title={program.title} lede={program.description} />
 
-              <div className="surface-panel space-y-3 rounded-lg p-5">
-                <p className="flex items-center gap-2 text-sm font-bold text-white">
-                  <Users className="h-4 w-4 text-orange-300" />
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
+          <div className="space-y-8">
+            <EditorialReveal>
+              <div
+                className="space-y-3 p-5"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
+                <p className="flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--fx-accent)" }}>
+                  <Users className="h-4 w-4" />
                   Para quem é
                 </p>
-                <p className="text-sm leading-6 text-slate-300">{program.audience}</p>
+                <p className="font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                  {program.audience}
+                </p>
               </div>
+            </EditorialReveal>
 
+            <EditorialReveal delay={0.08}>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {program.steps.map((step) => (
-                  <div key={step} className="surface-panel rounded-lg p-4 text-center">
-                    <CheckCircle2 className="mx-auto mb-2 h-5 w-5 text-emerald-400" />
-                    <p className="text-sm font-bold text-white">{step}</p>
+                  <div
+                    key={step}
+                    className="p-4 text-center"
+                    style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+                  >
+                    <CheckCircle2 className="mx-auto mb-2 h-5 w-5" style={{ color: "var(--fx-accent)" }} />
+                    <p className="font-body text-[14px] font-semibold" style={{ color: "var(--fx-ink)" }}>{step}</p>
                   </div>
                 ))}
               </div>
+            </EditorialReveal>
 
+            <EditorialReveal delay={0.16}>
               <div className="space-y-3">
-                <h2 className="font-[var(--font-space)] text-xl font-bold text-white">Critérios de participação</h2>
+                <h2 className="font-display text-[22px] font-semibold" style={{ color: "var(--fx-ink)" }}>
+                  Critérios de participação
+                </h2>
                 <ul className="space-y-2">
                   {program.criteria.map((criterion) => (
-                    <li key={criterion} className="flex items-start gap-2 text-sm leading-6 text-slate-300">
-                      <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-orange-300" />
+                    <li key={criterion} className="flex items-start gap-2 font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                      <CheckCircle2 className="mt-1 h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
                       {criterion}
                     </li>
                   ))}
                 </ul>
               </div>
+            </EditorialReveal>
 
-              <p className="flex items-start gap-2 text-sm leading-6 text-slate-400">
-                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />
+            <EditorialReveal delay={0.24}>
+              <p className="flex items-start gap-2 font-body text-[14px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                <CalendarDays className="mt-0.5 h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
                 {program.calendar}
               </p>
-            </div>
+            </EditorialReveal>
+          </div>
 
-            <div className="rounded-lg border border-slate-800 bg-slate-950 p-5 text-white shadow-crisp sm:p-7">
+          <EditorialReveal delay={0.1}>
+            <div
+              className="p-5 sm:p-7"
+              style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+            >
               {inscriptionsOpen ? (
                 <div className="space-y-5">
                   <div className="space-y-2">
-                    <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-400">
+                    <p className="font-mono text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--fx-accent)" }}>
                       Inscrições abertas
                     </p>
-                    <h2 className="font-[var(--font-space)] text-xl font-bold">
+                    <h2 className="font-display text-[22px] font-semibold" style={{ color: "var(--fx-ink)" }}>
                       Inscreva-se em {program.title}
                     </h2>
                   </div>
@@ -100,13 +112,13 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-sm font-bold uppercase tracking-[0.16em] text-slate-400">
+                  <p className="font-mono text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--fx-muted)" }}>
                     Inscrições fechadas
                   </p>
-                  <h2 className="font-[var(--font-space)] text-xl font-bold">
+                  <h2 className="font-display text-[22px] font-semibold" style={{ color: "var(--fx-ink)" }}>
                     Nenhuma turma aberta no momento
                   </h2>
-                  <p className="text-sm leading-6 text-slate-300">
+                  <p className="font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
                     As chamadas são divulgadas na agenda do ecossistema e na comunidade. Entre no
                     grupo do WhatsApp ou acompanhe as oportunidades na home para saber quando a
                     próxima turma abrir.
@@ -114,10 +126,9 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
                 </div>
               )}
             </div>
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+          </EditorialReveal>
+        </div>
+      </section>
+    </EditorialShell>
   );
 }
