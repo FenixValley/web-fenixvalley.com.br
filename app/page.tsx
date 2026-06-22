@@ -1,37 +1,44 @@
 import { fraunces } from "@/app/fonts";
+import { pillars } from "@/data/ecosystem";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { IndexList } from "@/components/editorial/index-list";
-import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { PretextHeadline } from "@/components/pretext/pretext-headline";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { EditorialHero } from "@/components/sections/editorial-hero";
+import { EditorialMetrics } from "@/components/sections/editorial-metrics";
+import { EditorialAudience } from "@/components/sections/editorial-audience";
+import { EditorialEcosystem } from "@/components/sections/editorial-ecosystem";
+import { EditorialPrograms } from "@/components/sections/editorial-programs";
+import { EditorialContent } from "@/components/sections/editorial-content";
+import { EditorialJoin } from "@/components/sections/editorial-join";
 
-const PILARES = [
-  { title: "Ideias e projetos", description: "Compartilhar oportunidades, validar problemas reais e formar times." },
-  { title: "Startups e empresas", description: "Conexão entre negócios locais, tecnologia aplicada e novas fontes de receita." },
-  { title: "Universidades e talentos", description: "Aproximação entre estudantes, pesquisa, mercado e desafios da cidade." },
-  { title: "Capital e parceiros", description: "Pontes com investidores, mentores, governo, entidades e lideranças." },
-  { title: "Nova economia", description: "Diversificação econômica para reduzir a dependência de um único setor." },
-  { title: "Impacto local", description: "Empreendedorismo como ferramenta para mudar vidas, cidades e mercados." }
-];
+const pilares = pillars.map((p) => ({ title: p.title, description: p.description }));
 
 export default function HomePage() {
   return (
     <EditorialShell>
       <EditorialHero />
+      <EditorialMetrics />
+      <EditorialAudience />
+      <EditorialEcosystem />
+      <EditorialPrograms />
 
-      <section className="mx-auto w-full max-w-[1180px] px-6 pb-24 sm:px-10">
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
         <EditorialReveal>
           <div className="flex items-end justify-between gap-6 border-t pt-6" style={{ borderColor: "var(--fx-line)" }}>
-            <div className="max-w-[680px]">
+            <div className="min-w-0 flex-1 max-w-[680px]">
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.3em]" style={{ color: "var(--fx-accent)" }}>
+                As frentes
+              </p>
               <PretextHeadline
                 text="O que vive no Vale"
                 fontFamily={fraunces.style.fontFamily}
                 weight={600}
                 level={2}
                 accent="Vale"
-                sizeRatio={0.06}
+                sizeRatio={0.062}
                 minSize={26}
-                maxSize={40}
+                maxSize={44}
                 leading={1}
               />
             </div>
@@ -42,9 +49,12 @@ export default function HomePage() {
         </EditorialReveal>
 
         <div className="mt-4">
-          <IndexList items={PILARES} />
+          <IndexList items={pilares} />
         </div>
       </section>
+
+      <EditorialContent />
+      <EditorialJoin />
     </EditorialShell>
   );
 }

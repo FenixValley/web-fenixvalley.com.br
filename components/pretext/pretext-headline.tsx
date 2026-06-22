@@ -94,6 +94,7 @@ export function PretextHeadline({
       aria-label={text}
       style={{
         position: "relative",
+        width: "100%",
         height: layout ? layout.height : undefined,
         fontFamily,
         fontWeight: weight
