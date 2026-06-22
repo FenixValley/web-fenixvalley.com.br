@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { fraunces } from "@/app/fonts";
-import { LottiePlayer } from "@/components/editorial/lottie-player";
+import { Aurora } from "@/components/editorial/aurora";
 import { PretextHeadline } from "@/components/pretext/pretext-headline";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 
@@ -12,10 +12,7 @@ export function EditorialJoin() {
         className="relative overflow-hidden rounded-3xl border px-7 py-14 sm:px-14 sm:py-20"
         style={{ borderColor: "var(--fx-line)", background: "var(--fx-ink)" }}
       >
-        <div className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 opacity-[0.45]">
-          <LottiePlayer name="network" className="h-full w-full" />
-        </div>
-        <div className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(60% 80% at 80% 0%, rgba(27,59,255,0.35), transparent 70%)" }} />
+        <Aurora />
 
         <div className="relative z-10 max-w-[760px]" style={{ color: "#ffffff" }}>
           <EditorialReveal>

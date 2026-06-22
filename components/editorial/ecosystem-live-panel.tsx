@@ -4,20 +4,68 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { ecosystemActors } from "@/data/ecosystem";
-import { LottiePlayer } from "@/components/editorial/lottie-player";
 
-// Painel "mapa vivo": rede Lottie ao fundo + atores como pontos pulsantes.
+// Posições (0-100) a partir dos % dos atores.
+const pts = ecosystemActors.map((a) => ({
+  name: a.name,
+  x: parseFloat(a.x),
+  y: parseFloat(a.y)
+}));
+
+// Arestas da rede (índices em ecosystemActors): Investidores no centro + cruzamentos.
+const edges = [
+  [4, 0],
+  [4, 1],
+  [4, 2],
+  [4, 3],
+  [0, 3],
+  [1, 2]
+];
+
+// Painel "mapa vivo": rede de conexões animada (SVG/motion) + atores pulsantes.
 export function EcosystemLivePanel() {
   return (
     <div
       className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border"
       style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}
     >
-      {/* rede de nós animada (Lottie) como pano de fundo vivo */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.55]">
-        <LottiePlayer name="network" className="h-[125%] w-[125%]" />
-      </div>
+      {/* malha de fundo */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.5]"
+        style={{
+          backgroundImage:
+            "linear-gradient(var(--fx-line) 1px, transparent 1px), linear-gradient(90deg, var(--fx-line) 1px, transparent 1px)",
+          backgroundSize: "32px 32px"
+        }}
+      />
 
+      {/* conexões animadas */}
+      <svg
+        aria-hidden
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        className="absolute inset-0 h-full w-full"
+      >
+        {edges.map(([a, b], i) => (
+          <motion.line
+            key={`${a}-${b}`}
+            x1={pts[a].x}
+            y1={pts[a].y}
+            x2={pts[b].x}
+            y2={pts[b].y}
+            stroke="var(--fx-accent)"
+            strokeWidth={0.4}
+            strokeOpacity={0.45}
+            initial={{ pathLength: 0, opacity: 0 }}
+            whileInView={{ pathLength: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, delay: 0.3 + i * 0.12, ease: "easeInOut" }}
+          />
+        ))}
+      </svg>
+
+      {/* atores pulsantes */}
       {ecosystemActors.map((actor, index) => (
         <motion.div
           key={actor.name}
@@ -28,7 +76,7 @@ export function EcosystemLivePanel() {
           viewport={{ once: true }}
           transition={{ delay: 0.2 + index * 0.12, type: "spring", stiffness: 220, damping: 16 }}
         >
-          <div className="group flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <span className="relative flex h-3 w-3">
               <motion.span
                 className="absolute inline-flex h-full w-full rounded-full"
