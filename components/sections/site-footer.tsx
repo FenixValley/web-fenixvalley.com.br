@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPinned, MessageCircle } from "lucide-react";
+import { Mail, MapPinned, MessageCircle } from "lucide-react";
+import { NewsletterForm } from "./newsletter-form";
 
 const footerGroups = [
   {
@@ -62,21 +63,7 @@ export function SiteFooter() {
               Receba eventos, chamadas, editais e convites da comunidade Fênix Valley.
             </p>
           </div>
-          <form className="grid gap-3 sm:grid-cols-[1fr_auto] lg:self-end">
-            <label className="sr-only" htmlFor="footer-email">
-              E-mail para newsletter
-            </label>
-            <input
-              id="footer-email"
-              type="email"
-              placeholder="seu@email.com"
-              className="h-11 rounded-md border border-white/10 bg-slate-900 px-3 text-sm text-white outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-orange-400"
-            />
-            <button type="button" className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-orange-600">
-              Inscrever
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
 
         <div className="grid gap-10 py-12 lg:grid-cols-[1.05fr_1.45fr]">
@@ -91,9 +78,9 @@ export function SiteFooter() {
                 <MessageCircle className="h-4 w-4 text-orange-300" />
                 Comunidade oficial no WhatsApp
               </Link>
-              <Link href="mailto:contato@fenixvalley.com.br" className="inline-flex items-center gap-2 hover:text-orange-200">
+              <Link href="mailto:betim.fenixvalley2026@gmail.com" className="inline-flex items-center gap-2 hover:text-orange-200">
                 <Mail className="h-4 w-4 text-sky-300" />
-                contato@fenixvalley.com.br
+                betim.fenixvalley2026@gmail.com
               </Link>
               <span className="inline-flex items-center gap-2">
                 <MapPinned className="h-4 w-4 text-emerald-300" />
