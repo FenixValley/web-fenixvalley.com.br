@@ -63,13 +63,13 @@ export function BrandMotion() {
       >
         <div className="flex h-52 w-52 items-center justify-center rounded-full bg-white/92 p-5 shadow-crisp ring-1 ring-sky-200/40 backdrop-blur sm:h-64 sm:w-64">
           <Image
-            src="/logo-fenix-valley.png"
-            alt=""
-            width={240}
-            height={240}
-            priority
-            className="h-auto w-full"
-          />
+              src="/logo-vertical.png"
+              alt="Fênix Valley"
+              width={240}
+              height={240}
+              priority
+              className="h-auto w-full"
+            />
         </div>
       </motion.div>
     </div>

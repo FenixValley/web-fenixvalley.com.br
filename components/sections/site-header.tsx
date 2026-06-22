@@ -189,14 +189,14 @@ export function SiteHeader() {
           </button>
 
           {/* center logo */}
-          <Link href="#" className="flex shrink-0 items-center" aria-label="Fênix Valley">
+          <Link href="/" className="flex shrink-0 items-center" aria-label="Fênix Valley">
             <Image
-              src="/logo-fenix-valley.png"
-              alt=""
-              width={130}
-              height={130}
+              src="/logo-simbolo.png"
+              alt="Fênix Valley"
+              width={44}
+              height={44}
               priority
-              className="h-11 w-auto"
+              className="h-11 w-11"
             />
           </Link>
 
