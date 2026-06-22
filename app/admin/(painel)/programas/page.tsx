@@ -20,8 +20,8 @@ export default async function AdminProgramsPage() {
   return (
     <div className="space-y-10">
       <div className="space-y-6">
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Programas</h1>
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <h1 className="font-display text-2xl font-black text-foreground">Programas</h1>
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -36,15 +36,15 @@ export default async function AdminProgramsPage() {
                 return (
                   <TableRow key={program.slug}>
                     <TableCell>
-                      <p className="font-semibold text-white">{program.title}</p>
-                      <p className="text-xs text-slate-400">/programas/{program.slug}</p>
+                      <p className="font-semibold text-foreground">{program.title}</p>
+                      <p className="text-xs text-muted-foreground">/programas/{program.slug}</p>
                     </TableCell>
                     <TableCell>
                       <span
                         className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${
                           open
-                            ? "border-emerald-500/30 bg-emerald-500/15 text-emerald-400"
-                            : "border-slate-500/30 bg-slate-500/15 text-slate-400"
+                            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                            : "border-border bg-muted text-muted-foreground"
                         }`}
                       >
                         {open ? "Abertas" : "Fechadas"}
@@ -58,12 +58,12 @@ export default async function AdminProgramsPage() {
                         }}
                       >
                         {open ? (
-                          <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                          <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                             <Lock className="h-4 w-4" />
                             Fechar inscrições
                           </Button>
                         ) : (
-                          <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                          <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                             <LockOpen className="h-4 w-4" />
                             Abrir inscrições
                           </Button>
@@ -79,11 +79,11 @@ export default async function AdminProgramsPage() {
       </div>
 
       <div className="space-y-6">
-        <h2 className="font-[var(--font-space)] text-xl font-black text-white">Inscrições recebidas</h2>
+        <h2 className="font-display text-xl font-black text-foreground">Inscrições recebidas</h2>
         {applications.length === 0 ? (
-          <p className="text-sm text-slate-400">Nenhuma inscrição recebida ainda.</p>
+          <p className="text-sm text-muted-foreground">Nenhuma inscrição recebida ainda.</p>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-white/10">
+          <div className="overflow-hidden rounded-xl border border-border">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -98,16 +98,16 @@ export default async function AdminProgramsPage() {
                 {applications.map((application) => (
                   <TableRow key={application.id}>
                     <TableCell>
-                      <p className="font-semibold text-white">{application.name}</p>
-                      <p className="text-xs text-slate-400">{application.email}</p>
+                      <p className="font-semibold text-foreground">{application.name}</p>
+                      <p className="text-xs text-muted-foreground">{application.email}</p>
                       {application.organization ? (
-                        <p className="text-xs text-slate-400">{application.organization}</p>
+                        <p className="text-xs text-muted-foreground">{application.organization}</p>
                       ) : null}
                     </TableCell>
-                    <TableCell className="text-sm text-slate-300">
+                    <TableCell className="text-sm text-muted-foreground">
                       {programTitles.get(application.programSlug) ?? application.programSlug}
                     </TableCell>
-                    <TableCell className="max-w-64 text-sm text-slate-300">{application.motivation}</TableCell>
+                    <TableCell className="max-w-64 text-sm text-muted-foreground">{application.motivation}</TableCell>
                     <TableCell>
                       <StatusBadge status={application.status} />
                     </TableCell>
@@ -119,7 +119,7 @@ export default async function AdminProgramsPage() {
                             await setProgramApplicationStatus(application.id, "approved");
                           }}
                         >
-                          <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                          <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                             <Check className="h-4 w-4" />
                             Aprovar
                           </Button>
@@ -130,7 +130,7 @@ export default async function AdminProgramsPage() {
                             await setProgramApplicationStatus(application.id, "rejected");
                           }}
                         >
-                          <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                          <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                             <X className="h-4 w-4" />
                             Rejeitar
                           </Button>

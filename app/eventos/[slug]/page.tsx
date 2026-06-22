@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { events } from "@/db/schema";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { MotionCard } from "@/components/editorial/motion-card";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 
@@ -126,11 +127,10 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
       </section>
 
       <section className="mx-auto w-full max-w-[820px] space-y-10 px-6 py-14 sm:px-10 sm:py-18">
-        <EditorialReveal>
-          <div
-            className="space-y-3 rounded-2xl border p-6 font-mono text-[12px] uppercase tracking-[0.08em]"
-            style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)", color: "var(--fx-muted)" }}
-          >
+        <MotionCard
+          className="space-y-3 rounded-2xl border p-6 font-mono text-[12px] uppercase tracking-[0.08em]"
+          style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)", color: "var(--fx-muted)" }}
+        >
             <p className="flex items-center gap-2">
               <CalendarDays className="h-4 w-4 shrink-0" style={{ color: "var(--fx-accent)" }} />
               <span style={{ color: "var(--fx-ink)" }}>{formatFullDate(event.date)}</span>
@@ -152,8 +152,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             <p className="pt-2 normal-case tracking-normal" style={{ color: "var(--fx-muted)" }}>
               Organização: <span style={{ color: "var(--fx-ink)" }}>{event.organizer}</span>
             </p>
-          </div>
-        </EditorialReveal>
+        </MotionCard>
 
         {event.schedule ? (
           <EditorialReveal delay={0.08}>

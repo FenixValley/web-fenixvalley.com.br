@@ -19,7 +19,7 @@ export default async function EditOpportunityPage({ params }: { params: Promise<
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Editar oportunidade</h1>
+      <h1 className="font-display text-2xl font-black text-foreground">Editar oportunidade</h1>
       <OpportunityForm action={upsertOpportunity.bind(null, opportunityId)} initialValues={opportunity} />
     </div>
   );

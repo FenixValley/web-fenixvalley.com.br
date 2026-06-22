@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { count, eq } from "drizzle-orm";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { actors, events, leads, opportunities, volunteers } from "@/db/schema";
 import { getDb } from "@/lib/db";
 
@@ -45,19 +46,20 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Visão geral</h1>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <h1 className="font-display text-2xl font-black text-foreground">Visão geral</h1>
+      <EditorialReveal className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.label}
             href={card.href}
-            className="surface-panel rounded-lg p-5 transition-transform hover:-translate-y-0.5"
+            className="rounded-lg border p-5 transition-transform hover:-translate-y-0.5"
+            style={{ background: "var(--fx-surface)", borderColor: "var(--fx-line)" }}
           >
-            <p className="font-[var(--font-space)] text-3xl font-black text-orange-300">{card.value}</p>
-            <p className="mt-1 text-sm font-semibold text-white">{card.label}</p>
+            <p className="font-display text-3xl font-black text-primary">{card.value}</p>
+            <p className="mt-1 text-sm font-semibold text-foreground">{card.label}</p>
           </Link>
         ))}
-      </div>
+      </EditorialReveal>
     </div>
   );
 }

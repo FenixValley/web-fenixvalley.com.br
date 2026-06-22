@@ -16,7 +16,7 @@ export default async function AdminOpportunitiesPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Oportunidades</h1>
+        <h1 className="font-display text-2xl font-black text-foreground">Oportunidades</h1>
         <Button asChild size="sm">
           <Link href="/admin/oportunidades/nova">
             <Plus className="h-4 w-4" />
@@ -25,9 +25,9 @@ export default async function AdminOpportunitiesPage() {
         </Button>
       </div>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-400">Nenhuma oportunidade cadastrada.</p>
+        <p className="text-sm text-muted-foreground">Nenhuma oportunidade cadastrada.</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -42,11 +42,11 @@ export default async function AdminOpportunitiesPage() {
               {rows.map((opportunity) => (
                 <TableRow key={opportunity.id}>
                   <TableCell>
-                    <p className="font-semibold text-white">{opportunity.title}</p>
-                    <p className="max-w-72 truncate text-xs text-slate-400">{opportunity.audience}</p>
+                    <p className="font-semibold text-foreground">{opportunity.title}</p>
+                    <p className="max-w-72 truncate text-xs text-muted-foreground">{opportunity.audience}</p>
                   </TableCell>
-                  <TableCell className="text-sm text-slate-300">{opportunity.type}</TableCell>
-                  <TableCell className="text-sm text-slate-300">{opportunity.date}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{opportunity.type}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{opportunity.date}</TableCell>
                   <TableCell>
                     <StatusBadge status={opportunity.status} />
                   </TableCell>
@@ -61,7 +61,7 @@ export default async function AdminOpportunitiesPage() {
                         <Button
                           size="sm"
                           variant="ghost"
-                          className={opportunity.featured ? "text-amber-300 hover:text-amber-200" : "text-slate-400 hover:text-amber-300"}
+                          className={opportunity.featured ? "text-amber-600 hover:text-amber-700" : "text-muted-foreground hover:text-amber-600"}
                         >
                           <Star className="h-4 w-4" />
                           {opportunity.featured ? "Remover destaque" : "Destacar"}
@@ -74,7 +74,7 @@ export default async function AdminOpportunitiesPage() {
                             await setOpportunityStatus(opportunity.id, "archived");
                           }}
                         >
-                          <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                          <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                             <Archive className="h-4 w-4" />
                             Arquivar
                           </Button>
@@ -86,13 +86,13 @@ export default async function AdminOpportunitiesPage() {
                             await setOpportunityStatus(opportunity.id, "published");
                           }}
                         >
-                          <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                          <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                             <Upload className="h-4 w-4" />
                             Publicar
                           </Button>
                         </form>
                       )}
-                      <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                      <Button asChild size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                         <Link href={`/admin/oportunidades/${opportunity.id}/editar`}>
                           <Pencil className="h-4 w-4" />
                           Editar

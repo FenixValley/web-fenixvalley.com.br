@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 import type { SitePage } from "@/data/site-pages";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { MotionCard } from "@/components/editorial/motion-card";
 import { PageHeader } from "@/components/editorial/page-header";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 
@@ -27,22 +28,22 @@ export function InternalPage({ page }: { page: SitePage }) {
 
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {page.sections.map((section, index) => (
-            <EditorialReveal key={section.title} delay={0.12 + index * 0.08}>
-              <article
-                className="h-full rounded-lg p-6"
-                style={{
-                  background: "var(--fx-surface)",
-                  border: "1px solid var(--fx-line)"
-                }}
-              >
-                <h2 className="font-display text-xl font-semibold" style={{ color: "var(--fx-ink)" }}>
-                  {section.title}
-                </h2>
-                <p className="mt-3 font-body text-[15px] leading-[1.7]" style={{ color: "var(--fx-muted)" }}>
-                  {section.body}
-                </p>
-              </article>
-            </EditorialReveal>
+            <MotionCard
+              key={section.title}
+              delay={0.12 + index * 0.08}
+              className="h-full rounded-lg p-6"
+              style={{
+                background: "var(--fx-surface)",
+                border: "1px solid var(--fx-line)"
+              }}
+            >
+              <h2 className="font-display text-xl font-semibold" style={{ color: "var(--fx-ink)" }}>
+                {section.title}
+              </h2>
+              <p className="mt-3 font-body text-[15px] leading-[1.7]" style={{ color: "var(--fx-muted)" }}>
+                {section.body}
+              </p>
+            </MotionCard>
           ))}
         </div>
 

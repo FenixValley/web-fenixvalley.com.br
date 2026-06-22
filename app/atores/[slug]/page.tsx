@@ -7,6 +7,7 @@ import { actors } from "@/db/schema";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { PageHeader } from "@/components/editorial/page-header";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { MotionCard } from "@/components/editorial/motion-card";
 import { getDb } from "@/lib/db";
 import { actorTypeLabels } from "@/lib/schemas";
 
@@ -83,11 +84,12 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
             </div>
           </EditorialReveal>
 
-          <EditorialReveal delay={0.2}>
-            <aside
-              className="flex flex-col gap-3 border p-6"
-              style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}
-            >
+          <MotionCard
+            delay={0.2}
+            className="flex flex-col gap-3 border p-6"
+            style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}
+          >
+            <aside className="flex flex-col gap-3">
               <p
                 className="font-mono text-[11px] uppercase tracking-[0.24em]"
                 style={{ color: "var(--fx-accent)" }}
@@ -148,7 +150,7 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
                 </p>
               ) : null}
             </aside>
-          </EditorialReveal>
+          </MotionCard>
         </div>
       </section>
     </EditorialShell>

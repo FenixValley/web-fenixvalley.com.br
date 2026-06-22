@@ -6,6 +6,7 @@ import { events } from "@/db/schema";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { EventSubmitForm } from "@/components/sections/event-submit-form";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { MotionCard } from "@/components/editorial/motion-card";
 import { PageHeader } from "@/components/editorial/page-header";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
@@ -191,10 +192,10 @@ export default async function EventsPage({
                 </EditorialReveal>
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {monthEvents.map((event, eventIndex) => (
-                    <EditorialReveal key={event.id} delay={0.06 * eventIndex}>
+                    <MotionCard key={event.id} delay={0.06 * eventIndex} className="h-full">
                       <Link
                         href={`/eventos/${event.slug}`}
-                        className="group flex h-full flex-col rounded-2xl border p-5 transition-all hover:-translate-y-1"
+                        className="group flex h-full flex-col rounded-2xl border p-5 transition-colors"
                         style={{ borderColor: "var(--fx-line)", background: "var(--fx-paper)" }}
                       >
                         <div className="mb-3 flex items-center justify-between gap-2">
@@ -240,7 +241,7 @@ export default async function EventsPage({
                           <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </span>
                       </Link>
-                    </EditorialReveal>
+                    </MotionCard>
                   ))}
                 </div>
               </div>

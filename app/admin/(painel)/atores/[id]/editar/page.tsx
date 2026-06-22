@@ -17,7 +17,7 @@ export default async function EditActorPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Editar ator</h1>
+      <h1 className="font-display text-2xl font-black text-foreground">Editar ator</h1>
       <ActorForm action={upsertActor.bind(null, actorId)} initialValues={actor} />
     </div>
   );

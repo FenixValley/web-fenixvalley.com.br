@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { programsCatalog } from "@/data/programs";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { PageHeader } from "@/components/editorial/page-header";
-import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { MotionCard } from "@/components/editorial/motion-card";
 
 export const metadata: Metadata = {
   title: "Programas | Fênix Valley",
@@ -25,12 +25,13 @@ export default function ProgramsPage() {
       <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {programsCatalog.map((program, index) => (
-            <EditorialReveal key={program.slug} delay={index * 0.06}>
-              <Link
-                href={`/programas/${program.slug}`}
-                className="group flex h-full flex-col p-6 transition-transform hover:-translate-y-1"
-                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
-              >
+            <MotionCard
+              key={program.slug}
+              delay={index * 0.06}
+              className="group flex h-full flex-col p-6"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+            >
+              <Link href={`/programas/${program.slug}`} className="flex h-full flex-col">
                 <span
                   className="w-fit px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em]"
                   style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
@@ -51,7 +52,7 @@ export default function ProgramsPage() {
                   <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </Link>
-            </EditorialReveal>
+            </MotionCard>
           ))}
         </div>
       </section>

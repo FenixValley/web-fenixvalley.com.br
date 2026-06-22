@@ -17,7 +17,7 @@ export default async function AdminActorsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Atores do mapa</h1>
+        <h1 className="font-display text-2xl font-black text-foreground">Atores do mapa</h1>
         <Button asChild size="sm">
           <Link href="/admin/atores/novo">
             <Plus className="h-4 w-4" />
@@ -26,9 +26,9 @@ export default async function AdminActorsPage() {
         </Button>
       </div>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-400">Nenhum ator cadastrado.</p>
+        <p className="text-sm text-muted-foreground">Nenhum ator cadastrado.</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -43,13 +43,13 @@ export default async function AdminActorsPage() {
               {rows.map((actor) => (
                 <TableRow key={actor.id}>
                   <TableCell>
-                    <p className="font-semibold text-white">{actor.name}</p>
-                    <p className="max-w-72 truncate text-xs text-slate-400">{actor.segment}</p>
+                    <p className="font-semibold text-foreground">{actor.name}</p>
+                    <p className="max-w-72 truncate text-xs text-muted-foreground">{actor.segment}</p>
                   </TableCell>
-                  <TableCell className="text-sm text-slate-300">
+                  <TableCell className="text-sm text-muted-foreground">
                     {actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type}
                   </TableCell>
-                  <TableCell className="text-sm text-slate-300">{actor.neighborhood}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{actor.neighborhood}</TableCell>
                   <TableCell>
                     <StatusBadge status={actor.status} />
                   </TableCell>
@@ -61,7 +61,7 @@ export default async function AdminActorsPage() {
                           await setActorStatus(actor.id, "approved");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                        <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                           <Check className="h-4 w-4" />
                           Aprovar
                         </Button>
@@ -72,12 +72,12 @@ export default async function AdminActorsPage() {
                           await setActorStatus(actor.id, "rejected");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                        <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                           <X className="h-4 w-4" />
                           Rejeitar
                         </Button>
                       </form>
-                      <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                      <Button asChild size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                         <Link href={`/admin/atores/${actor.id}/editar`}>
                           <Pencil className="h-4 w-4" />
                           Editar

@@ -8,6 +8,8 @@ import { ProgramApplyForm } from "@/components/sections/program-apply-form";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { PageHeader } from "@/components/editorial/page-header";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { AnimatedIcon } from "@/components/editorial/animated-icon";
+import { MotionCard } from "@/components/editorial/motion-card";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -39,35 +41,34 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
       <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_.95fr] lg:items-start">
           <div className="space-y-8">
-            <EditorialReveal>
-              <div
-                className="space-y-3 p-5"
-                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
-              >
-                <p className="flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--fx-accent)" }}>
-                  <Users className="h-4 w-4" />
-                  Para quem é
-                </p>
-                <p className="font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
-                  {program.audience}
-                </p>
-              </div>
-            </EditorialReveal>
+            <MotionCard
+              className="space-y-3 p-5"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+            >
+              <p className="flex items-center gap-3 font-mono text-[12px] uppercase tracking-[0.18em]" style={{ color: "var(--fx-accent)" }}>
+                <AnimatedIcon>
+                  <Users className="h-5 w-5" strokeWidth={1.6} />
+                </AnimatedIcon>
+                Para quem é
+              </p>
+              <p className="font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+                {program.audience}
+              </p>
+            </MotionCard>
 
-            <EditorialReveal delay={0.08}>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {program.steps.map((step) => (
-                  <div
-                    key={step}
-                    className="p-4 text-center"
-                    style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
-                  >
-                    <CheckCircle2 className="mx-auto mb-2 h-5 w-5" style={{ color: "var(--fx-accent)" }} />
-                    <p className="font-body text-[14px] font-semibold" style={{ color: "var(--fx-ink)" }}>{step}</p>
-                  </div>
-                ))}
-              </div>
-            </EditorialReveal>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {program.steps.map((step, index) => (
+                <MotionCard
+                  key={step}
+                  delay={index * 0.06}
+                  className="p-4 text-center"
+                  style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+                >
+                  <CheckCircle2 className="mx-auto mb-2 h-5 w-5" style={{ color: "var(--fx-accent)" }} />
+                  <p className="font-body text-[14px] font-semibold" style={{ color: "var(--fx-ink)" }}>{step}</p>
+                </MotionCard>
+              ))}
+            </div>
 
             <EditorialReveal delay={0.16}>
               <div className="space-y-3">
@@ -93,11 +94,12 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
             </EditorialReveal>
           </div>
 
-          <EditorialReveal delay={0.1}>
-            <div
-              className="p-5 sm:p-7"
-              style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
-            >
+          <MotionCard
+            delay={0.1}
+            className="p-5 sm:p-7"
+            style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+          >
+            <div>
               {inscriptionsOpen ? (
                 <div className="space-y-5">
                   <div className="space-y-2">
@@ -126,7 +128,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ slug: 
                 </div>
               )}
             </div>
-          </EditorialReveal>
+          </MotionCard>
         </div>
       </section>
     </EditorialShell>

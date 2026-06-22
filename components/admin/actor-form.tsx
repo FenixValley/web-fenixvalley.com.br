@@ -8,7 +8,7 @@ import type { FormState } from "@/app/admin/(painel)/actions";
 import { actorTypeLabels, actorTypes } from "@/lib/schemas";
 
 const selectClassName =
-  "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+  "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
 
 type ActorFormValues = {
   name: string;
@@ -33,12 +33,12 @@ export function ActorForm({
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
-      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+      <label className="block space-y-2 text-sm font-semibold text-foreground">
         Nome
         <Input name="name" required defaultValue={initialValues?.name} />
       </label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Tipo
           <select name="type" required defaultValue={initialValues?.type ?? ""} className={selectClassName}>
             <option value="">Selecione</option>
@@ -49,36 +49,36 @@ export function ActorForm({
             ))}
           </select>
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Segmento
           <Input name="segment" required defaultValue={initialValues?.segment} />
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Bairro/Região
           <Input name="neighborhood" required defaultValue={initialValues?.neighborhood} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Latitude
           <Input name="lat" type="number" step="any" defaultValue={initialValues?.lat} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Longitude
           <Input name="lng" type="number" step="any" defaultValue={initialValues?.lng} />
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Site (opcional)
           <Input name="site" type="url" placeholder="https://" defaultValue={initialValues?.site ?? ""} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           E-mail de contato (opcional)
           <Input name="email" type="email" placeholder="contato@organizacao.com.br" defaultValue={initialValues?.email ?? ""} />
         </label>
       </div>
-      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+      <label className="block space-y-2 text-sm font-semibold text-foreground">
         Descrição
         <Textarea name="description" required defaultValue={initialValues?.description} />
       </label>

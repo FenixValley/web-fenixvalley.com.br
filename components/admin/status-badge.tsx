@@ -1,9 +1,9 @@
 const styles: Record<string, string> = {
-  pending: "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  approved: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  rejected: "bg-rose-500/15 text-rose-400 border-rose-500/30",
-  published: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  archived: "bg-slate-500/15 text-slate-400 border-slate-500/30"
+  pending: "bg-amber-50 text-amber-700 border-amber-200",
+  approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  rejected: "bg-rose-50 text-rose-700 border-rose-200",
+  published: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  archived: "bg-muted text-muted-foreground border-border"
 };
 
 const labels: Record<string, string> = {
