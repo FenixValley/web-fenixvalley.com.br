@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { MotionConfig } from "motion/react";
 import { EditorialFooter } from "./editorial-footer";
 import { EditorialHeader } from "./editorial-header";
 import { editorialThemeStyle } from "./theme";
@@ -14,10 +15,12 @@ export function EditorialShell({
   active?: string;
 }) {
   return (
-    <div className="flex min-h-screen flex-col font-body" style={editorialThemeStyle}>
-      <EditorialHeader active={active} />
-      <main className="flex-1">{children}</main>
-      <EditorialFooter />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="flex min-h-screen flex-col font-body" style={editorialThemeStyle}>
+        <EditorialHeader active={active} />
+        <main className="flex-1">{children}</main>
+        <EditorialFooter />
+      </div>
+    </MotionConfig>
   );
 }
