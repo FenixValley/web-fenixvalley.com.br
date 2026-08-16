@@ -13,7 +13,7 @@ const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
 async function requireAdmin() {
   const session = await auth();
-  if (!session?.user?.email) throw new Error("Não autorizado.");
+  if (!session?.user?.email || session.user.role !== "admin") throw new Error("Não autorizado.");
   return session.user.email;
 }
 

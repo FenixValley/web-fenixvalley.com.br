@@ -6,7 +6,6 @@ import { ArrowRight, ExternalLink, Menu, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 
 
 const leftNav = [
@@ -96,7 +95,6 @@ const searchItems: SearchItem[] = [
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAdmin } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -202,19 +200,6 @@ export function SiteHeader() {
 
           {/* right nav — desktop */}
           <nav className="hidden flex-1 items-center justify-end gap-6 text-sm font-semibold text-slate-300 lg:flex">
-            {!user ? (
-              <Link href="/auth" className="transition-colors hover:text-white">
-                Fazer Login
-              </Link>
-            ) : (
-              <Link 
-                href={isAdmin ? "/admin/dashboard" : "/eventos"} 
-                className="rounded-full bg-emerald-500 px-4 py-1.5 text-white shadow-sm shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-md hover:shadow-emerald-500/25"
-              >
-                {isAdmin ? "Painel Admin" : "Minha Conta"}
-              </Link>
-            )}
-
             {rightNav.map((item) => (
               <Link
                 key={item.href}
@@ -339,24 +324,6 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-
-              {!user ? (
-                <Link
-                  href="/auth"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
-                >
-                  Fazer Login
-                </Link>
-              ) : (
-                <Link
-                  href={isAdmin ? "/admin/dashboard" : "/eventos"}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
-                >
-                  {isAdmin ? "Painel Admin" : "Minha Conta"}
-                </Link>
-              )}
 
               {rightNav.map((item) => (
                 <Link

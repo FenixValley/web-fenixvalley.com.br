@@ -13,7 +13,6 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
 import { Opportunity } from "@/data/opportunities";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";

@@ -11,6 +11,9 @@ export function BrandMotion() {
   const pulseRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
     const ctx = gsap.context(() => {
       gsap.to(ringRef.current, {
         rotate: 360,

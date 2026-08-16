@@ -3,6 +3,7 @@ import { FacaParteSection } from "@/components/sections/faca-parte-section";
 import { HeroSection } from "@/components/sections/hero-section";
 import { IndicatorsSection } from "@/components/sections/indicators-section";
 import { OpportunitiesSection } from "@/components/sections/opportunities-section";
+import { opportunities } from "@/data/opportunities";
 import { ProgramsSection } from "@/components/sections/programs-section";
 import { AudienceSection } from "@/components/sections/audience-section";
 import { ContentCommunitySection } from "@/components/sections/content-community-section";
@@ -20,7 +21,7 @@ export default function HomePage() {
         <EcosystemSection />
         <ProgramsSection />
         <IndicatorsSection />
-        <OpportunitiesSection />
+        <OpportunitiesSection opportunities={opportunities} />
         <ContentCommunitySection />
         <FacaParteSection />
         <JoinSection />

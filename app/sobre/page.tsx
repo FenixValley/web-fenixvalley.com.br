@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   Users,
   Zap,
@@ -16,6 +17,12 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/sections/site-header";
 import { SiteFooter } from "@/components/sections/site-footer";
+
+export const metadata: Metadata = {
+  title: "Sobre | Fênix Valley",
+  description:
+    "Conheça a história, os pilares e a jornada do Fênix Valley, o ecossistema de inovação de Betim que renasce das cinzas."
+};
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -52,24 +59,31 @@ const pillars = [
 
 const journey = [
   {
-    year: "2023",
-    title: "A Primeira Faísca",
+    year: "2017",
+    title: "A Semente Germinada",
     description:
-      "Um grupo de empreendedores de Betim percebeu que a cidade tinha talento de sobra, mas faltava uma estrutura para conectar esse potencial. O Fênix Valley nasceu dessa inquietação.",
+      "O governo iniciou um trabalho estratégico nas principais regiões de Minas Gerais para fortalecer ecossistemas de inovação. Gisele Ribeiro Ramos liderou a região metropolitana (Betim, Contagem, Ibirite e entorno), estimulando a comunidade através de eventos, hackatons, palestras e articulação entre governo, prefeituras e empreendedores.",
     icon: Star,
   },
   {
-    year: "2024",
-    title: "Construindo a Rede",
+    year: "2018-2020",
+    title: "Crescimento em Movimento",
     description:
-      "Primeiros eventos, primeiras conexões reais. Startups se encontraram com investidores, jovens talentos com mentores experientes. A comunidade começou a ganhar forma e identidade.",
+      "Cada líder de território, junto com apoiadores locais, começou a fortalecer sua comunidade. Nesse processo, identificou-se a necessidade de um nome que representasse esse renascimento. Assim nasceu 'Fênix Valley' — a fênix que renasce das cinzas, simbolizando a inovação em ascensão na região.",
     icon: Network,
   },
   {
-    year: "2025",
-    title: "O Ecossistema Vivo",
+    year: "2020-2023",
+    title: "Pausa Necessária",
     description:
-      "Programas estruturados, uma agenda ativa de eventos e uma base crescente de membros comprometidos. Betim começa a se reconhecer como polo de inovação.",
+      "A pandemia desacelerou o movimento. Eventos presenciais foram interrompidos e a energia comunitária minguou. Mas as sementes já estavam plantadas, e a comunidade nunca deixou de acreditar que retornaria.",
+    icon: Star,
+  },
+  {
+    year: "2024-2025",
+    title: "O Retorno com Força Total",
+    description:
+      "A Fênix Valley ressurge com toda energia. Programas estruturados, agenda intensiva de eventos, mentorias ativas e uma base crescente de membros comprometidos. Betim se consolida como polo de inovação que atrai talentos de toda a região metropolitana.",
     icon: TrendingUp,
   },
   {
@@ -280,7 +294,7 @@ export default function SobrePage() {
               <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-orange-500/0 via-orange-500/40 to-orange-500/0 hidden sm:block" aria-hidden="true" />
 
               <div className="space-y-10">
-                {journey.map((item, i) => {
+                {journey.map((item) => {
                   const Icon = item.icon;
                   return (
                     <div key={item.year} className="relative flex gap-8 sm:gap-10">

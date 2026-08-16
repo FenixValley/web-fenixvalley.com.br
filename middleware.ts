@@ -10,6 +10,9 @@ export default auth((request) => {
   if (!request.auth && !isLoginPage) {
     return Response.redirect(new URL("/admin/login", request.nextUrl));
   }
+  if (request.auth && !isLoginPage && request.auth.user?.role !== "admin") {
+    return Response.redirect(new URL("/admin/login", request.nextUrl));
+  }
   if (request.auth && isLoginPage) {
     return Response.redirect(new URL("/admin", request.nextUrl));
   }

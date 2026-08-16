@@ -1,282 +1,210 @@
-"use client";
-
-import { useEffect, useMemo, useState } from "react";
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  doc,
-  setDoc,
-  deleteDoc,
-  getDoc,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { FenixEvent, EventCategory } from "@/types/event";
-import { useAuth } from "@/contexts/AuthContext";
-import { EventCard } from "@/components/events/EventCard";
-import { SiteHeader } from "@/components/sections/site-header";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { Loader2, CalendarX, Zap } from "lucide-react";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
+import { and, eq, gte } from "drizzle-orm";
+import { ArrowRight, CalendarDays, Clock, MapPin, Plus } from "lucide-react";
+import { events } from "@/db/schema";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { EventSubmitForm } from "@/components/sections/event-submit-form";
+import { SiteFooter } from "@/components/sections/site-footer";
+import { SiteHeader } from "@/components/sections/site-header";
+import { getDb } from "@/lib/db";
+import { eventCategories, eventModes } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
 
-// ── Auth Modal ─────────────────────────────────────────────────────────────
+export const dynamic = "force-dynamic";
 
-function AuthModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="surface-panel w-full max-w-sm rounded-2xl p-8 text-center space-y-5 shadow-2xl">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-orange-500/15 text-orange-400">
-          <Zap className="h-7 w-7" />
-        </div>
-        <div className="space-y-2">
-          <h2 className="font-[var(--font-space)] text-xl font-black text-white">
-            Entre para confirmar presença
-          </h2>
-          <p className="text-sm leading-6 text-slate-400">
-            Faça login ou cadastre-se gratuitamente para confirmar que você vai ao evento.
-          </p>
-        </div>
-        <div className="flex flex-col gap-3">
-          <Link
-            href="/auth"
-            className="flex items-center justify-center gap-2 rounded-full bg-orange-500 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600"
-          >
-            Entrar / Cadastrar
-          </Link>
-          <button
-            onClick={onClose}
-            className="rounded-full border border-white/10 py-2.5 text-sm font-semibold text-slate-400 transition-all hover:bg-white/5 hover:text-white"
-          >
-            Agora não
-          </button>
-        </div>
-      </div>
-    </div>
+export const metadata: Metadata = {
+  title: "Eventos | Fênix Valley",
+  description:
+    "Agenda de meetups, palestras, workshops, hackathons e demo days do ecossistema de inovação de Betim."
+};
+
+function formatMonth(date: string) {
+  return new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric", timeZone: "UTC" }).format(
+    new Date(`${date}T12:00:00Z`)
   );
 }
 
-// ── Category Filter ────────────────────────────────────────────────────────
+function formatDay(date: string) {
+  return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" }).format(
+    new Date(`${date}T12:00:00Z`)
+  );
+}
 
-const CATEGORIES: { value: "all" | EventCategory; label: string }[] = [
-  { value: "all", label: "Todos" },
-  { value: "meetup", label: "Meetups" },
-  { value: "workshop", label: "Workshops" },
-  { value: "hackathon", label: "Hackathons" },
-];
+function filterHref(category: string | null, mode: string | null) {
+  const params = new URLSearchParams();
+  if (category) params.set("categoria", category);
+  if (mode) params.set("modalidade", mode);
+  const query = params.toString();
+  return query ? `/eventos?${query}` : "/eventos";
+}
 
-// ── Page ──────────────────────────────────────────────────────────────────
+export default async function EventsPage({
+  searchParams
+}: {
+  searchParams: Promise<{ categoria?: string; modalidade?: string }>;
+}) {
+  const { categoria, modalidade } = await searchParams;
+  const category = eventCategories.find((c) => c === categoria) ?? null;
+  const mode = eventModes.find((m) => m === modalidade) ?? null;
 
-export default function EventosPage() {
-  const { user } = useAuth();
-  const [events, setEvents] = useState<FenixEvent[]>([]);
-  const [rsvps, setRsvps] = useState<Set<string>>(new Set());
-  const [rsvpCounts, setRsvpCounts] = useState<Record<string, number>>({});
-  const [category, setCategory] = useState<"all" | EventCategory>("all");
-  const [loading, setLoading] = useState(true);
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const today = new Date().toISOString().slice(0, 10);
+  const conditions = [eq(events.status, "approved"), gte(events.date, today)];
+  if (category) conditions.push(eq(events.category, category));
+  if (mode) conditions.push(eq(events.mode, mode));
 
-  // Real-time events listener
-  useEffect(() => {
-    const q = query(collection(db, "eventos"), orderBy("date", "asc"));
-    const unsub = onSnapshot(q, (snap) => {
-      const docs = snap.docs.map((d) => {
-        const data = d.data();
-        return {
-          id: d.id,
-          ...data,
-          date: data.date?.toDate?.() ?? new Date(data.date),
-          createdAt: data.createdAt?.toDate?.() ?? new Date(data.createdAt),
-        } as FenixEvent;
-      });
-      setEvents(docs);
+  const rows = await getDb()
+    .select()
+    .from(events)
+    .where(and(...conditions))
+    .orderBy(events.date, events.time);
 
-      // Aggregate RSVP counts
-      const counts: Record<string, number> = {};
-      snap.docs.forEach((d) => {
-        const data = d.data();
-        if (data.rsvpCount !== undefined) counts[d.id] = data.rsvpCount;
-      });
-      setRsvpCounts(counts);
-
-      setLoading(false);
-    }, (error) => {
-      console.error("Erro ao carregar eventos globais:", error);
-      setLoading(false);
-    });
-    return unsub;
-  }, []);
-
-  // Load user RSVPs
-  useEffect(() => {
-    if (!user) { setRsvps(new Set()); return; }
-    const userRsvpRef = doc(db, "userRsvps", user.uid);
-    const unsub = onSnapshot(userRsvpRef, (snap) => {
-      const data = snap.data();
-      setRsvps(new Set(data?.eventIds ?? []));
-    });
-    return unsub;
-  }, [user]);
-
-  const handleRSVP = async (eventId: string) => {
-    if (!user) return;
-    const userRsvpRef = doc(db, "userRsvps", user.uid);
-    const rsvpRef = doc(db, "rsvps", `${eventId}_${user.uid}`);
-    const eventRef = doc(db, "eventos", eventId);
-
-    if (rsvps.has(eventId)) {
-      // Remove RSVP
-      await deleteDoc(rsvpRef);
-      const snap = await getDoc(userRsvpRef);
-      const current = snap.data()?.eventIds ?? [];
-      await setDoc(userRsvpRef, { eventIds: current.filter((id: string) => id !== eventId) });
-      setRsvpCounts((prev) => ({ ...prev, [eventId]: Math.max(0, (prev[eventId] ?? 1) - 1) }));
-    } else {
-      // Add RSVP
-      await setDoc(rsvpRef, { eventId, userId: user.uid, userEmail: user.email, createdAt: new Date() });
-      const snap = await getDoc(userRsvpRef);
-      const current = snap.data()?.eventIds ?? [];
-      await setDoc(userRsvpRef, { eventIds: [...current, eventId] });
-      setRsvpCounts((prev) => ({ ...prev, [eventId]: (prev[eventId] ?? 0) + 1 }));
-    }
-  };
-
-  const now = new Date();
-
-  const { upcoming, past } = useMemo(() => {
-    const filtered = category === "all" ? events : events.filter((e) => e.category === category);
-    return {
-      upcoming: filtered.filter((e) => e.date >= now).sort((a, b) => {
-        if (a.highlighted && !b.highlighted) return -1;
-        if (!a.highlighted && b.highlighted) return 1;
-        return a.date.getTime() - b.date.getTime();
-      }),
-      past: filtered.filter((e) => e.date < now).sort((a, b) => b.date.getTime() - a.date.getTime()),
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events, category]);
+  const byMonth = new Map<string, typeof rows>();
+  for (const event of rows) {
+    const month = formatMonth(event.date);
+    byMonth.set(month, [...(byMonth.get(month) ?? []), event]);
+  }
 
   return (
     <>
-      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
       <SiteHeader />
+      <main>
+        <section className="relative overflow-hidden py-14 sm:py-18">
+          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
+          <div className="section-shell relative space-y-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="max-w-3xl space-y-4">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Agenda</p>
+                <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
+                  Eventos do ecossistema
+                </h1>
+                <p className="text-lg leading-8 text-slate-300">
+                  Meetups, palestras, workshops, hackathons e demo days de Betim e região.
+                </p>
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="shrink-0">
+                    <Plus className="h-4 w-4" />
+                    Divulgar evento
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-h-[85vh] overflow-y-auto p-6">
+                  <DialogTitle>Divulgue seu evento</DialogTitle>
+                  <p className="text-sm text-muted-foreground">
+                    Eventos alinhados ao propósito do movimento entram na agenda após curadoria.
+                  </p>
+                  <EventSubmitForm />
+                </DialogContent>
+              </Dialog>
+            </div>
 
-      <main className="min-h-screen">
-        {/* Hero */}
-        <section className="relative overflow-hidden py-20 sm:py-28">
-          <div className="brand-grid absolute inset-x-0 top-0 h-[380px]" aria-hidden="true" />
-          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-80 w-[700px] rounded-full bg-orange-500/10 blur-3xl" aria-hidden="true" />
-          <div className="section-shell relative text-center space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 text-sm font-bold uppercase tracking-widest text-orange-400">
-              <Zap className="h-3.5 w-3.5" />
-              Agenda Fênix Valley
-            </p>
-            <h1 className="font-[var(--font-space)] text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
-              Eventos & Encontros
-            </h1>
-            <p className="text-lg leading-8 text-slate-400 max-w-xl mx-auto">
-              Meetups, workshops e hackathons para conectar, aprender e construir o ecossistema de inovação de Betim.
-            </p>
-          </div>
-        </section>
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center gap-2" aria-label="Filtrar por categoria">
+                <Link
+                  href={filterHref(null, mode)}
+                  className={cn(
+                    "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                    category === null
+                      ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
+                      : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                  )}
+                >
+                  Todas as categorias
+                </Link>
+                {eventCategories.map((item) => (
+                  <Link
+                    key={item}
+                    href={filterHref(category === item ? null : item, mode)}
+                    className={cn(
+                      "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                      category === item
+                        ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                    )}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-center gap-2" aria-label="Filtrar por modalidade">
+                {eventModes.map((item) => (
+                  <Link
+                    key={item}
+                    href={filterHref(category, mode === item ? null : item)}
+                    className={cn(
+                      "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+                      mode === item
+                        ? "border-sky-400/60 bg-sky-500/15 text-sky-300"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                    )}
+                  >
+                    {item}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
-        {/* Category filter */}
-        <section className="sticky top-[64px] z-30 border-b border-white/8 bg-slate-950/90 backdrop-blur-xl py-3">
-          <div className="section-shell flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.value}
-                onClick={() => setCategory(cat.value)}
-                className={`shrink-0 rounded-full px-5 py-2 text-sm font-bold transition-all duration-200 ${
-                  category === cat.value
-                    ? "bg-orange-500 text-white shadow-md shadow-orange-500/25"
-                    : "border border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Events grid */}
-        <section className="py-12 sm:py-16">
-          <div className="section-shell space-y-14">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center py-24 gap-4 text-slate-400">
-                <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
-                <p className="text-sm font-semibold">Carregando eventos...</p>
+            {rows.length === 0 ? (
+              <div className="surface-panel max-w-2xl rounded-lg p-8">
+                <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
+                  Nenhum evento aprovado na agenda{category || mode ? " com esses filtros" : " por enquanto"}.
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-slate-300">
+                  Os encontros são divulgados aqui e na comunidade do WhatsApp assim que confirmados.
+                  Organiza algo alinhado ao movimento? Use o botão “Divulgar evento”.
+                </p>
               </div>
             ) : (
-              <>
-                {/* Upcoming */}
-                <div className="space-y-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="font-[var(--font-space)] text-2xl font-black text-white">
-                      Próximos eventos
-                    </h2>
-                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-slate-400">
-                      {upcoming.length} evento{upcoming.length !== 1 ? "s" : ""}
-                    </span>
-                  </div>
-
-                  {upcoming.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 py-20 gap-4 text-center">
-                      <CalendarX className="h-12 w-12 text-slate-600" />
-                      <div className="space-y-1">
-                        <p className="font-semibold text-slate-300">Nenhum evento programado</p>
-                        <p className="text-sm text-slate-500">
-                          Fique de olho — novidades chegam em breve!
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                      {upcoming.map((event) => (
-                        <EventCard
+              <div className="space-y-10">
+                {[...byMonth.entries()].map(([month, monthEvents]) => (
+                  <div key={month} className="space-y-4">
+                    <h2 className="font-[var(--font-space)] text-xl font-bold capitalize text-white">{month}</h2>
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                      {monthEvents.map((event) => (
+                        <Link
                           key={event.id}
-                          event={event}
-                          hasRSVP={rsvps.has(event.id)}
-                          rsvpCount={rsvpCounts[event.id] ?? 0}
-                          onRSVP={handleRSVP}
-                          onAuthRequired={() => setShowAuthModal(true)}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Past events */}
-                {past.length > 0 && (
-                  <div className="space-y-8">
-                    <div className="flex items-center gap-4">
-                      <div className="h-px flex-1 bg-white/8" />
-                      <h2 className="font-[var(--font-space)] text-lg font-bold text-slate-500">
-                        Memórias
-                      </h2>
-                      <div className="h-px flex-1 bg-white/8" />
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                      {past.map((event) => (
-                        <EventCard
-                          key={event.id}
-                          event={event}
-                          hasRSVP={false}
-                          rsvpCount={rsvpCounts[event.id] ?? 0}
-                          onRSVP={() => {}}
-                          onAuthRequired={() => {}}
-                          isPast
-                        />
+                          href={`/eventos/${event.slug}`}
+                          className="surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1"
+                        >
+                          <div className="mb-3 flex items-center justify-between gap-2">
+                            <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                              {event.category}
+                            </Badge>
+                            <span className="text-xs font-semibold text-sky-300">{event.mode}</span>
+                          </div>
+                          <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{event.title}</h3>
+                          <p className="mt-2 flex-1 text-sm leading-6 text-slate-300 line-clamp-3">
+                            {event.description}
+                          </p>
+                          <div className="mt-4 space-y-1 text-xs text-slate-400">
+                            <p className="flex items-center gap-1.5">
+                              <CalendarDays className="h-3.5 w-3.5 text-orange-300" />
+                              {formatDay(event.date)}
+                              <Clock className="ml-2 h-3.5 w-3.5 text-sky-300" />
+                              {event.time}
+                            </p>
+                            <p className="flex items-center gap-1.5">
+                              <MapPin className="h-3.5 w-3.5 text-emerald-300" />
+                              <span className="truncate">{event.location}</span>
+                            </p>
+                          </div>
+                          <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
+                            Ver evento
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          </span>
+                        </Link>
                       ))}
                     </div>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             )}
           </div>
         </section>
       </main>
-
       <SiteFooter />
     </>
   );
