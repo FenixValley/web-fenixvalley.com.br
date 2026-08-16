@@ -16,8 +16,11 @@ jobs:
           node-version: 22
           cache: yarn
 
-      - name: Habilitar corepack (Yarn Berry)
-        run: corepack enable
+      - name: Habilitar corepack e ativar Yarn fixado
+        run: |
+          corepack enable
+          corepack prepare yarn@4.15.0 --activate
+          yarn --version
 
       - name: Instalar dependências
         run: yarn install --immutable
