@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/sections/site-header";
 export const metadata: Metadata = {
   title: "Startups | Fênix Valley",
   description:
-    "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio."
+    "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio.",
+  openGraph: {
+    title: "Startups | Fênix Valley",
+    description:
+      "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio."
+  }
 };
 
 export default function StartupsPage() {

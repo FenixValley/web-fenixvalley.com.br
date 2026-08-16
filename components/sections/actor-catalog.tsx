@@ -24,11 +24,14 @@ async function fetchActors(): Promise<CatalogActor[]> {
 export function ActorCatalog({
   types,
   ctaLabel,
+  ctaHref,
   emptyTitle,
   emptyDescription
 }: {
   types: string[];
   ctaLabel: string;
+  /** Quando definido, o CTA vira um link direto em vez de abrir o formulário de cadastro no mapa. */
+  ctaHref?: string;
   emptyTitle: string;
   emptyDescription: string;
 }) {
@@ -100,22 +103,31 @@ export function ActorCatalog({
               className="pl-9"
             />
           </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button size="sm" className="shrink-0">
+          {ctaHref ? (
+            <Button asChild size="sm" className="shrink-0">
+              <Link href={ctaHref}>
                 <Plus className="h-4 w-4" />
                 {ctaLabel}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
-              <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
-              <p className="text-sm text-muted-foreground">
-                Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As respostas
-                ajudam a curadoria a conectar os atores da região e a incluir seu perfil nesta vitrine.
-              </p>
-              <ActorRegisterForm />
-            </DialogContent>
-          </Dialog>
+              </Link>
+            </Button>
+          ) : (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" className="shrink-0">
+                  <Plus className="h-4 w-4" />
+                  {ctaLabel}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
+                <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
+                <p className="text-sm text-muted-foreground">
+                  Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As respostas
+                  ajudam a curadoria a conectar os atores da região e a incluir seu perfil nesta vitrine.
+                </p>
+                <ActorRegisterForm />
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </div>
 

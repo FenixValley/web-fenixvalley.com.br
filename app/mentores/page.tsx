@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/sections/site-header";
 export const metadata: Metadata = {
   title: "Mentores | Fênix Valley",
   description:
-    "Mentores do ecossistema de inovação de Betim: especialidades, temas de atuação e formas de conectar com empreendedores e projetos."
+    "Mentores do ecossistema de inovação de Betim: especialidades, temas de atuação e formas de conectar com empreendedores e projetos.",
+  openGraph: {
+    title: "Mentores | Fênix Valley",
+    description:
+      "Mentores do ecossistema de inovação de Betim: especialidades, temas de atuação e formas de conectar com empreendedores e projetos."
+  }
 };
 
 export default function MentoresPage() {
@@ -30,8 +35,9 @@ export default function MentoresPage() {
             <ActorCatalog
               types={["mentor"]}
               ctaLabel="Seja um mentor"
+              ctaHref="/voluntarie-se"
               emptyTitle="Nenhum mentor aprovado por enquanto."
-              emptyDescription="Mentores aparecem aqui assim que cadastrados no mapa do ecossistema e aprovados pela curadoria. Cadastre-se para apoiar startups e estudantes da região."
+              emptyDescription="Mentores aparecem aqui assim que aprovados pela curadoria. Cadastre-se como voluntário(a) na área de Educação e mentorias para apoiar startups e estudantes da região."
             />
           </div>
         </section>

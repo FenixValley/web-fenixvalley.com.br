@@ -50,7 +50,7 @@ export default async function EventsPage({
   const category = eventCategories.find((c) => c === categoria) ?? null;
   const mode = eventModes.find((m) => m === modalidade) ?? null;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
   const conditions = [eq(events.status, "approved"), gte(events.date, today)];
   if (category) conditions.push(eq(events.category, category));
   if (mode) conditions.push(eq(events.mode, mode));

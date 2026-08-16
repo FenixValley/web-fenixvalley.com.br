@@ -6,7 +6,11 @@ import { SiteHeader } from "@/components/sections/site-header";
 export const metadata: Metadata = {
   title: "Espaços | Fênix Valley",
   description:
-    "Coworkings, laboratórios e hubs de inovação do ecossistema de Betim: estrutura, localização e como reservar."
+    "Coworkings, laboratórios e hubs de inovação do ecossistema de Betim: estrutura, localização e como reservar.",
+  openGraph: {
+    title: "Espaços | Fênix Valley",
+    description: "Coworkings, laboratórios e hubs de inovação do ecossistema de Betim."
+  }
 };
 
 export default function EspacosPage() {

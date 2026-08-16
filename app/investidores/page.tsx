@@ -6,7 +6,12 @@ import { SiteHeader } from "@/components/sections/site-header";
 export const metadata: Metadata = {
   title: "Investidores | Fênix Valley",
   description:
-    "Investidores conectados ao ecossistema de inovação de Betim: teses de investimento, estágios e segmentos de interesse."
+    "Investidores conectados ao ecossistema de inovação de Betim: teses de investimento, estágios e segmentos de interesse.",
+  openGraph: {
+    title: "Investidores | Fênix Valley",
+    description:
+      "Investidores conectados ao ecossistema de inovação de Betim: teses de investimento, estágios e segmentos de interesse."
+  }
 };
 
 export default function InvestidoresPage() {
@@ -28,7 +33,7 @@ export default function InvestidoresPage() {
               </p>
             </div>
             <ActorCatalog
-              types={["investidor"]}
+              types={["investidor", "aceleradora"]}
               ctaLabel="Cadastre-se como investidor"
               emptyTitle="Nenhum investidor aprovado por enquanto."
               emptyDescription="Investidores aparecem aqui assim que cadastrados no mapa do ecossistema e aprovados pela curadoria."

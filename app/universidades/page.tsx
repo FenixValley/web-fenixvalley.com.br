@@ -22,7 +22,12 @@ import { SiteHeader } from "@/components/sections/site-header";
 export const metadata: Metadata = {
   title: "Universidades e educação | Fênix Valley",
   description:
-    "Instituições de ensino, escolas técnicas e trilhas de capacitação do ecossistema de inovação de Betim, conectando estudantes a estágios, hackathons, mentorias e desafios."
+    "Instituições de ensino, escolas técnicas e trilhas de capacitação do ecossistema de inovação de Betim, conectando estudantes a estágios, hackathons, mentorias e desafios.",
+  openGraph: {
+    title: "Universidades e educação | Fênix Valley",
+    description:
+      "Instituições de ensino, escolas técnicas e trilhas de capacitação do ecossistema de inovação de Betim."
+  }
 };
 
 const trilhas = [

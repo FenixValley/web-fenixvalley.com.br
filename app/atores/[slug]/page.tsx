@@ -34,7 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!actor) return { title: "Ator não encontrado | Fênix Valley" };
   return {
     title: `${actor.name} | Mapa Fênix Valley`,
-    description: actor.description
+    description: actor.description,
+    openGraph: {
+      title: `${actor.name} | Fênix Valley`,
+      description: actor.description
+    }
   };
 }
 
