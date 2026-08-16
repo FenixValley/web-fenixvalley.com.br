@@ -52,6 +52,7 @@ export const actorTypes = [
   "investidor",
   "aceleradora",
   "incubadora",
+  "mentor",
   "poder-publico",
   "comunidade"
 ] as const;
@@ -67,6 +68,7 @@ export const actorTypeLabels: Record<(typeof actorTypes)[number], string> = {
   investidor: "Investidor",
   aceleradora: "Aceleradora",
   incubadora: "Incubadora",
+  mentor: "Mentor(a)",
   "poder-publico": "Poder público",
   comunidade: "Comunidade"
 };

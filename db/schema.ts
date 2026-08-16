@@ -35,6 +35,7 @@ export const actors = sqliteTable("actors", {
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
   status: text("status").notNull().default("pending"),
+  featured: integer("featured").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 

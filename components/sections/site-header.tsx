@@ -77,6 +77,36 @@ const searchItems: SearchItem[] = [
     href: "/eventos"
   },
   {
+    title: "Startups",
+    description: "Vitrine das startups do ecossistema: segmento, estágio e contato.",
+    category: "Vitrine",
+    href: "/startups"
+  },
+  {
+    title: "Universidades e Educação",
+    description: "Instituições de ensino, escolas técnicas e trilhas de capacitação.",
+    category: "Vitrine",
+    href: "/universidades"
+  },
+  {
+    title: "Mentores",
+    description: "Profissionais disponíveis para orientar startups e estudantes.",
+    category: "Vitrine",
+    href: "/mentores"
+  },
+  {
+    title: "Investidores",
+    description: "Investidores-anjo, fundos e aceleradoras conectados à região.",
+    category: "Vitrine",
+    href: "/investidores"
+  },
+  {
+    title: "Espaços",
+    description: "Coworkings, laboratórios e hubs de inovação disponíveis.",
+    category: "Vitrine",
+    href: "/espacos"
+  },
+  {
     title: "Faça Parte (Formulário)",
     description: "Inscreva seu interesse no Google Forms para participar da curadoria.",
     category: "Ações",

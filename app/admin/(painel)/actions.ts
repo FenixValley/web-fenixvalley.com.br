@@ -37,6 +37,16 @@ export async function setActorStatus(id: number, status: "approved" | "rejected"
   revalidatePath("/admin");
 }
 
+export async function setActorFeatured(id: number, featured: boolean) {
+  const adminEmail = await requireAdmin();
+  await getDb()
+    .update(actors)
+    .set({ featured: featured ? 1 : 0 })
+    .where(eq(actors.id, id));
+  await logAudit(adminEmail, featured ? "feature" : "unfeature", "actor", id);
+  revalidatePath("/admin/atores");
+}
+
 export async function setOpportunityFeatured(id: number, featured: boolean) {
   const adminEmail = await requireAdmin();
   await getDb()
