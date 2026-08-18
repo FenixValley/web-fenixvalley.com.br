@@ -62,7 +62,7 @@ const journey = [
     year: "2017",
     title: "A Semente Germinada",
     description:
-      "O governo iniciou um trabalho estratégico nas principais regiões de Minas Gerais para fortalecer ecossistemas de inovação. Gisele Ribeiro Ramos liderou a região metropolitana (Betim, Contagem, Ibirite e entorno), estimulando a comunidade através de eventos, hackatons, palestras e articulação entre governo, prefeituras e empreendedores.",
+      "O governo iniciou um trabalho estratégico nas principais regiões de Minas Gerais para fortalecer ecossistemas de inovação. Gisele Ribeiro Ramos liderou a região metropolitana (Betim, Contagem, Ibirité e entorno), estimulando a comunidade através de eventos, hackathons, palestras e articulação entre governo, prefeituras e empreendedores.",
     icon: Star,
   },
   {

@@ -64,7 +64,12 @@ export default async function EventsPage({
   const byMonth = new Map<string, typeof rows>();
   for (const event of rows) {
     const month = formatMonth(event.date);
-    byMonth.set(month, [...(byMonth.get(month) ?? []), event]);
+    let group = byMonth.get(month);
+    if (!group) {
+      group = [];
+      byMonth.set(month, group);
+    }
+    group.push(event);
   }
 
   return (
@@ -102,7 +107,7 @@ export default async function EventsPage({
             </div>
 
             <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2" aria-label="Filtrar por categoria">
+              <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por categoria">
                 <Link
                   href={filterHref(null, mode)}
                   className={cn(
@@ -129,7 +134,7 @@ export default async function EventsPage({
                   </Link>
                 ))}
               </div>
-              <div className="flex flex-wrap items-center gap-2" aria-label="Filtrar por modalidade">
+              <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por modalidade">
                 {eventModes.map((item) => (
                   <Link
                     key={item}

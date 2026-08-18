@@ -144,13 +144,10 @@ export function ActorCatalog({
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((actor) =>
-            actor.slug ? (
-              <Link
-                key={actor.id}
-                href={`/atores/${actor.slug}`}
-                className="surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1"
-              >
+          {filtered.map((actor) => {
+            const cardClassName = "surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1";
+            const content = (
+              <>
                 <div className="mb-3 flex items-center justify-between gap-2">
                   <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
                     {actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type}
@@ -169,13 +166,24 @@ export function ActorCatalog({
                   <MapPin className="h-3.5 w-3.5 text-emerald-300" />
                   {actor.neighborhood}
                 </p>
-                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
-                  Ver perfil
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </span>
+                {actor.slug ? (
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
+                    Ver perfil
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                ) : null}
+              </>
+            );
+            return actor.slug ? (
+              <Link key={actor.id} href={`/atores/${actor.slug}`} className={cardClassName}>
+                {content}
               </Link>
-            ) : null
-          )}
+            ) : (
+              <div key={actor.id} className={cardClassName}>
+                {content}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
