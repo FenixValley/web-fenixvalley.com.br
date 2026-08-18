@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import { ChevronRight, ExternalLink, Mail, MapPin, MapPinned } from "lucide-react";
+import { ChevronRight, ExternalLink, Linkedin, Mail, MapPin, MapPinned, PlayCircle, Star } from "lucide-react";
 import { actors } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { parseActorDetails } from "@/lib/actor-details";
 import { getDb } from "@/lib/db";
 import { actorTypeLabels } from "@/lib/schemas";
 
@@ -37,7 +38,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: actor.description,
     openGraph: {
       title: `${actor.name} | Fênix Valley`,
-      description: actor.description
+      description: actor.description,
+      images: ["/logo-simbolo.png"]
     }
   };
 }
@@ -48,6 +50,7 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
   if (!actor) notFound();
 
   const typeLabel = actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type;
+  const details = parseActorDetails(actor.type, actor.details);
 
   return (
     <>
@@ -69,9 +72,17 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
             </nav>
 
             <div className="space-y-4">
-              <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
-                {typeLabel}
-              </Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                  {typeLabel}
+                </Badge>
+                {actor.featured ? (
+                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-300">
+                    <Star className="h-3.5 w-3.5 fill-amber-300" />
+                    {actor.highlightLabel ?? "Destaque"}
+                  </span>
+                ) : null}
+              </div>
               <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
                 {actor.name}
               </h1>
@@ -84,6 +95,51 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
             <div className="surface-panel rounded-lg p-6">
               <p className="text-base leading-8 text-slate-300">{actor.description}</p>
             </div>
+
+            {details ? (
+              <div className="surface-panel space-y-5 rounded-lg p-6">
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha da startup</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {details.foundedYear ? (
+                    <FactItem label="Fundação" value={details.foundedYear} />
+                  ) : null}
+                  {details.stage ? <FactItem label="Estágio" value={details.stage} /> : null}
+                  {details.businessModel ? (
+                    <FactItem label="Modelo de negócio" value={details.businessModel} />
+                  ) : null}
+                </div>
+                {details.founders ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Fundadores</p>
+                    <p className="text-sm leading-6 text-slate-300 whitespace-pre-line">{details.founders}</p>
+                  </div>
+                ) : null}
+                {details.techFocus?.length ? (
+                  <TagList label="Foco tecnológico" items={details.techFocus} />
+                ) : null}
+                {details.needs?.length ? <TagList label="Buscando" items={details.needs} /> : null}
+                {details.pitchVideoUrl || details.linkedin ? (
+                  <div className="flex flex-wrap gap-3 pt-1">
+                    {details.pitchVideoUrl ? (
+                      <Button asChild size="sm" variant="ghost">
+                        <a href={details.pitchVideoUrl} target="_blank" rel="noreferrer">
+                          <PlayCircle className="h-4 w-4" />
+                          Assistir pitch
+                        </a>
+                      </Button>
+                    ) : null}
+                    {details.linkedin ? (
+                      <Button asChild size="sm" variant="ghost">
+                        <a href={details.linkedin} target="_blank" rel="noreferrer">
+                          <Linkedin className="h-4 w-4" />
+                          LinkedIn
+                        </a>
+                      </Button>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
 
             <div className="flex flex-wrap gap-3">
               {actor.email ? (
@@ -124,5 +180,29 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
       </main>
       <SiteFooter />
     </>
+  );
+}
+
+function FactItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="space-y-1">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <p className="text-sm font-semibold text-slate-200">{value}</p>
+    </div>
+  );
+}
+
+function TagList({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <div className="flex flex-wrap gap-2">
+        {items.map((item) => (
+          <Badge key={item} variant="outline" className="border-white/10 bg-white/5 text-slate-300">
+            {item}
+          </Badge>
+        ))}
+      </div>
+    </div>
   );
 }

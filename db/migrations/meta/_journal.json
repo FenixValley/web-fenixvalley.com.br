@@ -57,6 +57,13 @@
       "when": 1786896405815,
       "tag": "0007_new_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1787062100373,
+      "tag": "0008_colossal_lionheart",
+      "breakpoints": true
     }
   ]
 }

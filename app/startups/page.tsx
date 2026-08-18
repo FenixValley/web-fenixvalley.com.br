@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ActorCatalog } from "@/components/sections/actor-catalog";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { STARTUP_ROLE_VALUE } from "@/data/mapa-form";
 
 export const metadata: Metadata = {
   title: "Startups | Fênix Valley",
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Startups | Fênix Valley",
     description:
-      "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio."
+      "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio.",
+    images: ["/logo-simbolo.png"]
   }
 };
 
@@ -38,6 +40,8 @@ export default function StartupsPage() {
               ctaLabel="Cadastre sua startup"
               emptyTitle="Nenhuma startup aprovada por enquanto."
               emptyDescription="As startups aparecem aqui assim que cadastradas no mapa do ecossistema e aprovadas pela curadoria. Cadastre a sua para fazer parte da vitrine."
+              detailFacets={["stage", "businessModel"]}
+              registerDefaultRole={STARTUP_ROLE_VALUE}
             />
           </div>
         </section>

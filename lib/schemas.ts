@@ -14,6 +14,22 @@ export type LeadInput = z.infer<typeof leadSchema>;
 const consentField = (message: string) =>
   z.boolean({ message }).refine((value) => value === true, { message });
 
+const httpUrlField = (message: string) =>
+  z
+    .string()
+    .url(message)
+    .refine(
+      (value) => {
+        try {
+          const protocol = new URL(value).protocol;
+          return protocol === "https:" || protocol === "http:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Use uma URL http(s)." }
+    );
+
 export const volunteerAreas = [
   "Tecnologia e produto",
   "Design e conteúdo",
@@ -80,22 +96,7 @@ export const actorSchema = z.object({
   neighborhood: z.string().min(2, "Informe o bairro ou região."),
   description: z.string().min(10, "Descreva a organização em uma frase."),
   email: z.string().email("Informe um e-mail válido.").optional().or(z.literal("")),
-  site: z
-    .string()
-    .url("Informe uma URL válida.")
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    )
-    .optional()
-    .or(z.literal("")),
+  site: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
   lat: z.preprocess(
     (value) => (value === "" || value === null ? undefined : value),
     z.coerce.number().min(-90).max(90).optional()
@@ -113,6 +114,46 @@ export const actorRegisterSchema = actorSchema.extend({
 });
 
 export type ActorRegisterInput = z.infer<typeof actorRegisterSchema>;
+
+export const startupStages = [
+  "Ideação",
+  "Validação / MVP",
+  "Tração",
+  "Escala"
+] as const;
+
+export const startupBusinessModels = ["B2B", "B2C", "B2B2C", "B2G / GovTech", "Marketplace"] as const;
+
+export const startupTechFocus = [
+  "Inteligência Artificial",
+  "IoT / Hardware",
+  "Blockchain / Web3",
+  "Cloud / SaaS",
+  "Big Data / Analytics",
+  "Web / Mobile",
+  "No-code / Low-code"
+] as const;
+
+export const startupNeeds = [
+  "Investimento",
+  "Clientes",
+  "Parceiros",
+  "Programas de aceleração",
+  "Talentos"
+] as const;
+
+export const startupDetailsSchema = z.object({
+  foundedYear: z.string().optional().or(z.literal("")),
+  stage: z.enum(startupStages).optional().or(z.literal("")),
+  businessModel: z.enum(startupBusinessModels).optional().or(z.literal("")),
+  techFocus: z.array(z.enum(startupTechFocus)).optional(),
+  founders: z.string().optional().or(z.literal("")),
+  pitchVideoUrl: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  needs: z.array(z.enum(startupNeeds)).optional()
+});
+
+export type StartupDetails = z.infer<typeof startupDetailsSchema>;
 
 export const opportunityTypes = [
   "Meetup",
@@ -138,22 +179,7 @@ export const opportunitySchema = z.object({
   audience: z.string().min(3, "Informe o público."),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD."),
   owner: z.string().min(2, "Informe o responsável."),
-  link: z
-    .string()
-    .url("Informe uma URL válida.")
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    )
-    .optional()
-    .or(z.literal(""))
+  link: httpUrlField("Informe uma URL válida.").optional().or(z.literal(""))
 });
 
 export type OpportunityInput = z.infer<typeof opportunitySchema>;
@@ -171,22 +197,6 @@ export const eventCategories = [
 ] as const;
 
 export const eventModes = ["Presencial", "Online", "Híbrido"] as const;
-
-const httpUrlField = (message: string) =>
-  z
-    .string()
-    .url(message)
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    );
 
 export const eventSchema = z.object({
   title: z.string().min(3, "Informe o nome do evento."),

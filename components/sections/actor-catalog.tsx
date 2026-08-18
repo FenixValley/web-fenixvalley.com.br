@@ -10,10 +10,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { actorTypeLabels } from "@/lib/schemas";
+import { parseActorDetails } from "@/lib/actor-details";
+import { actorTypeLabels, type StartupDetails } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
-type CatalogActor = MapActor & { featured?: number | null };
+type CatalogActor = MapActor & {
+  featured?: number | null;
+  highlightLabel?: string | null;
+  details?: string | null;
+};
+
+type DetailFacetKey = Extract<keyof StartupDetails, "stage" | "businessModel">;
+
+const DETAIL_FACET_LABELS: Record<DetailFacetKey, string> = {
+  stage: "Estágio",
+  businessModel: "Modelo de negócio"
+};
+
+const chipClassName = (active: boolean) =>
+  cn(
+    "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+    active
+      ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
+      : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+  );
 
 async function fetchActors(): Promise<CatalogActor[]> {
   const response = await fetch("/api/actors");
@@ -26,7 +46,9 @@ export function ActorCatalog({
   ctaLabel,
   ctaHref,
   emptyTitle,
-  emptyDescription
+  emptyDescription,
+  detailFacets = [],
+  registerDefaultRole
 }: {
   types: string[];
   ctaLabel: string;
@@ -34,23 +56,51 @@ export function ActorCatalog({
   ctaHref?: string;
   emptyTitle: string;
   emptyDescription: string;
+  /** Chaves de StartupDetails pra virar chip de filtro extra (só tem efeito quando `types` inclui "startup"). */
+  detailFacets?: DetailFacetKey[];
+  /** Pré-seleciona o papel no formulário de cadastro do mapa. */
+  registerDefaultRole?: string;
 }) {
   const { data: actors = [], isError } = useQuery({ queryKey: ["actors"], queryFn: fetchActors });
   const [segment, setSegment] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [facetFilters, setFacetFilters] = useState<Partial<Record<DetailFacetKey, string>>>({});
 
   const scoped = useMemo(() => actors.filter((actor) => types.includes(actor.type)), [actors, types]);
+
+  const detailsByActor = useMemo(() => {
+    const map = new Map<number, StartupDetails | null>();
+    for (const actor of scoped) map.set(actor.id, parseActorDetails(actor.type, actor.details ?? null));
+    return map;
+  }, [scoped]);
 
   const segments = useMemo(
     () => Array.from(new Set(scoped.map((actor) => actor.segment))).sort((a, b) => a.localeCompare(b)),
     [scoped]
   );
 
+  const facetOptions = useMemo(() => {
+    const options = {} as Record<DetailFacetKey, string[]>;
+    for (const key of detailFacets) {
+      const values = new Set<string>();
+      for (const actor of scoped) {
+        const value = detailsByActor.get(actor.id)?.[key];
+        if (value) values.add(value);
+      }
+      options[key] = Array.from(values).sort((a, b) => a.localeCompare(b));
+    }
+    return options;
+  }, [detailFacets, scoped, detailsByActor]);
+
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
     return scoped
       .filter((actor) => {
         if (segment && actor.segment !== segment) return false;
+        for (const key of detailFacets) {
+          const wanted = facetFilters[key];
+          if (wanted && detailsByActor.get(actor.id)?.[key] !== wanted) return false;
+        }
         if (!query) return true;
         return (
           actor.name.toLowerCase().includes(query) ||
@@ -59,22 +109,13 @@ export function ActorCatalog({
         );
       })
       .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
-  }, [scoped, segment, search]);
+  }, [scoped, segment, search, detailFacets, facetFilters, detailsByActor]);
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setSegment(null)}
-            className={cn(
-              "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
-              segment === null
-                ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
-            )}
-          >
+        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por segmento">
+          <button type="button" onClick={() => setSegment(null)} className={chipClassName(segment === null)}>
             Todos os segmentos
           </button>
           {segments.map((item) => (
@@ -82,12 +123,7 @@ export function ActorCatalog({
               key={item}
               type="button"
               onClick={() => setSegment(segment === item ? null : item)}
-              className={cn(
-                "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
-                segment === item
-                  ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                  : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
-              )}
+              className={chipClassName(segment === item)}
             >
               {item}
             </button>
@@ -124,12 +160,48 @@ export function ActorCatalog({
                   Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As respostas
                   ajudam a curadoria a conectar os atores da região e a incluir seu perfil nesta vitrine.
                 </p>
-                <ActorRegisterForm />
+                <ActorRegisterForm defaultRole={registerDefaultRole} />
               </DialogContent>
             </Dialog>
           )}
         </div>
       </div>
+
+      {detailFacets.length > 0 ? (
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
+          {detailFacets.map((key) => (
+            <div
+              key={key}
+              className="flex flex-wrap items-center gap-2"
+              role="group"
+              aria-label={`Filtrar por ${DETAIL_FACET_LABELS[key]}`}
+            >
+              <span className="text-xs font-bold uppercase tracking-[0.1em] text-slate-500">
+                {DETAIL_FACET_LABELS[key]}
+              </span>
+              <button
+                type="button"
+                onClick={() => setFacetFilters((prev) => ({ ...prev, [key]: undefined }))}
+                className={chipClassName(!facetFilters[key])}
+              >
+                Todos
+              </button>
+              {(facetOptions[key] ?? []).map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() =>
+                    setFacetFilters((prev) => ({ ...prev, [key]: prev[key] === value ? undefined : value }))
+                  }
+                  className={chipClassName(facetFilters[key] === value)}
+                >
+                  {value}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      ) : null}
 
       {isError ? (
         <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
@@ -155,7 +227,7 @@ export function ActorCatalog({
                   {actor.featured ? (
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-300">
                       <Star className="h-3.5 w-3.5 fill-amber-300" />
-                      Destaque
+                      {actor.highlightLabel ?? "Destaque"}
                     </span>
                   ) : null}
                 </div>

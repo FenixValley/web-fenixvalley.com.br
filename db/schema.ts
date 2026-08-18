@@ -36,6 +36,8 @@ export const actors = sqliteTable("actors", {
   lng: real("lng").notNull(),
   status: text("status").notNull().default("pending"),
   featured: integer("featured").notNull().default(0),
+  highlightLabel: text("highlight_label"),
+  details: text("details"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 

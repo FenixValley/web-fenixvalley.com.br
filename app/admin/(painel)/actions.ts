@@ -7,7 +7,7 @@ import { actors, auditLogs, events, opportunities, programApplications, programS
 import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { actorSchema, opportunitySchema } from "@/lib/schemas";
+import { actorSchema, opportunitySchema, startupDetailsSchema } from "@/lib/schemas";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
@@ -21,54 +21,87 @@ async function logAudit(actorEmail: string, action: string, entity: string, enti
   await getDb().insert(auditLogs).values({ actorEmail, action, entity, entityId, detail });
 }
 
+/**
+ * Monta o insert de auditoria sem executá-lo, para ser combinado com a escrita
+ * principal em um único db.batch() atômico (D1 não suporta BEGIN/COMMIT).
+ */
+function auditEntry(
+  db: ReturnType<typeof getDb>,
+  actorEmail: string,
+  action: string,
+  entity: string,
+  entityId: number | null,
+  detail?: string
+) {
+  return db.insert(auditLogs).values({ actorEmail, action, entity, entityId, detail });
+}
+
 export async function setVolunteerStatus(id: number, status: "approved" | "rejected") {
   const adminEmail = await requireAdmin();
-  await getDb().update(volunteers).set({ status }).where(eq(volunteers.id, id));
-  await logAudit(adminEmail, status, "volunteer", id);
+  const db = getDb();
+  await db.batch([
+    db.update(volunteers).set({ status }).where(eq(volunteers.id, id)),
+    auditEntry(db, adminEmail, status, "volunteer", id)
+  ]);
   revalidatePath("/admin/voluntarios");
   revalidatePath("/admin");
 }
 
 export async function setActorStatus(id: number, status: "approved" | "rejected") {
   const adminEmail = await requireAdmin();
-  await getDb().update(actors).set({ status }).where(eq(actors.id, id));
-  await logAudit(adminEmail, status, "actor", id);
+  const db = getDb();
+  await db.batch([
+    db.update(actors).set({ status }).where(eq(actors.id, id)),
+    auditEntry(db, adminEmail, status, "actor", id)
+  ]);
   revalidatePath("/admin/atores");
   revalidatePath("/admin");
 }
 
 export async function setActorFeatured(id: number, featured: boolean) {
   const adminEmail = await requireAdmin();
-  await getDb()
-    .update(actors)
-    .set({ featured: featured ? 1 : 0 })
-    .where(eq(actors.id, id));
-  await logAudit(adminEmail, featured ? "feature" : "unfeature", "actor", id);
+  const db = getDb();
+  await db.batch([
+    db
+      .update(actors)
+      .set({ featured: featured ? 1 : 0 })
+      .where(eq(actors.id, id)),
+    auditEntry(db, adminEmail, featured ? "feature" : "unfeature", "actor", id)
+  ]);
   revalidatePath("/admin/atores");
 }
 
 export async function setOpportunityFeatured(id: number, featured: boolean) {
   const adminEmail = await requireAdmin();
-  await getDb()
-    .update(opportunities)
-    .set({ featured: featured ? 1 : 0 })
-    .where(eq(opportunities.id, id));
-  await logAudit(adminEmail, featured ? "feature" : "unfeature", "opportunity", id);
+  const db = getDb();
+  await db.batch([
+    db
+      .update(opportunities)
+      .set({ featured: featured ? 1 : 0 })
+      .where(eq(opportunities.id, id)),
+    auditEntry(db, adminEmail, featured ? "feature" : "unfeature", "opportunity", id)
+  ]);
   revalidatePath("/admin/oportunidades");
 }
 
 export async function setOpportunityStatus(id: number, status: "published" | "archived") {
   const adminEmail = await requireAdmin();
-  await getDb().update(opportunities).set({ status }).where(eq(opportunities.id, id));
-  await logAudit(adminEmail, status, "opportunity", id);
+  const db = getDb();
+  await db.batch([
+    db.update(opportunities).set({ status }).where(eq(opportunities.id, id)),
+    auditEntry(db, adminEmail, status, "opportunity", id)
+  ]);
   revalidatePath("/admin/oportunidades");
   revalidatePath("/admin");
 }
 
 export async function setEventStatus(id: number, status: "approved" | "rejected" | "archived") {
   const adminEmail = await requireAdmin();
-  await getDb().update(events).set({ status }).where(eq(events.id, id));
-  await logAudit(adminEmail, status, "event", id);
+  const db = getDb();
+  await db.batch([
+    db.update(events).set({ status }).where(eq(events.id, id)),
+    auditEntry(db, adminEmail, status, "event", id)
+  ]);
   revalidatePath("/admin/eventos");
   revalidatePath("/admin");
   revalidatePath("/eventos");
@@ -76,25 +109,55 @@ export async function setEventStatus(id: number, status: "approved" | "rejected"
 
 export async function setProgramInscriptions(slug: string, open: boolean) {
   const adminEmail = await requireAdmin();
-  await getDb()
-    .insert(programSettings)
-    .values({ slug, inscriptionsOpen: open ? 1 : 0 })
-    .onConflictDoUpdate({
-      target: programSettings.slug,
-      set: { inscriptionsOpen: open ? 1 : 0 }
-    });
-  await logAudit(adminEmail, open ? "open-inscriptions" : "close-inscriptions", "program", null, slug);
+  const db = getDb();
+  await db.batch([
+    db
+      .insert(programSettings)
+      .values({ slug, inscriptionsOpen: open ? 1 : 0 })
+      .onConflictDoUpdate({
+        target: programSettings.slug,
+        set: { inscriptionsOpen: open ? 1 : 0 }
+      }),
+    auditEntry(db, adminEmail, open ? "open-inscriptions" : "close-inscriptions", "program", null, slug)
+  ]);
   revalidatePath("/admin/programas");
 }
 
 export async function setProgramApplicationStatus(id: number, status: "approved" | "rejected") {
   const adminEmail = await requireAdmin();
-  await getDb().update(programApplications).set({ status }).where(eq(programApplications.id, id));
-  await logAudit(adminEmail, status, "program-application", id);
+  const db = getDb();
+  await db.batch([
+    db.update(programApplications).set({ status }).where(eq(programApplications.id, id)),
+    auditEntry(db, adminEmail, status, "program-application", id)
+  ]);
   revalidatePath("/admin/programas");
 }
 
 export type FormState = { error?: string };
+
+function serializeActorDetails(type: string, formData: FormData): { error: string } | { details: string | null } {
+  if (type !== "startup") return { details: null };
+
+  const parsed = startupDetailsSchema.safeParse({
+    foundedYear: formData.get("foundedYear"),
+    stage: formData.get("stage"),
+    businessModel: formData.get("businessModel"),
+    techFocus: formData.getAll("techFocus"),
+    founders: formData.get("founders"),
+    pitchVideoUrl: formData.get("pitchVideoUrl"),
+    linkedin: formData.get("linkedin"),
+    needs: formData.getAll("needs")
+  });
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return { error: first ?? "Revise os campos de detalhes da startup." };
+  }
+
+  const cleaned = Object.fromEntries(
+    Object.entries(parsed.data).filter(([, value]) => (Array.isArray(value) ? value.length > 0 : Boolean(value)))
+  );
+  return { details: Object.keys(cleaned).length > 0 ? JSON.stringify(cleaned) : null };
+}
 
 export async function upsertActor(id: number | null, _previous: FormState, formData: FormData): Promise<FormState> {
   const adminEmail = await requireAdmin();
@@ -103,12 +166,20 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
     const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
     return { error: first ?? "Revise os campos." };
   }
+
+  const detailsResult = serializeActorDetails(parsed.data.type, formData);
+  if ("error" in detailsResult) return { error: detailsResult.error };
+
+  const highlightLabel = formData.get("highlightLabel")?.toString().trim() || null;
+
   const data = {
     ...parsed.data,
     site: parsed.data.site || null,
     email: parsed.data.email || null,
     lat: parsed.data.lat ?? BETIM_CENTER.lat,
-    lng: parsed.data.lng ?? BETIM_CENTER.lng
+    lng: parsed.data.lng ?? BETIM_CENTER.lng,
+    highlightLabel,
+    details: detailsResult.details
   };
   const db = getDb();
   if (id === null) {

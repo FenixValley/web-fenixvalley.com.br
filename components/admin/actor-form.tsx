@@ -1,11 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { FormState } from "@/app/admin/(painel)/actions";
-import { actorTypeLabels, actorTypes } from "@/lib/schemas";
+import {
+  actorTypeLabels,
+  actorTypes,
+  startupBusinessModels,
+  startupNeeds,
+  startupStages,
+  startupTechFocus,
+  type StartupDetails
+} from "@/lib/schemas";
 
 const selectClassName =
   "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
@@ -20,6 +29,8 @@ type ActorFormValues = {
   email: string | null;
   lat: number;
   lng: number;
+  highlightLabel?: string | null;
+  details?: StartupDetails | null;
 };
 
 export function ActorForm({
@@ -30,6 +41,8 @@ export function ActorForm({
   initialValues?: ActorFormValues;
 }) {
   const [state, formAction, isPending] = useActionState<FormState, FormData>(action, {});
+  const [type, setType] = useState(initialValues?.type ?? "");
+  const details = initialValues?.details;
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -40,11 +53,17 @@ export function ActorForm({
       <div className="grid gap-4 md:grid-cols-2">
         <label className="block space-y-2 text-sm font-semibold text-slate-200">
           Tipo
-          <select name="type" required defaultValue={initialValues?.type ?? ""} className={selectClassName}>
+          <select
+            name="type"
+            required
+            value={type}
+            onChange={(event) => setType(event.target.value)}
+            className={selectClassName}
+          >
             <option value="">Selecione</option>
-            {actorTypes.map((type) => (
-              <option key={type} value={type}>
-                {actorTypeLabels[type]}
+            {actorTypes.map((option) => (
+              <option key={option} value={option}>
+                {actorTypeLabels[option]}
               </option>
             ))}
           </select>
@@ -82,10 +101,107 @@ export function ActorForm({
         Descrição
         <Textarea name="description" required defaultValue={initialValues?.description} />
       </label>
+
+      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        Rótulo de destaque (opcional)
+        <Input
+          name="highlightLabel"
+          placeholder='Ex.: "Startup do mês", "Aberta para investimento", "Case de sucesso"'
+          defaultValue={initialValues?.highlightLabel ?? ""}
+        />
+        <span className="block text-xs font-normal text-slate-400">
+          Aparece no lugar do rótulo genérico &quot;Destaque&quot; quando o ator estiver marcado como destaque.
+        </span>
+      </label>
+
+      {type === "startup" ? (
+        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+            Detalhes de startup
+          </legend>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Ano de fundação
+              <Input name="foundedYear" defaultValue={details?.foundedYear ?? ""} />
+            </label>
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Estágio
+              <select name="stage" defaultValue={details?.stage ?? ""} className={selectClassName}>
+                <option value="">Não informado</option>
+                {startupStages.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Modelo de negócio
+            <select name="businessModel" defaultValue={details?.businessModel ?? ""} className={selectClassName}>
+              <option value="">Não informado</option>
+              {startupBusinessModels.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+          <CheckboxGroup label="Foco tecnológico" name="techFocus" options={startupTechFocus} defaultValues={details?.techFocus} />
+          <CheckboxGroup label="Principais necessidades" name="needs" options={startupNeeds} defaultValues={details?.needs} />
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Fundadores
+            <Textarea name="founders" placeholder="Um por linha" defaultValue={details?.founders ?? ""} />
+          </label>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Vídeo do pitch (opcional)
+              <Input name="pitchVideoUrl" type="url" placeholder="https://" defaultValue={details?.pitchVideoUrl ?? ""} />
+            </label>
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              LinkedIn (opcional)
+              <Input name="linkedin" type="url" placeholder="https://" defaultValue={details?.linkedin ?? ""} />
+            </label>
+          </div>
+        </fieldset>
+      ) : null}
+
       {state.error ? <p className="text-sm font-medium text-destructive">{state.error}</p> : null}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Salvando..." : "Salvar ator"}
       </Button>
     </form>
+  );
+}
+
+function CheckboxGroup({
+  label,
+  name,
+  options,
+  defaultValues
+}: {
+  label: string;
+  name: string;
+  options: readonly string[];
+  defaultValues?: string[];
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-sm font-semibold text-slate-200">{label}</p>
+      <div className="grid gap-2 sm:grid-cols-2">
+        {options.map((option) => (
+          <label key={option} className="flex items-start gap-2 text-sm leading-6 text-slate-300">
+            <input
+              type="checkbox"
+              name={name}
+              value={option}
+              defaultChecked={defaultValues?.includes(option)}
+              className="mt-1 h-4 w-4 shrink-0"
+            />
+            {option}
+          </label>
+        ))}
+      </div>
+    </div>
   );
 }
