@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { FormState } from "@/app/admin/(painel)/actions";
+import type { ActorDetails } from "@/lib/actor-details";
 import {
   actorTypeLabels,
   actorTypes,
@@ -13,8 +14,11 @@ import {
   startupNeeds,
   startupStages,
   startupTechFocus,
+  type InstitutionDetails,
   type StartupDetails
 } from "@/lib/schemas";
+
+const INSTITUTION_TYPES = ["universidade", "escola-tecnica"];
 
 const selectClassName =
   "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
@@ -30,7 +34,7 @@ type ActorFormValues = {
   lat: number;
   lng: number;
   highlightLabel?: string | null;
-  details?: StartupDetails | null;
+  details?: ActorDetails | null;
 };
 
 export function ActorForm({
@@ -42,7 +46,8 @@ export function ActorForm({
 }) {
   const [state, formAction, isPending] = useActionState<FormState, FormData>(action, {});
   const [type, setType] = useState(initialValues?.type ?? "");
-  const details = initialValues?.details;
+  const details = initialValues?.details as StartupDetails | undefined;
+  const institutionDetails = initialValues?.details as InstitutionDetails | undefined;
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -163,6 +168,46 @@ export function ActorForm({
               <Input name="linkedin" type="url" placeholder="https://" defaultValue={details?.linkedin ?? ""} />
             </label>
           </div>
+        </fieldset>
+      ) : null}
+
+      {INSTITUTION_TYPES.includes(type) ? (
+        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+            Detalhes da instituição
+          </legend>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Cursos
+            <Textarea name="courses" placeholder="Um por linha" defaultValue={institutionDetails?.courses ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Laboratórios
+            <Textarea name="labs" placeholder="Um por linha" defaultValue={institutionDetails?.labs ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Linhas de pesquisa
+            <Textarea
+              name="researchLines"
+              placeholder="Um por linha"
+              defaultValue={institutionDetails?.researchLines ?? ""}
+            />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Programas de extensão
+            <Textarea
+              name="extensionPrograms"
+              placeholder="Um por linha"
+              defaultValue={institutionDetails?.extensionPrograms ?? ""}
+            />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Parcerias
+            <Textarea
+              name="partnerships"
+              placeholder="Um por linha"
+              defaultValue={institutionDetails?.partnerships ?? ""}
+            />
+          </label>
         </fieldset>
       ) : null}
 

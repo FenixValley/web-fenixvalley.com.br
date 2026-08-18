@@ -100,6 +100,19 @@ export const auditLogs = sqliteTable("audit_logs", {
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
+export const learningTracks = sqliteTable("learning_tracks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("published"),
+  relatedEventCategory: text("related_event_category"),
+  relatedOpportunityType: text("related_opportunity_type"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
 export const leads = sqliteTable("leads", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),

@@ -64,6 +64,13 @@
       "when": 1787062100373,
       "tag": "0008_colossal_lionheart",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1787065625751,
+      "tag": "0009_brief_korvac",
+      "breakpoints": true
     }
   ]
 }

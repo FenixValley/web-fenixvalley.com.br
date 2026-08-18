@@ -10,7 +10,7 @@ import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
 import { parseActorDetails } from "@/lib/actor-details";
 import { getDb } from "@/lib/db";
-import { actorTypeLabels } from "@/lib/schemas";
+import { actorTypeLabels, type InstitutionDetails, type StartupDetails } from "@/lib/schemas";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +50,12 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
   if (!actor) notFound();
 
   const typeLabel = actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type;
-  const details = parseActorDetails(actor.type, actor.details);
+  const parsedDetails = parseActorDetails(actor.type, actor.details);
+  const details = actor.type === "startup" ? (parsedDetails as StartupDetails | null) : null;
+  const institutionDetails =
+    actor.type === "universidade" || actor.type === "escola-tecnica"
+      ? (parsedDetails as InstitutionDetails | null)
+      : null;
 
   return (
     <>
@@ -141,6 +146,25 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
               </div>
             ) : null}
 
+            {institutionDetails ? (
+              <div className="surface-panel space-y-5 rounded-lg p-6">
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha da instituição</h2>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  {institutionDetails.courses ? <LineList label="Cursos" value={institutionDetails.courses} /> : null}
+                  {institutionDetails.labs ? <LineList label="Laboratórios" value={institutionDetails.labs} /> : null}
+                  {institutionDetails.researchLines ? (
+                    <LineList label="Linhas de pesquisa" value={institutionDetails.researchLines} />
+                  ) : null}
+                  {institutionDetails.extensionPrograms ? (
+                    <LineList label="Programas de extensão" value={institutionDetails.extensionPrograms} />
+                  ) : null}
+                  {institutionDetails.partnerships ? (
+                    <LineList label="Parcerias" value={institutionDetails.partnerships} />
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
             <div className="flex flex-wrap gap-3">
               {actor.email ? (
                 <Button asChild>
@@ -188,6 +212,24 @@ function FactItem({ label, value }: { label: string; value: string }) {
     <div className="space-y-1">
       <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
       <p className="text-sm font-semibold text-slate-200">{value}</p>
+    </div>
+  );
+}
+
+function LineList({ label, value }: { label: string; value: string }) {
+  const items = value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  if (items.length === 0) return null;
+  return (
+    <div className="space-y-1.5">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <ul className="space-y-1 text-sm leading-6 text-slate-300">
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { asc, eq } from "drizzle-orm";
 import {
   ArrowRight,
   Banknote,
@@ -7,6 +8,7 @@ import {
   Factory,
   Landmark,
   Lightbulb,
+  type LucideIcon,
   Megaphone,
   Presentation,
   Rocket,
@@ -18,6 +20,10 @@ import {
 import { ActorCatalog } from "@/components/sections/actor-catalog";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { learningTracks } from "@/db/schema";
+import { getDb } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Universidades e educação | Fênix Valley",
@@ -30,22 +36,28 @@ export const metadata: Metadata = {
   }
 };
 
-const trilhas = [
-  { icon: Lightbulb, title: "Ideia ao MVP", description: "Do problema à primeira versão testável do produto." },
-  { icon: Presentation, title: "Modelo de negócio", description: "Proposta de valor, canais e estrutura de receita." },
-  { icon: Megaphone, title: "Marketing e vendas", description: "Posicionamento, aquisição e relacionamento com clientes." },
-  { icon: Cpu, title: "Programação", description: "Fundamentos e boas práticas para times de produto digital." },
-  { icon: Sparkles, title: "Inteligência artificial", description: "Aplicações práticas de IA em produtos e processos." },
-  { icon: Wallet, title: "Investimento", description: "Como se preparar para rodadas e conversar com investidores." },
-  { icon: Rocket, title: "Pitch", description: "Comunicação clara e persuasiva para bancas e parceiros." },
-  { icon: TrendingUp, title: "Vendas B2B/B2G", description: "Ciclos de venda para empresas e poder público." },
-  { icon: Banknote, title: "Finanças", description: "Fluxo de caixa, precificação e indicadores essenciais." },
-  { icon: Landmark, title: "GovTech", description: "Inovação aplicada a serviços e desafios públicos." },
-  { icon: Factory, title: "Indústria 4.0", description: "Automação, dados e eficiência para o setor produtivo." },
-  { icon: ShieldCheck, title: "ESG", description: "Impacto socioambiental e governança para negócios sustentáveis." }
-];
+const TRACK_ICONS: Record<string, LucideIcon> = {
+  Lightbulb,
+  Presentation,
+  Megaphone,
+  Cpu,
+  Sparkles,
+  Wallet,
+  Rocket,
+  TrendingUp,
+  Banknote,
+  Landmark,
+  Factory,
+  ShieldCheck
+};
 
-export default function UniversidadesPage() {
+export default async function UniversidadesPage() {
+  const trilhas = await getDb()
+    .select()
+    .from(learningTracks)
+    .where(eq(learningTracks.status, "published"))
+    .orderBy(asc(learningTracks.order), asc(learningTracks.title));
+
   return (
     <>
       <SiteHeader />
@@ -80,20 +92,37 @@ export default function UniversidadesPage() {
                 Trilhas de capacitação
               </h2>
               <p className="text-lg leading-8 text-slate-300">
-                Doze frentes de aprendizado que conectam estudantes e empreendedores a cursos, mentorias, desafios
-                e eventos do ecossistema. Cada trilha é reforçada pela agenda de eventos e pelos programas em
+                Frentes de aprendizado que conectam estudantes e empreendedores a cursos, mentorias, desafios e
+                eventos do ecossistema. Cada trilha é reforçada pela agenda de eventos e pelas oportunidades em
                 andamento.
               </p>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {trilhas.map(({ icon: Icon, title, description }) => (
-                <div key={title} className="surface-panel rounded-lg p-5">
-                  <Icon className="h-6 w-6 text-orange-300" aria-hidden="true" />
-                  <h3 className="mt-3 font-[var(--font-space)] text-base font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">{description}</p>
-                </div>
-              ))}
-            </div>
+            {trilhas.length === 0 ? (
+              <p className="text-sm text-slate-400">Nenhuma trilha publicada no momento.</p>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {trilhas.map((trilha) => {
+                  const Icon = TRACK_ICONS[trilha.icon] ?? Lightbulb;
+                  return (
+                    <Link
+                      key={trilha.slug}
+                      href={`/universidades/trilhas/${trilha.slug}`}
+                      className="surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1"
+                    >
+                      <Icon className="h-6 w-6 text-orange-300" aria-hidden="true" />
+                      <h3 className="mt-3 font-[var(--font-space)] text-base font-bold text-white">{trilha.title}</h3>
+                      <p className="mt-2 flex-1 text-sm leading-6 text-slate-300 line-clamp-3">
+                        {trilha.description}
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
+                        Ver trilha
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
             <div className="surface-panel flex flex-col gap-4 rounded-lg p-6 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-xl text-sm leading-6 text-slate-300">
                 Estágios, vagas, hackathons e mentorias para estudantes ficam reunidos na agenda de oportunidades e
@@ -101,17 +130,31 @@ export default function UniversidadesPage() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <Link
+                  href="/oportunidades?tipo=Est%C3%A1gio"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
+                >
+                  Ver estágios
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/oportunidades?tipo=Vaga"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
+                >
+                  Ver vagas
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/eventos?categoria=Hackathon"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
+                >
+                  Ver hackathons
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
                   href="/eventos?categoria=Acad%C3%AAmico"
                   className="inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
                 >
                   Ver eventos acadêmicos
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/#oportunidades"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
-                >
-                  Ver oportunidades
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>

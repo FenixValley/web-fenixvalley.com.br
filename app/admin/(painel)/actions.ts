@@ -3,11 +3,21 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { actors, auditLogs, events, opportunities, programApplications, programSettings, volunteers } from "@/db/schema";
+import {
+  actors,
+  auditLogs,
+  events,
+  learningTracks,
+  opportunities,
+  programApplications,
+  programSettings,
+  volunteers
+} from "@/db/schema";
 import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { actorSchema, opportunitySchema, startupDetailsSchema } from "@/lib/schemas";
+import { actorSchema, institutionDetailsSchema, learningTrackSchema, opportunitySchema, startupDetailsSchema } from "@/lib/schemas";
+import { slugify } from "@/lib/slug";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
@@ -136,27 +146,47 @@ export async function setProgramApplicationStatus(id: number, status: "approved"
 export type FormState = { error?: string };
 
 function serializeActorDetails(type: string, formData: FormData): { error: string } | { details: string | null } {
-  if (type !== "startup") return { details: null };
-
-  const parsed = startupDetailsSchema.safeParse({
-    foundedYear: formData.get("foundedYear"),
-    stage: formData.get("stage"),
-    businessModel: formData.get("businessModel"),
-    techFocus: formData.getAll("techFocus"),
-    founders: formData.get("founders"),
-    pitchVideoUrl: formData.get("pitchVideoUrl"),
-    linkedin: formData.get("linkedin"),
-    needs: formData.getAll("needs")
-  });
-  if (!parsed.success) {
-    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
-    return { error: first ?? "Revise os campos de detalhes da startup." };
+  if (type === "startup") {
+    const parsed = startupDetailsSchema.safeParse({
+      foundedYear: formData.get("foundedYear"),
+      stage: formData.get("stage"),
+      businessModel: formData.get("businessModel"),
+      techFocus: formData.getAll("techFocus"),
+      founders: formData.get("founders"),
+      pitchVideoUrl: formData.get("pitchVideoUrl"),
+      linkedin: formData.get("linkedin"),
+      needs: formData.getAll("needs")
+    });
+    if (!parsed.success) {
+      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      return { error: first ?? "Revise os campos de detalhes da startup." };
+    }
+    return { details: serializeCleaned(parsed.data) };
   }
 
+  if (type === "universidade" || type === "escola-tecnica") {
+    const parsed = institutionDetailsSchema.safeParse({
+      courses: formData.get("courses"),
+      labs: formData.get("labs"),
+      researchLines: formData.get("researchLines"),
+      extensionPrograms: formData.get("extensionPrograms"),
+      partnerships: formData.get("partnerships")
+    });
+    if (!parsed.success) {
+      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      return { error: first ?? "Revise os campos de detalhes da instituição." };
+    }
+    return { details: serializeCleaned(parsed.data) };
+  }
+
+  return { details: null };
+}
+
+function serializeCleaned(data: Record<string, unknown>): string | null {
   const cleaned = Object.fromEntries(
-    Object.entries(parsed.data).filter(([, value]) => (Array.isArray(value) ? value.length > 0 : Boolean(value)))
+    Object.entries(data).filter(([, value]) => (Array.isArray(value) ? value.length > 0 : Boolean(value)))
   );
-  return { details: Object.keys(cleaned).length > 0 ? JSON.stringify(cleaned) : null };
+  return Object.keys(cleaned).length > 0 ? JSON.stringify(cleaned) : null;
 }
 
 export async function upsertActor(id: number | null, _previous: FormState, formData: FormData): Promise<FormState> {
@@ -194,6 +224,75 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
   }
   revalidatePath("/admin/atores");
   redirect("/admin/atores");
+}
+
+async function uniqueLearningTrackSlug(db: ReturnType<typeof getDb>, title: string, excludeId?: number): Promise<string> {
+  const base = slugify(title);
+  let slug = base;
+  let suffix = 2;
+  for (;;) {
+    const existing = await db.query.learningTracks.findFirst({
+      where: eq(learningTracks.slug, slug),
+      columns: { id: true }
+    });
+    if (!existing || existing.id === excludeId) return slug;
+    slug = `${base}-${suffix++}`;
+  }
+}
+
+export async function upsertLearningTrack(
+  id: number | null,
+  _previous: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const adminEmail = await requireAdmin();
+  const parsed = learningTrackSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return { error: first ?? "Revise os campos." };
+  }
+  const data = {
+    ...parsed.data,
+    relatedEventCategory: parsed.data.relatedEventCategory || null,
+    relatedOpportunityType: parsed.data.relatedOpportunityType || null
+  };
+  const db = getDb();
+  if (id === null) {
+    const slug = await uniqueLearningTrackSlug(db, data.title);
+    const [created] = await db
+      .insert(learningTracks)
+      .values({ ...data, slug, status: "published" })
+      .returning({ id: learningTracks.id });
+    await logAudit(adminEmail, "create", "learning-track", created?.id ?? null, data.title);
+  } else {
+    await db.update(learningTracks).set(data).where(eq(learningTracks.id, id));
+    await logAudit(adminEmail, "update", "learning-track", id, data.title);
+  }
+  revalidatePath("/admin/trilhas");
+  revalidatePath("/universidades");
+  redirect("/admin/trilhas");
+}
+
+export async function setLearningTrackStatus(id: number, status: "published" | "draft") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(learningTracks).set({ status }).where(eq(learningTracks.id, id)),
+    auditEntry(db, adminEmail, status, "learning-track", id)
+  ]);
+  revalidatePath("/admin/trilhas");
+  revalidatePath("/universidades");
+}
+
+export async function deleteLearningTrack(id: number) {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.delete(learningTracks).where(eq(learningTracks.id, id)),
+    auditEntry(db, adminEmail, "delete", "learning-track", id)
+  ]);
+  revalidatePath("/admin/trilhas");
+  revalidatePath("/universidades");
 }
 
 export async function upsertOpportunity(

@@ -69,8 +69,11 @@ export function ActorCatalog({
   const scoped = useMemo(() => actors.filter((actor) => types.includes(actor.type)), [actors, types]);
 
   const detailsByActor = useMemo(() => {
+    // detailFacets (stage/businessModel) só são usadas para o catálogo de startups.
     const map = new Map<number, StartupDetails | null>();
-    for (const actor of scoped) map.set(actor.id, parseActorDetails(actor.type, actor.details ?? null));
+    for (const actor of scoped) {
+      map.set(actor.id, parseActorDetails(actor.type, actor.details ?? null) as StartupDetails | null);
+    }
     return map;
   }, [scoped]);
 

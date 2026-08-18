@@ -16,6 +16,8 @@ import { Opportunity } from "@/data/opportunities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { opportunityTypes } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
 
 async function fetchOpportunities() {
   const response = await fetch("/api/opportunities");
@@ -63,9 +65,16 @@ function isClosingSoon(date: string) {
   return deadline >= now && deadline - now <= WEEK_IN_MS;
 }
 
-export function OpportunitiesTable({ initialData }: { initialData: Opportunity[] }) {
+export function OpportunitiesTable({
+  initialData,
+  initialType = null
+}: {
+  initialData: Opportunity[];
+  initialType?: string | null;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string | null>(initialType);
   const { data = initialData, isFetching } = useQuery({
     queryKey: ["opportunities"],
     queryFn: fetchOpportunities,
@@ -73,6 +82,11 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
     // initialData é o snapshot estático do build; busca a versão viva ao montar
     staleTime: 0
   });
+
+  const typeFilteredData = useMemo(
+    () => (typeFilter ? data.filter((item) => item.type === typeFilter) : data),
+    [data, typeFilter]
+  );
 
   const columns = useMemo<ColumnDef<Opportunity>[]>(
     () => [
@@ -159,7 +173,7 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
   );
 
   const table = useReactTable({
-    data,
+    data: typeFilteredData,
     columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
@@ -171,6 +185,37 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
 
   return (
     <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por tipo">
+        <button
+          type="button"
+          onClick={() => setTypeFilter(null)}
+          aria-pressed={typeFilter === null}
+          className={cn(
+            "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+            typeFilter === null
+              ? "border-primary/60 bg-primary/15 text-primary"
+              : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
+          )}
+        >
+          Todos os tipos
+        </button>
+        {opportunityTypes.map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => setTypeFilter(typeFilter === item ? null : item)}
+            aria-pressed={typeFilter === item}
+            className={cn(
+              "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+              typeFilter === item
+                ? "border-primary/60 bg-primary/15 text-primary"
+                : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
+            )}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />

@@ -3,7 +3,8 @@ const styles: Record<string, string> = {
   approved: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
   rejected: "bg-rose-500/15 text-rose-400 border-rose-500/30",
   published: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  archived: "bg-slate-500/15 text-slate-400 border-slate-500/30"
+  archived: "bg-slate-500/15 text-slate-400 border-slate-500/30",
+  draft: "bg-slate-500/15 text-slate-400 border-slate-500/30"
 };
 
 const labels: Record<string, string> = {
@@ -11,7 +12,8 @@ const labels: Record<string, string> = {
   approved: "Aprovado",
   rejected: "Rejeitado",
   published: "Publicada",
-  archived: "Arquivada"
+  archived: "Arquivada",
+  draft: "Rascunho"
 };
 
 export function StatusBadge({ status }: { status: string }) {

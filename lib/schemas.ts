@@ -155,6 +155,16 @@ export const startupDetailsSchema = z.object({
 
 export type StartupDetails = z.infer<typeof startupDetailsSchema>;
 
+export const institutionDetailsSchema = z.object({
+  courses: z.string().optional().or(z.literal("")),
+  labs: z.string().optional().or(z.literal("")),
+  researchLines: z.string().optional().or(z.literal("")),
+  extensionPrograms: z.string().optional().or(z.literal("")),
+  partnerships: z.string().optional().or(z.literal(""))
+});
+
+export type InstitutionDetails = z.infer<typeof institutionDetailsSchema>;
+
 export const opportunityTypes = [
   "Meetup",
   "Programa",
@@ -226,3 +236,29 @@ export const programApplicationSchema = z.object({
 });
 
 export type ProgramApplicationInput = z.infer<typeof programApplicationSchema>;
+
+export const learningTrackIcons = [
+  "Lightbulb",
+  "Presentation",
+  "Megaphone",
+  "Cpu",
+  "Sparkles",
+  "Wallet",
+  "Rocket",
+  "TrendingUp",
+  "Banknote",
+  "Landmark",
+  "Factory",
+  "ShieldCheck"
+] as const;
+
+export const learningTrackSchema = z.object({
+  title: z.string().min(3, "Informe o título da trilha."),
+  description: z.string().min(10, "Descreva a trilha em uma frase."),
+  icon: z.enum(learningTrackIcons, { message: "Escolha um ícone." }),
+  order: z.preprocess((value) => (value === "" || value === null ? undefined : value), z.coerce.number().int().min(0)).default(0),
+  relatedEventCategory: z.enum(eventCategories).optional().or(z.literal("")),
+  relatedOpportunityType: z.enum(opportunityTypes).optional().or(z.literal(""))
+});
+
+export type LearningTrackInput = z.infer<typeof learningTrackSchema>;

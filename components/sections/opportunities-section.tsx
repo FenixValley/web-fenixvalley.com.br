@@ -4,10 +4,12 @@ import { OpportunitiesTable } from "./opportunities-table";
 
 export function OpportunitiesSection({
   opportunities,
-  heading: Heading = "h2"
+  heading: Heading = "h2",
+  initialType
 }: {
   opportunities: Opportunity[];
   heading?: "h1" | "h2";
+  initialType?: string | null;
 }) {
   return (
     <section id="oportunidades" className="relative overflow-hidden py-16 sm:py-20">
@@ -25,7 +27,7 @@ export function OpportunitiesSection({
             </p>
           </FadeIn>
         </div>
-        <OpportunitiesTable initialData={opportunities} />
+        <OpportunitiesTable initialData={opportunities} initialType={initialType} />
       </div>
     </section>
   );
