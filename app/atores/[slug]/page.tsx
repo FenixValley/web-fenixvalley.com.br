@@ -37,10 +37,12 @@ async function getApprovedActor(slug: string) {
   });
 }
 
-// Números são coletados em formato livre (com DDD, sem código do país) — assume Brasil (+55).
+// Números são coletados em formato livre. Local brasileiro (com DDD, sem código do país)
+// tem 10 ou 11 dígitos — nesse caso prefixamos +55. Com código do país já tem 12 ou 13
+// dígitos (ex.: DDD 55 é válido e não pode ser confundido com o prefixo do Brasil).
 function whatsappLink(value: string): string {
   const digits = value.replace(/\D/g, "");
-  const withCountryCode = digits.startsWith("55") ? digits : `55${digits}`;
+  const withCountryCode = digits.length <= 11 ? `55${digits}` : digits;
   return `https://wa.me/${withCountryCode}`;
 }
 
