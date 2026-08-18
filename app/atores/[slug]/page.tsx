@@ -2,7 +2,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { and, eq } from "drizzle-orm";
-import { ChevronRight, ExternalLink, Linkedin, Mail, MapPin, MapPinned, PlayCircle, Star } from "lucide-react";
+import {
+  ChevronRight,
+  ExternalLink,
+  Linkedin,
+  Mail,
+  MapPin,
+  MapPinned,
+  MessageCircle,
+  PlayCircle,
+  Star
+} from "lucide-react";
 import { actors } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +35,13 @@ async function getApprovedActor(slug: string) {
   return getDb().query.actors.findFirst({
     where: and(eq(actors.slug, slug), eq(actors.status, "approved"))
   });
+}
+
+// Números são coletados em formato livre (com DDD, sem código do país) — assume Brasil (+55).
+function whatsappLink(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  const withCountryCode = digits.startsWith("55") ? digits : `55${digits}`;
+  return `https://wa.me/${withCountryCode}`;
 }
 
 function isHttpUrl(value: string): boolean {
@@ -287,6 +304,14 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
                   </a>
                 </Button>
               ) : null}
+              {actor.whatsapp ? (
+                <Button asChild variant={actor.email || actor.site ? "ghost" : "default"}>
+                  <a href={whatsappLink(actor.whatsapp)} target="_blank" rel="noreferrer">
+                    <MessageCircle className="h-4 w-4" />
+                    WhatsApp
+                  </a>
+                </Button>
+              ) : null}
               <Button asChild variant="ghost">
                 <Link href="/mapa">
                   <MapPinned className="h-4 w-4" />
@@ -295,7 +320,7 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
               </Button>
             </div>
 
-            {!actor.email && !actor.site ? (
+            {!actor.email && !actor.site && !actor.whatsapp ? (
               <p className="text-sm leading-6 text-slate-400">
                 Esta organização ainda não informou canais de contato. Fale com a coordenação em{" "}
                 <Link href="/contato" className="text-orange-300 hover:text-orange-200">

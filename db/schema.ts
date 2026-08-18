@@ -32,6 +32,7 @@ export const actors = sqliteTable("actors", {
   description: text("description").notNull(),
   site: text("site"),
   email: text("email"),
+  whatsapp: text("whatsapp"),
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
   status: text("status").notNull().default("pending"),

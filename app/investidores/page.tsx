@@ -37,7 +37,7 @@ export default function InvestidoresPage() {
               ctaLabel="Cadastre-se como investidor"
               emptyTitle="Nenhum investidor aprovado por enquanto."
               emptyDescription="Investidores aparecem aqui assim que cadastrados no mapa do ecossistema e aprovados pela curadoria."
-              detailFacets={["stage"]}
+              detailFacets={["stage", "region"]}
             />
           </div>
         </section>

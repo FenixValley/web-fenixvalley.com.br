@@ -39,6 +39,7 @@ type ActorFormValues = {
   description: string;
   site: string | null;
   email: string | null;
+  whatsapp: string | null;
   lat: number;
   lng: number;
   highlightLabel?: string | null;
@@ -103,7 +104,7 @@ export function ActorForm({
           <Input name="lng" type="number" step="any" defaultValue={initialValues?.lng} />
         </label>
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-3">
         <label className="block space-y-2 text-sm font-semibold text-slate-200">
           Site (opcional)
           <Input name="site" type="url" placeholder="https://" defaultValue={initialValues?.site ?? ""} />
@@ -111,6 +112,10 @@ export function ActorForm({
         <label className="block space-y-2 text-sm font-semibold text-slate-200">
           E-mail de contato (opcional)
           <Input name="email" type="email" placeholder="contato@organizacao.com.br" defaultValue={initialValues?.email ?? ""} />
+        </label>
+        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          WhatsApp (opcional)
+          <Input name="whatsapp" type="tel" placeholder="(31) 91234-5678" defaultValue={initialValues?.whatsapp ?? ""} />
         </label>
       </div>
       <label className="block space-y-2 text-sm font-semibold text-slate-200">

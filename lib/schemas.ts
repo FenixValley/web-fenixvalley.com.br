@@ -30,6 +30,12 @@ const httpUrlField = (message: string) =>
       { message: "Use uma URL http(s)." }
     );
 
+const whatsappField = z
+  .string()
+  .refine((value) => /^\+?\d{10,15}$/.test(value.replace(/[\s()-]/g, "")), {
+    message: "Informe um WhatsApp válido, com DDD (ex.: (31) 91234-5678)."
+  });
+
 export const volunteerAreas = [
   "Tecnologia e produto",
   "Design e conteúdo",
@@ -97,6 +103,7 @@ export const actorSchema = z.object({
   description: z.string().min(10, "Descreva a organização em uma frase."),
   email: z.string().email("Informe um e-mail válido.").optional().or(z.literal("")),
   site: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  whatsapp: whatsappField.optional().or(z.literal("")),
   lat: z.preprocess(
     (value) => (value === "" || value === null ? undefined : value),
     z.coerce.number().min(-90).max(90).optional()

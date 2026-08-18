@@ -28,7 +28,8 @@ const DETAIL_FACET_LABELS: Record<DetailFacetKey, string> = {
   businessModel: "Modelo de negócio",
   format: "Formato",
   availability: "Disponibilidade",
-  usageType: "Tipo de uso"
+  usageType: "Tipo de uso",
+  region: "Região"
 };
 
 const chipClassName = (active: boolean) =>

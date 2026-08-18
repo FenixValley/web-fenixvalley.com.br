@@ -262,6 +262,7 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
     ...parsed.data,
     site: parsed.data.site || null,
     email: parsed.data.email || null,
+    whatsapp: parsed.data.whatsapp || null,
     lat: parsed.data.lat ?? BETIM_CENTER.lat,
     lng: parsed.data.lng ?? BETIM_CENTER.lng,
     highlightLabel,
