@@ -29,10 +29,10 @@ const DETAIL_FACET_LABELS: Record<DetailFacetKey, string> = {
 
 const chipClassName = (active: boolean) =>
   cn(
-    "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+    "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
     active
-      ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-      : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+      ? "border-orange-400/60 bg-orange-500/15 text-orange-300 hover:bg-orange-500/25"
+      : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
   );
 
 async function fetchActors(): Promise<CatalogActor[]> {

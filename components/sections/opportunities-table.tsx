@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Column,
   ColumnDef,
   SortingState,
   flexRender,
@@ -35,6 +36,23 @@ function formatDate(value: string) {
     timeZone: "UTC"
   }).format(new Date(value));
 }
+
+// Ciclo de 3 estados (sem ordenação -> ascendente -> descendente -> sem ordenação),
+// diferente do toggleSorting padrão do TanStack Table que só alterna asc/desc.
+function cycleSorting(column: Column<Opportunity, unknown>) {
+  const sorted = column.getIsSorted();
+  if (sorted === false) column.toggleSorting(false);
+  else if (sorted === "asc") column.toggleSorting(true);
+  else column.clearSorting();
+}
+
+const typeChipClassName = (active: boolean) =>
+  cn(
+    "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+    active
+      ? "border-primary/60 bg-primary/15 text-primary hover:bg-primary/25"
+      : "border-border bg-card/60 text-muted-foreground hover:border-muted-foreground/40 hover:bg-muted/60 hover:text-foreground"
+  );
 
 function SortIcon({ sorted }: { sorted: false | "asc" | "desc" }) {
   if (sorted === "asc") return <ArrowUp className="h-4 w-4" />;
@@ -99,7 +117,7 @@ export function OpportunitiesTable({
       {
         accessorKey: "title",
         header: ({ column }) => (
-          <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button variant="ghost" size="sm" onClick={() => cycleSorting(column)}
             className="text-muted-foreground hover:text-foreground">
             Oportunidade
             <SortIcon sorted={column.getIsSorted()} />
@@ -135,7 +153,7 @@ export function OpportunitiesTable({
       {
         accessorKey: "date",
         header: ({ column }) => (
-          <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button variant="ghost" size="sm" onClick={() => cycleSorting(column)}
             className="text-muted-foreground hover:text-foreground">
             Data
             <SortIcon sorted={column.getIsSorted()} />
@@ -196,12 +214,7 @@ export function OpportunitiesTable({
           type="button"
           onClick={() => setTypeFilter(null)}
           aria-pressed={typeFilter === null}
-          className={cn(
-            "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
-            typeFilter === null
-              ? "border-primary/60 bg-primary/15 text-primary"
-              : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
-          )}
+          className={typeChipClassName(typeFilter === null)}
         >
           Todos os tipos
         </button>
@@ -211,12 +224,7 @@ export function OpportunitiesTable({
             type="button"
             onClick={() => setTypeFilter(typeFilter === item ? null : item)}
             aria-pressed={typeFilter === item}
-            className={cn(
-              "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
-              typeFilter === item
-                ? "border-primary/60 bg-primary/15 text-primary"
-                : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
-            )}
+            className={typeChipClassName(typeFilter === item)}
           >
             {item}
           </button>
