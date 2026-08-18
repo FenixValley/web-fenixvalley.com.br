@@ -61,7 +61,7 @@ export function ActorCatalog({
   /** Pré-seleciona o papel no formulário de cadastro do mapa. */
   registerDefaultRole?: string;
 }) {
-  const { data: actors = [], isError } = useQuery({ queryKey: ["actors"], queryFn: fetchActors });
+  const { data: actors = [], isPending, isError } = useQuery({ queryKey: ["actors"], queryFn: fetchActors });
   const [segment, setSegment] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [facetFilters, setFacetFilters] = useState<Partial<Record<DetailFacetKey, string>>>({});
@@ -115,7 +115,12 @@ export function ActorCatalog({
     <div className="space-y-6">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por segmento">
-          <button type="button" onClick={() => setSegment(null)} className={chipClassName(segment === null)}>
+          <button
+            type="button"
+            onClick={() => setSegment(null)}
+            aria-pressed={segment === null}
+            className={chipClassName(segment === null)}
+          >
             Todos os segmentos
           </button>
           {segments.map((item) => (
@@ -123,6 +128,7 @@ export function ActorCatalog({
               key={item}
               type="button"
               onClick={() => setSegment(segment === item ? null : item)}
+              aria-pressed={segment === item}
               className={chipClassName(segment === item)}
             >
               {item}
@@ -136,6 +142,7 @@ export function ActorCatalog({
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome, bairro ou segmento"
+              aria-label="Buscar por nome, bairro ou segmento"
               className="pl-9"
             />
           </div>
@@ -182,6 +189,7 @@ export function ActorCatalog({
               <button
                 type="button"
                 onClick={() => setFacetFilters((prev) => ({ ...prev, [key]: undefined }))}
+                aria-pressed={!facetFilters[key]}
                 className={chipClassName(!facetFilters[key])}
               >
                 Todos
@@ -193,6 +201,7 @@ export function ActorCatalog({
                   onClick={() =>
                     setFacetFilters((prev) => ({ ...prev, [key]: prev[key] === value ? undefined : value }))
                   }
+                  aria-pressed={facetFilters[key] === value}
                   className={chipClassName(facetFilters[key] === value)}
                 >
                   {value}
@@ -203,13 +212,13 @@ export function ActorCatalog({
         </div>
       ) : null}
 
-      {isError ? (
+      {isPending ? (
+        <p className="surface-panel max-w-2xl rounded-lg p-8 text-sm text-slate-300">Carregando...</p>
+      ) : isError ? (
         <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
           Não foi possível carregar os dados agora. Tente novamente em instantes.
         </p>
-      ) : null}
-
-      {filtered.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="surface-panel max-w-2xl rounded-lg p-8">
           <h2 className="font-[var(--font-space)] text-xl font-bold text-white">{emptyTitle}</h2>
           <p className="mt-3 text-sm leading-7 text-slate-300">{emptyDescription}</p>
