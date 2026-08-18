@@ -10,7 +10,14 @@ import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
 import { parseActorDetails } from "@/lib/actor-details";
 import { getDb } from "@/lib/db";
-import { actorTypeLabels, type InstitutionDetails, type StartupDetails } from "@/lib/schemas";
+import {
+  actorTypeLabels,
+  type InstitutionDetails,
+  type InvestorDetails,
+  type MentorDetails,
+  type SpaceDetails,
+  type StartupDetails
+} from "@/lib/schemas";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +62,13 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
   const institutionDetails =
     actor.type === "universidade" || actor.type === "escola-tecnica"
       ? (parsedDetails as InstitutionDetails | null)
+      : null;
+  const mentorDetails = actor.type === "mentor" ? (parsedDetails as MentorDetails | null) : null;
+  const investorDetails =
+    actor.type === "investidor" || actor.type === "aceleradora" ? (parsedDetails as InvestorDetails | null) : null;
+  const spaceDetails =
+    actor.type === "coworking" || actor.type === "laboratorio" || actor.type === "hub"
+      ? (parsedDetails as SpaceDetails | null)
       : null;
 
   return (
@@ -162,6 +176,97 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
                     <LineList label="Parcerias" value={institutionDetails.partnerships} />
                   ) : null}
                 </div>
+              </div>
+            ) : null}
+
+            {mentorDetails ? (
+              <div className="surface-panel space-y-5 rounded-lg p-6">
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha do mentor</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {mentorDetails.format ? <FactItem label="Formato" value={mentorDetails.format} /> : null}
+                  {mentorDetails.availability ? (
+                    <FactItem label="Disponibilidade" value={mentorDetails.availability} />
+                  ) : null}
+                </div>
+                {mentorDetails.specialties ? (
+                  <LineList label="Especialidades / temas" value={mentorDetails.specialties} />
+                ) : null}
+                {mentorDetails.experience ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Experiência</p>
+                    <p className="text-sm leading-6 text-slate-300 whitespace-pre-line">{mentorDetails.experience}</p>
+                  </div>
+                ) : null}
+                {mentorDetails.supportedProjects ? (
+                  <LineList label="Projetos apoiados" value={mentorDetails.supportedProjects} />
+                ) : null}
+                {mentorDetails.linkedin ? (
+                  <div className="pt-1">
+                    <Button asChild size="sm" variant="ghost">
+                      <a href={mentorDetails.linkedin} target="_blank" rel="noreferrer">
+                        <Linkedin className="h-4 w-4" />
+                        LinkedIn
+                      </a>
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {investorDetails ? (
+              <div className="surface-panel space-y-5 rounded-lg p-6">
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha do investidor</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {investorDetails.stage ? (
+                    <FactItem label="Estágio de interesse" value={investorDetails.stage} />
+                  ) : null}
+                  {investorDetails.region ? <FactItem label="Região de atuação" value={investorDetails.region} /> : null}
+                </div>
+                {investorDetails.thesis ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Tese de investimento</p>
+                    <p className="text-sm leading-6 text-slate-300 whitespace-pre-line">{investorDetails.thesis}</p>
+                  </div>
+                ) : null}
+                {investorDetails.segments ? (
+                  <LineList label="Segmentos de interesse" value={investorDetails.segments} />
+                ) : null}
+                {investorDetails.requirements ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Requisitos para aplicar</p>
+                    <p className="text-sm leading-6 text-slate-300 whitespace-pre-line">{investorDetails.requirements}</p>
+                  </div>
+                ) : null}
+                {investorDetails.linkedin ? (
+                  <div className="pt-1">
+                    <Button asChild size="sm" variant="ghost">
+                      <a href={investorDetails.linkedin} target="_blank" rel="noreferrer">
+                        <Linkedin className="h-4 w-4" />
+                        LinkedIn
+                      </a>
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+
+            {spaceDetails ? (
+              <div className="surface-panel space-y-5 rounded-lg p-6">
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha do espaço</h2>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {spaceDetails.capacity ? <FactItem label="Capacidade" value={spaceDetails.capacity} /> : null}
+                  {spaceDetails.usageType ? <FactItem label="Tipo de uso" value={spaceDetails.usageType} /> : null}
+                  {spaceDetails.hours ? <FactItem label="Horário de funcionamento" value={spaceDetails.hours} /> : null}
+                </div>
+                {spaceDetails.amenities ? (
+                  <LineList label="Estrutura disponível" value={spaceDetails.amenities} />
+                ) : null}
+                {spaceDetails.rules ? (
+                  <div className="space-y-1.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Regras de uso</p>
+                    <p className="text-sm leading-6 text-slate-300 whitespace-pre-line">{spaceDetails.rules}</p>
+                  </div>
+                ) : null}
               </div>
             ) : null}
 

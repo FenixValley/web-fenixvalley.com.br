@@ -10,15 +10,23 @@ import type { ActorDetails } from "@/lib/actor-details";
 import {
   actorTypeLabels,
   actorTypes,
+  eventModes,
+  spaceUsageTypes,
   startupBusinessModels,
   startupNeeds,
   startupStages,
   startupTechFocus,
+  volunteerAvailabilities,
   type InstitutionDetails,
+  type InvestorDetails,
+  type MentorDetails,
+  type SpaceDetails,
   type StartupDetails
 } from "@/lib/schemas";
 
 const INSTITUTION_TYPES = ["universidade", "escola-tecnica"];
+const INVESTOR_TYPES = ["investidor", "aceleradora"];
+const SPACE_TYPES = ["coworking", "laboratorio", "hub"];
 
 const selectClassName =
   "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
@@ -48,6 +56,9 @@ export function ActorForm({
   const [type, setType] = useState(initialValues?.type ?? "");
   const details = initialValues?.details as StartupDetails | undefined;
   const institutionDetails = initialValues?.details as InstitutionDetails | undefined;
+  const mentorDetails = initialValues?.details as MentorDetails | undefined;
+  const investorDetails = initialValues?.details as InvestorDetails | undefined;
+  const spaceDetails = initialValues?.details as SpaceDetails | undefined;
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -207,6 +218,136 @@ export function ActorForm({
               placeholder="Um por linha"
               defaultValue={institutionDetails?.partnerships ?? ""}
             />
+          </label>
+        </fieldset>
+      ) : null}
+
+      {type === "mentor" ? (
+        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+            Detalhes do mentor
+          </legend>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Especialidades / temas
+            <Textarea name="specialties" placeholder="Um por linha" defaultValue={mentorDetails?.specialties ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Experiência
+            <Textarea name="experience" defaultValue={mentorDetails?.experience ?? ""} />
+          </label>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Formato
+              <select name="format" defaultValue={mentorDetails?.format ?? ""} className={selectClassName}>
+                <option value="">Não informado</option>
+                {eventModes.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Disponibilidade
+              <select name="availability" defaultValue={mentorDetails?.availability ?? ""} className={selectClassName}>
+                <option value="">Não informado</option>
+                {volunteerAvailabilities.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Projetos apoiados
+            <Textarea
+              name="supportedProjects"
+              placeholder="Um por linha"
+              defaultValue={mentorDetails?.supportedProjects ?? ""}
+            />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            LinkedIn (opcional)
+            <Input name="linkedin" type="url" placeholder="https://" defaultValue={mentorDetails?.linkedin ?? ""} />
+          </label>
+        </fieldset>
+      ) : null}
+
+      {INVESTOR_TYPES.includes(type) ? (
+        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+            Detalhes do investidor
+          </legend>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Tese de investimento
+            <Textarea name="thesis" defaultValue={investorDetails?.thesis ?? ""} />
+          </label>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Estágio de interesse
+              <select name="stage" defaultValue={investorDetails?.stage ?? ""} className={selectClassName}>
+                <option value="">Não informado</option>
+                {startupStages.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Região de atuação
+              <Input name="region" defaultValue={investorDetails?.region ?? ""} />
+            </label>
+          </div>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Segmentos de interesse
+            <Textarea name="segments" placeholder="Um por linha" defaultValue={investorDetails?.segments ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Requisitos para aplicar
+            <Textarea name="requirements" defaultValue={investorDetails?.requirements ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            LinkedIn (opcional)
+            <Input name="linkedin" type="url" placeholder="https://" defaultValue={investorDetails?.linkedin ?? ""} />
+          </label>
+        </fieldset>
+      ) : null}
+
+      {SPACE_TYPES.includes(type) ? (
+        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+            Detalhes do espaço
+          </legend>
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Capacidade
+              <Input name="capacity" placeholder="Ex.: até 40 pessoas" defaultValue={spaceDetails?.capacity ?? ""} />
+            </label>
+            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+              Tipo de uso
+              <select name="usageType" defaultValue={spaceDetails?.usageType ?? ""} className={selectClassName}>
+                <option value="">Não informado</option>
+                {spaceUsageTypes.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Horário de funcionamento
+            <Input name="hours" placeholder="Ex.: seg. a sex., 8h-18h" defaultValue={spaceDetails?.hours ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Estrutura disponível
+            <Textarea name="amenities" placeholder="Um por linha" defaultValue={spaceDetails?.amenities ?? ""} />
+          </label>
+          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            Regras de uso
+            <Textarea name="rules" defaultValue={spaceDetails?.rules ?? ""} />
           </label>
         </fieldset>
       ) : null}

@@ -16,7 +16,16 @@ import {
 import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { actorSchema, institutionDetailsSchema, learningTrackSchema, opportunitySchema, startupDetailsSchema } from "@/lib/schemas";
+import {
+  actorSchema,
+  institutionDetailsSchema,
+  investorDetailsSchema,
+  learningTrackSchema,
+  mentorDetailsSchema,
+  opportunitySchema,
+  spaceDetailsSchema,
+  startupDetailsSchema
+} from "@/lib/schemas";
 import { slugify } from "@/lib/slug";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
@@ -175,6 +184,53 @@ function serializeActorDetails(type: string, formData: FormData): { error: strin
     if (!parsed.success) {
       const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
       return { error: first ?? "Revise os campos de detalhes da instituição." };
+    }
+    return { details: serializeCleaned(parsed.data) };
+  }
+
+  if (type === "mentor") {
+    const parsed = mentorDetailsSchema.safeParse({
+      specialties: formData.get("specialties"),
+      experience: formData.get("experience"),
+      format: formData.get("format"),
+      availability: formData.get("availability"),
+      linkedin: formData.get("linkedin"),
+      supportedProjects: formData.get("supportedProjects")
+    });
+    if (!parsed.success) {
+      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      return { error: first ?? "Revise os campos de detalhes do mentor." };
+    }
+    return { details: serializeCleaned(parsed.data) };
+  }
+
+  if (type === "investidor" || type === "aceleradora") {
+    const parsed = investorDetailsSchema.safeParse({
+      thesis: formData.get("thesis"),
+      stage: formData.get("stage"),
+      segments: formData.get("segments"),
+      region: formData.get("region"),
+      requirements: formData.get("requirements"),
+      linkedin: formData.get("linkedin")
+    });
+    if (!parsed.success) {
+      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      return { error: first ?? "Revise os campos de detalhes do investidor." };
+    }
+    return { details: serializeCleaned(parsed.data) };
+  }
+
+  if (type === "coworking" || type === "laboratorio" || type === "hub") {
+    const parsed = spaceDetailsSchema.safeParse({
+      capacity: formData.get("capacity"),
+      amenities: formData.get("amenities"),
+      usageType: formData.get("usageType"),
+      hours: formData.get("hours"),
+      rules: formData.get("rules")
+    });
+    if (!parsed.success) {
+      const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+      return { error: first ?? "Revise os campos de detalhes do espaço." };
     }
     return { details: serializeCleaned(parsed.data) };
   }

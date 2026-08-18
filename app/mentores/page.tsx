@@ -38,6 +38,7 @@ export default function MentoresPage() {
               ctaHref="/voluntarie-se"
               emptyTitle="Nenhum mentor aprovado por enquanto."
               emptyDescription="Mentores aparecem aqui assim que aprovados pela curadoria. Cadastre-se como voluntário(a) na área de Educação e mentorias para apoiar startups e estudantes da região."
+              detailFacets={["format", "availability"]}
             />
           </div>
         </section>

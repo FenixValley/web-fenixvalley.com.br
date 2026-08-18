@@ -237,6 +237,40 @@ export const programApplicationSchema = z.object({
 
 export type ProgramApplicationInput = z.infer<typeof programApplicationSchema>;
 
+export const mentorDetailsSchema = z.object({
+  specialties: z.string().optional().or(z.literal("")),
+  experience: z.string().optional().or(z.literal("")),
+  format: z.enum(eventModes).optional().or(z.literal("")),
+  availability: z.enum(volunteerAvailabilities).optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  supportedProjects: z.string().optional().or(z.literal(""))
+});
+
+export type MentorDetails = z.infer<typeof mentorDetailsSchema>;
+
+export const investorDetailsSchema = z.object({
+  thesis: z.string().optional().or(z.literal("")),
+  stage: z.enum(startupStages).optional().or(z.literal("")),
+  segments: z.string().optional().or(z.literal("")),
+  region: z.string().optional().or(z.literal("")),
+  requirements: z.string().optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal(""))
+});
+
+export type InvestorDetails = z.infer<typeof investorDetailsSchema>;
+
+export const spaceUsageTypes = ["Coworking", "Sala de reunião", "Auditório / Evento", "Laboratório"] as const;
+
+export const spaceDetailsSchema = z.object({
+  capacity: z.string().optional().or(z.literal("")),
+  amenities: z.string().optional().or(z.literal("")),
+  usageType: z.enum(spaceUsageTypes).optional().or(z.literal("")),
+  hours: z.string().optional().or(z.literal("")),
+  rules: z.string().optional().or(z.literal(""))
+});
+
+export type SpaceDetails = z.infer<typeof spaceDetailsSchema>;
+
 export const learningTrackIcons = [
   "Lightbulb",
   "Presentation",

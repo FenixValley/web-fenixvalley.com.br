@@ -10,8 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { parseActorDetails } from "@/lib/actor-details";
-import { actorTypeLabels, type StartupDetails } from "@/lib/schemas";
+import { parseActorDetails, type ActorDetails } from "@/lib/actor-details";
+import { actorTypeLabels } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 
 type CatalogActor = MapActor & {
@@ -20,11 +20,15 @@ type CatalogActor = MapActor & {
   details?: string | null;
 };
 
-type DetailFacetKey = Extract<keyof StartupDetails, "stage" | "businessModel">;
+/** Nomes de campos de `ActorDetails` usáveis como chip de filtro extra (valor único, tipo string). */
+type DetailFacetKey = string;
 
 const DETAIL_FACET_LABELS: Record<DetailFacetKey, string> = {
   stage: "Estágio",
-  businessModel: "Modelo de negócio"
+  businessModel: "Modelo de negócio",
+  format: "Formato",
+  availability: "Disponibilidade",
+  usageType: "Tipo de uso"
 };
 
 const chipClassName = (active: boolean) =>
@@ -34,6 +38,12 @@ const chipClassName = (active: boolean) =>
       ? "border-orange-400/60 bg-orange-500/15 text-orange-300 hover:bg-orange-500/25"
       : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
   );
+
+function getFacetValue(details: ActorDetails | null | undefined, key: DetailFacetKey): string | undefined {
+  if (!details) return undefined;
+  const value = (details as Record<string, unknown>)[key];
+  return typeof value === "string" && value ? value : undefined;
+}
 
 async function fetchActors(): Promise<CatalogActor[]> {
   const response = await fetch("/api/actors");
@@ -56,7 +66,8 @@ export function ActorCatalog({
   ctaHref?: string;
   emptyTitle: string;
   emptyDescription: string;
-  /** Chaves de StartupDetails pra virar chip de filtro extra (só tem efeito quando `types` inclui "startup"). */
+  /** Chaves de ActorDetails (StartupDetails/InstitutionDetails/MentorDetails/InvestorDetails/SpaceDetails)
+   * pra virar chip de filtro extra. Só faz sentido pra campos de valor único (string), não arrays. */
   detailFacets?: DetailFacetKey[];
   /** Pré-seleciona o papel no formulário de cadastro do mapa. */
   registerDefaultRole?: string;
@@ -69,10 +80,9 @@ export function ActorCatalog({
   const scoped = useMemo(() => actors.filter((actor) => types.includes(actor.type)), [actors, types]);
 
   const detailsByActor = useMemo(() => {
-    // detailFacets (stage/businessModel) só são usadas para o catálogo de startups.
-    const map = new Map<number, StartupDetails | null>();
+    const map = new Map<number, ActorDetails | null>();
     for (const actor of scoped) {
-      map.set(actor.id, parseActorDetails(actor.type, actor.details ?? null) as StartupDetails | null);
+      map.set(actor.id, parseActorDetails(actor.type, actor.details ?? null));
     }
     return map;
   }, [scoped]);
@@ -87,7 +97,7 @@ export function ActorCatalog({
     for (const key of detailFacets) {
       const values = new Set<string>();
       for (const actor of scoped) {
-        const value = detailsByActor.get(actor.id)?.[key];
+        const value = getFacetValue(detailsByActor.get(actor.id), key);
         if (value) values.add(value);
       }
       options[key] = Array.from(values).sort((a, b) => a.localeCompare(b));
@@ -102,7 +112,7 @@ export function ActorCatalog({
         if (segment && actor.segment !== segment) return false;
         for (const key of detailFacets) {
           const wanted = facetFilters[key];
-          if (wanted && detailsByActor.get(actor.id)?.[key] !== wanted) return false;
+          if (wanted && getFacetValue(detailsByActor.get(actor.id), key) !== wanted) return false;
         }
         if (!query) return true;
         return (

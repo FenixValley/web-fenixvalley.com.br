@@ -36,6 +36,7 @@ export default function EspacosPage() {
               ctaLabel="Cadastre seu espaço"
               emptyTitle="Nenhum espaço aprovado por enquanto."
               emptyDescription="Coworkings, laboratórios e hubs aparecem aqui assim que cadastrados no mapa do ecossistema e aprovados pela curadoria."
+              detailFacets={["usageType"]}
             />
           </div>
         </section>
