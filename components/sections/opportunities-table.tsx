@@ -11,7 +11,7 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
 import { Opportunity } from "@/data/opportunities";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +34,12 @@ function formatDate(value: string) {
     year: "numeric",
     timeZone: "UTC"
   }).format(new Date(value));
+}
+
+function SortIcon({ sorted }: { sorted: false | "asc" | "desc" }) {
+  if (sorted === "asc") return <ArrowUp className="h-4 w-4" />;
+  if (sorted === "desc") return <ArrowDown className="h-4 w-4" />;
+  return <ArrowUpDown className="h-4 w-4" />;
 }
 
 function StageBadge({ stage }: { stage: string }) {
@@ -96,7 +102,7 @@ export function OpportunitiesTable({
           <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-muted-foreground hover:text-foreground">
             Oportunidade
-            <ArrowUpDown className="h-4 w-4" />
+            <SortIcon sorted={column.getIsSorted()} />
           </Button>
         ),
         cell: ({ row }) => (
@@ -132,7 +138,7 @@ export function OpportunitiesTable({
           <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
             className="text-muted-foreground hover:text-foreground">
             Data
-            <ArrowUpDown className="h-4 w-4" />
+            <SortIcon sorted={column.getIsSorted()} />
           </Button>
         ),
         cell: ({ row }) => (
