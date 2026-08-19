@@ -35,12 +35,16 @@ Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS 3 · shadcn/ui
 - **Auth (Auth.js v5)** — Credentials provider em `lib/auth.ts` (PBKDF2 via `lib/password.ts` — bcrypt não roda em Workers); config edge-safe separada em `lib/auth-config.ts` usada pelo `middleware.ts` que protege `/admin/*`. Sessão JWT com claim `role`.
 - **Admin** — `app/admin/login` (público) e `app/admin/(painel)/` (layout com guard + sidebar). Mutações em `app/admin/(painel)/actions.ts` (server actions com `requireAdmin()`); formulários client com `useActionState`.
 - **Mapa** — `/mapa` com MapLibre GL (tiles OpenFreeMap, sem API key), client-only via `next/dynamic` em `components/map/`. Mostra apenas atores `approved` de `/api/actors`; cadastro público entra como `pending`.
-- APIs públicas em `app/api/` (leads, volunteers, actors, opportunities) validam com schemas zod de `lib/schemas.ts` e persistem no D1.
+- **Inovação aberta** — `/empresas` (hub das empresas) e `/desafios` + `/desafios/[slug]` (vitrine). Empresas publicam desafios pelo dialog público (`challenges`, entram como `pending`); startups e pesquisadores respondem pelo formulário da ficha (`challenge_proposals`). O e-mail da empresa nunca sai em rota pública — a conexão passa pela curadoria em `/admin/desafios`.
+- **Parceiros, impacto e governança** — `/parceiros` + `/parceiros/[slug]` (curadoria só no admin), `/seja-parceiro` (candidaturas em `partner_applications`), `/impacto` e `/governanca`. A página de impacto combina contagens lidas do próprio D1 com `impact_indicators` — e **só publica indicador com `verified = 1`**, fonte e período. Cases, depoimentos e relatórios ficam em `impact_stories`. Conteúdo institucional da governança em `data/governance.ts`.
+- APIs públicas em `app/api/` (leads, volunteers, actors, opportunities, challenges, challenge-proposals, partner-applications) validam com schemas zod de `lib/schemas.ts` e persistem no D1.
 - `components/providers/providers.tsx` — QueryClientProvider (client component); `app/layout.tsx` injeta script inline de tema antes da hidratação.
 
 ### Fluxo de moderação
 
 Voluntários (`/voluntarie-se`) e atores do mapa (dialog em `/mapa`) entram como `pending` e só aparecem publicamente após aprovação no admin. Oportunidades têm `published/archived`.
+
+O mesmo vale para inovação aberta e parcerias: desafios (`pending → published/rejected/archived`) e propostas (`pending → approved/rejected`) são moderados em `/admin/desafios`; parceiros e conteúdos de impacto nascem como `draft` e vão ao ar pelo `/admin/parceiros` e `/admin/impacto`; indicadores só aparecem em `/impacto` depois de marcados como conferidos.
 
 ### Tema (dark padrão / light opcional)
 

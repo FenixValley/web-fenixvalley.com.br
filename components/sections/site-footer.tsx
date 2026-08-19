@@ -10,6 +10,8 @@ const footerGroups = [
       { label: "Sobre nós", href: "/sobre" },
       { label: "Comunidade", href: "/comunidade" },
       { label: "Impacto", href: "/impacto" },
+      { label: "Governança", href: "/governanca" },
+      { label: "Parceiros", href: "/parceiros" },
       { label: "Contato", href: "/contato" }
     ]
   },
@@ -19,6 +21,7 @@ const footerGroups = [
       { label: "Mapa do ecossistema", href: "/mapa" },
       { label: "Startups", href: "/startups" },
       { label: "Empresas", href: "/empresas" },
+      { label: "Desafios de inovação", href: "/desafios" },
       { label: "Universidades", href: "/universidades" },
       { label: "Espaços", href: "/espacos" }
     ]
@@ -44,9 +47,12 @@ const footerGroups = [
 ];
 
 const legalLinks = [
-  { label: "Privacidade", href: "/privacidade" },
-  { label: "LGPD", href: "/privacidade" },
-  { label: "Código de conduta", href: "/#participar" }
+  { label: "Privacidade e LGPD", href: "/privacidade" },
+  { label: "Termos de uso", href: "/termos" },
+  { label: "Cookies", href: "/cookies" },
+  { label: "Código de conduta", href: "/codigo-de-conduta" },
+  { label: "Política de conteúdo", href: "/politica-de-conteudo" },
+  { label: "Governança", href: "/governanca" }
 ];
 
 export function SiteFooter() {

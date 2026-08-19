@@ -107,6 +107,42 @@ const searchItems: SearchItem[] = [
     href: "/espacos"
   },
   {
+    title: "Empresas e Indústrias",
+    description: "Inovação aberta, acesso a talentos e patrocínio para empresas da região.",
+    category: "Vitrine",
+    href: "/empresas"
+  },
+  {
+    title: "Desafios de Inovação",
+    description: "Dores reais publicadas por empresas, abertas a startups e pesquisadores.",
+    category: "Oportunidades",
+    href: "/desafios"
+  },
+  {
+    title: "Parceiros e Patrocinadores",
+    description: "Quem sustenta o movimento, por categoria de contribuição.",
+    category: "Institucional",
+    href: "/parceiros"
+  },
+  {
+    title: "Impacto e Transparência",
+    description: "Indicadores verificados, cases, depoimentos e relatórios do movimento.",
+    category: "Institucional",
+    href: "/impacto"
+  },
+  {
+    title: "Governança",
+    description: "Coordenação, conselho, políticas legais e prestação de contas.",
+    category: "Institucional",
+    href: "/governanca"
+  },
+  {
+    title: "Seja um Parceiro",
+    description: "Formas de apoiar o Fênix Valley e enviar uma proposta de parceria.",
+    category: "Ações",
+    href: "/seja-parceiro"
+  },
+  {
     title: "Faça Parte (Formulário)",
     description: "Inscreva seu interesse no Google Forms para participar da curadoria.",
     category: "Ações",
