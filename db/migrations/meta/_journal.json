@@ -85,6 +85,13 @@
       "when": 1787103026109,
       "tag": "0011_yellow_obadiah_stane",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1787144033920,
+      "tag": "0012_hard_bruce_banner",
+      "breakpoints": true
     }
   ]
 }

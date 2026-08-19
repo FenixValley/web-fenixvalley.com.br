@@ -12,6 +12,9 @@ const links = [
   { href: "/admin/programas", label: "Programas" },
   { href: "/admin/eventos", label: "Eventos" },
   { href: "/admin/oportunidades", label: "Oportunidades" },
+  { href: "/admin/desafios", label: "Desafios" },
+  { href: "/admin/parceiros", label: "Parceiros" },
+  { href: "/admin/impacto", label: "Impacto" },
   { href: "/admin/leads", label: "Leads" }
 ];
 

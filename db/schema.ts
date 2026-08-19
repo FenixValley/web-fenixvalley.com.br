@@ -125,3 +125,104 @@ export const leads = sqliteTable("leads", {
   objective: text("objective").notNull(),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
+
+// --- Issue #6: empresas e inovação corporativa -------------------------------
+
+/** Desafios de inovação aberta publicados por empresas (entram como `pending`). */
+export const challenges = sqliteTable("challenges", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  type: text("type").notNull(),
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  expectedOutcome: text("expected_outcome"),
+  deadline: text("deadline"),
+  company: text("company").notNull(),
+  companySegment: text("company_segment"),
+  // Contato da empresa: nunca exposto nas rotas públicas, só no admin.
+  companyEmail: text("company_email").notNull(),
+  companySite: text("company_site"),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+/** Soluções e demonstrações de interesse enviadas por startups, pesquisadores e talentos. */
+export const challengeProposals = sqliteTable("challenge_proposals", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  challengeId: integer("challenge_id")
+    .notNull()
+    .references(() => challenges.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  organization: text("organization"),
+  profile: text("profile").notNull(),
+  solution: text("solution").notNull(),
+  link: text("link"),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+// --- Issue #14: parceiros, impacto e governança ------------------------------
+
+/** Parceiros e patrocinadores curados pela coordenação (CRUD só no admin). */
+export const partners = sqliteTable("partners", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  description: text("description").notNull(),
+  contribution: text("contribution").notNull(),
+  site: text("site"),
+  logoUrl: text("logo_url"),
+  since: text("since"),
+  founding: integer("founding").notNull().default(0),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("draft"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+/** Candidaturas do formulário "Seja um parceiro" (entram como `pending`). */
+export const partnerApplications = sqliteTable("partner_applications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  organization: text("organization").notNull(),
+  contactName: text("contact_name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  category: text("category").notNull(),
+  supportTypes: text("support_types").notNull(),
+  message: text("message").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+/**
+ * Indicadores de impacto. `verified` marca o dado conferido pela coordenação —
+ * a página pública só exibe indicadores verificados (critério de aceite da issue #14).
+ */
+export const impactIndicators = sqliteTable("impact_indicators", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  label: text("label").notNull(),
+  value: text("value").notNull(),
+  period: text("period").notNull(),
+  source: text("source").notNull(),
+  note: text("note"),
+  verified: integer("verified").notNull().default(0),
+  order: integer("order").notNull().default(0),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+/** Cases, depoimentos e relatórios de prestação de contas da página de impacto. */
+export const impactStories = sqliteTable("impact_stories", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  type: text("type").notNull(),
+  title: text("title").notNull(),
+  summary: text("summary").notNull(),
+  authorName: text("author_name"),
+  authorRole: text("author_role"),
+  organization: text("organization"),
+  link: text("link"),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("draft"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});

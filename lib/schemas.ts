@@ -303,3 +303,157 @@ export const learningTrackSchema = z.object({
 });
 
 export type LearningTrackInput = z.infer<typeof learningTrackSchema>;
+
+// --- Issue #6: desafios de inovação aberta -----------------------------------
+
+/** Checkbox de FormData: vem como "on" quando marcado e ausente quando não. */
+const checkboxField = z.preprocess((value) => value === "on" || value === "true" || value === true, z.boolean());
+
+export const challengeTypes = [
+  "Desafio de inovação",
+  "Prova de conceito",
+  "Parceria estratégica",
+  "Vaga e talentos"
+] as const;
+
+export const challengeCategories = [
+  "Automação",
+  "Eficiência energética",
+  "Logística",
+  "Mobilidade",
+  "ESG",
+  "Resíduos",
+  "Inteligência artificial",
+  "IoT",
+  "Indústria 4.0",
+  "Segurança",
+  "Transformação digital"
+] as const;
+
+export const challengeSchema = z.object({
+  title: z.string().min(5, "Informe o título do desafio."),
+  type: z.enum(challengeTypes, { message: "Escolha o tipo de chamada." }),
+  category: z.enum(challengeCategories, { message: "Escolha a categoria do desafio." }),
+  description: z.string().min(30, "Descreva o desafio em pelo menos duas frases."),
+  expectedOutcome: z.string().optional().or(z.literal("")),
+  deadline: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD.")
+    .optional()
+    .or(z.literal("")),
+  company: z.string().min(2, "Informe o nome da empresa."),
+  companySegment: z.string().optional().or(z.literal("")),
+  companyEmail: z.string().email("Informe um e-mail válido."),
+  companySite: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  consent: consentField("É preciso autorizar a publicação do desafio.")
+});
+
+export type ChallengeInput = z.infer<typeof challengeSchema>;
+
+export const proposalProfiles = [
+  "Startup",
+  "Pesquisador(a) ou grupo de pesquisa",
+  "Profissional ou talento",
+  "Empresa",
+  "Estudante"
+] as const;
+
+export const challengeProposalSchema = z.object({
+  challengeId: z.coerce.number().int().positive(),
+  name: z.string().min(3, "Informe seu nome completo."),
+  email: z.string().email("Informe um e-mail válido."),
+  organization: z.string().optional().or(z.literal("")),
+  profile: z.enum(proposalProfiles, { message: "Escolha seu perfil." }),
+  solution: z.string().min(30, "Descreva a solução ou o interesse em pelo menos duas frases."),
+  link: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  consent: consentField("É preciso autorizar o envio dos dados à empresa.")
+});
+
+export type ChallengeProposalInput = z.infer<typeof challengeProposalSchema>;
+
+// --- Issue #14: parceiros, impacto e governança ------------------------------
+
+export const partnerCategories = [
+  "Institucional",
+  "Acadêmico",
+  "Empresarial",
+  "Tecnológico",
+  "Financeiro e patrocínio",
+  "Mídia e comunicação"
+] as const;
+
+export const partnerSchema = z.object({
+  name: z.string().min(2, "Informe o nome do parceiro."),
+  category: z.enum(partnerCategories, { message: "Escolha a categoria de apoio." }),
+  description: z.string().min(10, "Descreva o parceiro em uma frase."),
+  contribution: z.string().min(10, "Descreva como o parceiro apoia o movimento."),
+  site: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  logoUrl: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  since: z.string().optional().or(z.literal("")),
+  founding: checkboxField.default(false),
+  order: z
+    .preprocess((value) => (value === "" || value === null ? undefined : value), z.coerce.number().int().min(0))
+    .default(0)
+});
+
+export type PartnerInput = z.infer<typeof partnerSchema>;
+
+export const partnerSupportTypes = [
+  "Espaços para encontros e turmas",
+  "Mentoria e especialistas",
+  "Desafios de inovação aberta",
+  "Patrocínio de eventos e programas",
+  "Tecnologia e ferramentas",
+  "Bolsas e financiamento",
+  "Divulgação e mídia"
+] as const;
+
+export const partnerApplicationSchema = z.object({
+  organization: z.string().min(2, "Informe o nome da organização."),
+  contactName: z.string().min(3, "Informe o nome de quem fala pela organização."),
+  email: z.string().email("Informe um e-mail válido."),
+  phone: z.string().optional().or(z.literal("")),
+  category: z.enum(partnerCategories, { message: "Escolha a categoria de apoio." }),
+  supportTypes: z.array(z.enum(partnerSupportTypes)).min(1, "Escolha ao menos uma forma de apoio."),
+  message: z.string().min(20, "Conte como sua organização quer contribuir."),
+  consent: consentField("É preciso autorizar o contato da coordenação.")
+});
+
+export type PartnerApplicationInput = z.infer<typeof partnerApplicationSchema>;
+
+export const impactIndicatorSchema = z.object({
+  label: z.string().min(3, "Informe o nome do indicador."),
+  value: z.string().min(1, "Informe o valor apurado."),
+  period: z.string().min(4, "Informe o período de apuração (ex.: 2026 ou 1º semestre de 2026)."),
+  source: z.string().min(3, "Informe a fonte do dado — indicadores sem origem não são publicados."),
+  note: z.string().optional().or(z.literal("")),
+  verified: checkboxField.default(false),
+  order: z
+    .preprocess((value) => (value === "" || value === null ? undefined : value), z.coerce.number().int().min(0))
+    .default(0)
+});
+
+export type ImpactIndicatorInput = z.infer<typeof impactIndicatorSchema>;
+
+export const impactStoryTypes = ["case", "depoimento", "relatorio"] as const;
+
+export const impactStoryTypeLabels: Record<(typeof impactStoryTypes)[number], string> = {
+  case: "Case",
+  depoimento: "Depoimento",
+  relatorio: "Relatório"
+};
+
+export const impactStorySchema = z.object({
+  type: z.enum(impactStoryTypes, { message: "Escolha o tipo de conteúdo." }),
+  title: z.string().min(3, "Informe o título."),
+  summary: z.string().min(20, "Escreva um resumo com pelo menos duas frases."),
+  authorName: z.string().optional().or(z.literal("")),
+  authorRole: z.string().optional().or(z.literal("")),
+  organization: z.string().optional().or(z.literal("")),
+  link: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  order: z
+    .preprocess((value) => (value === "" || value === null ? undefined : value), z.coerce.number().int().min(0))
+    .default(0)
+});
+
+export type ImpactStoryInput = z.infer<typeof impactStorySchema>;

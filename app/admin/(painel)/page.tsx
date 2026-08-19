@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { count, eq } from "drizzle-orm";
-import { actors, events, leads, opportunities, volunteers } from "@/db/schema";
+import {
+  actors,
+  challengeProposals,
+  challenges,
+  events,
+  leads,
+  opportunities,
+  partnerApplications,
+  volunteers
+} from "@/db/schema";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -23,12 +32,27 @@ async function getCounts() {
     .select({ value: count() })
     .from(events)
     .where(eq(events.status, "pending"));
+  const [pendingChallenges] = await db
+    .select({ value: count() })
+    .from(challenges)
+    .where(eq(challenges.status, "pending"));
+  const [pendingProposals] = await db
+    .select({ value: count() })
+    .from(challengeProposals)
+    .where(eq(challengeProposals.status, "pending"));
+  const [pendingPartnerApplications] = await db
+    .select({ value: count() })
+    .from(partnerApplications)
+    .where(eq(partnerApplications.status, "pending"));
   const [totalLeads] = await db.select({ value: count() }).from(leads);
   return {
     pendingVolunteers: pendingVolunteers.value,
     pendingActors: pendingActors.value,
     pendingEvents: pendingEvents.value,
     publishedOpportunities: publishedOpportunities.value,
+    pendingChallenges: pendingChallenges.value,
+    pendingProposals: pendingProposals.value,
+    pendingPartnerApplications: pendingPartnerApplications.value,
     totalLeads: totalLeads.value
   };
 }
@@ -40,6 +64,13 @@ export default async function AdminDashboardPage() {
     { label: "Atores pendentes", value: counts.pendingActors, href: "/admin/atores" },
     { label: "Eventos pendentes", value: counts.pendingEvents, href: "/admin/eventos" },
     { label: "Oportunidades publicadas", value: counts.publishedOpportunities, href: "/admin/oportunidades" },
+    { label: "Desafios pendentes", value: counts.pendingChallenges, href: "/admin/desafios" },
+    { label: "Propostas a avaliar", value: counts.pendingProposals, href: "/admin/desafios" },
+    {
+      label: "Candidaturas a parceria",
+      value: counts.pendingPartnerApplications,
+      href: "/admin/parceiros"
+    },
     { label: "Leads recebidos", value: counts.totalLeads, href: "/admin/leads" }
   ];
 
