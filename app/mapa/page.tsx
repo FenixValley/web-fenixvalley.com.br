@@ -37,7 +37,7 @@ export default function MapPage() {
                 busque por bairro e cadastre sua organização.
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-3" aria-label="Vitrines por segmento">
+            <nav className="flex flex-wrap items-center gap-3" aria-label="Vitrines por segmento">
               {shortcuts.map((item) => (
                 <Link
                   key={item.href}
@@ -48,7 +48,7 @@ export default function MapPage() {
                   <ArrowRight className="h-3 w-3" />
                 </Link>
               ))}
-            </div>
+            </nav>
             <EcosystemMap />
           </div>
         </section>

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
 import { events, learningTracks, opportunities } from "@/db/schema";
+import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +40,7 @@ export default async function LearningTrackPage({ params }: { params: Promise<{ 
   if (!track) notFound();
 
   const db = getDb();
-  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
+  const today = todayInBusinessTimeZone();
 
   const relatedEvents = track.relatedEventCategory
     ? await db
