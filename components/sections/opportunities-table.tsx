@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Column,
@@ -99,6 +99,11 @@ export function OpportunitiesTable({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [typeFilter, setTypeFilter] = useState<string | null>(initialType);
+  // Navegar entre ?tipo=X e ?tipo=Y não remonta a página no App Router, então o
+  // estado inicial do useState ficaria preso no primeiro valor da URL.
+  useEffect(() => {
+    setTypeFilter(initialType);
+  }, [initialType]);
   const { data = initialData, isFetching } = useQuery({
     queryKey: ["opportunities"],
     queryFn: fetchOpportunities,

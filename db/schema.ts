@@ -6,7 +6,10 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
-  role: text("role").notNull().default("admin"),
+  // Default não-administrativo de propósito: quem precisa de acesso ao painel recebe
+  // "admin" explicitamente (ver scripts/seed-admin.mjs). Um insert que esqueça o campo
+  // não deve criar gestor por omissão — middleware e requireAdmin() exigem role === "admin".
+  role: text("role").notNull().default("member"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 

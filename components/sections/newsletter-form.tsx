@@ -29,7 +29,7 @@ export function NewsletterForm() {
 
       if (res.ok && data.ok) {
         setStatus("success");
-        setMessage(data.message ?? "");
+        setMessage(data.message ?? "Inscrição confirmada! Em breve você receberá novidades do Fênix Valley.");
         setEmail("");
       } else {
         setStatus("error");

@@ -78,6 +78,13 @@
       "when": 1787070009944,
       "tag": "0010_redundant_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1787103026109,
+      "tag": "0011_yellow_obadiah_stane",
+      "breakpoints": true
     }
   ]
 }

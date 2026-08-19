@@ -52,6 +52,11 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)"
       },
+      // O Tailwind 3 não define 18 na escala padrão (vai de 16 para 20), mas as seções
+      // usam py-18 como respiro intermediário — sem o token a classe não emite CSS.
+      spacing: {
+        18: "4.5rem"
+      },
       boxShadow: {
         crisp: "0 18px 45px rgb(15 23 42 / 0.08)"
       }
