@@ -40,18 +40,22 @@ export function PartnerApplicationForm() {
   function onSubmit(values: PartnerApplicationInput) {
     setMessage(null);
     startTransition(async () => {
-      const response = await fetch("/api/partner-applications", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values)
-      });
-      const payload = (await response.json()) as { ok: boolean; message?: string };
-      if (payload.ok) {
-        setMessage(payload.message ?? "Proposta recebida!");
-        reset();
-        return;
+      try {
+        const response = await fetch("/api/partner-applications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values)
+        });
+        const payload = (await response.json()) as { ok: boolean; message?: string };
+        if (payload.ok) {
+          setMessage(payload.message ?? "Proposta recebida!");
+          reset();
+          return;
+        }
+        setMessage("Revise os campos e tente novamente.");
+      } catch {
+        setMessage("Não foi possível enviar agora. Verifique sua conexão e tente de novo.");
       }
-      setMessage("Revise os campos e tente novamente.");
     });
   }
 

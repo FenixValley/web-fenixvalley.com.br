@@ -3,9 +3,10 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // Sem otimizador no runtime Cloudflare: as imagens saem direto na URL informada.
-    // Logos de parceiros são cadastrados pelo admin e podem estar em qualquer host,
-    // por isso o padrão remoto é aberto — não há proxy de imagem para ser abusado.
+    // ATENÇÃO: as duas linhas abaixo são um par. O hostname curinga só é aceitável
+    // porque `unoptimized: true` faz a imagem sair direto na URL informada, sem
+    // otimizador atuando como proxy de busca. Se `unoptimized` voltar a ser false,
+    // troque o curinga por uma allowlist dos hosts de logo de parceiro antes.
     unoptimized: true,
     remotePatterns: [{ protocol: "https", hostname: "**" }]
   },

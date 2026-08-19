@@ -1,7 +1,8 @@
-import { and, eq, gte, isNull, or } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { challenges } from "@/db/schema";
 import { uniqueChallengeSlug } from "@/lib/challenge-slug";
+import { openChallengesWhere } from "@/lib/challenges";
 import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
 import { challengeSchema } from "@/lib/schemas";
@@ -11,12 +12,7 @@ export async function GET(request: Request) {
   const category = url.searchParams.get("categoria");
   const type = url.searchParams.get("tipo");
 
-  const today = todayInBusinessTimeZone();
-  const conditions = [
-    eq(challenges.status, "published"),
-    // Sem prazo definido o desafio segue aberto; com prazo, some da lista pública no dia seguinte.
-    or(isNull(challenges.deadline), gte(challenges.deadline, today))!
-  ];
+  const conditions = [openChallengesWhere(todayInBusinessTimeZone())];
   if (category) conditions.push(eq(challenges.category, category));
   if (type) conditions.push(eq(challenges.type, type));
 

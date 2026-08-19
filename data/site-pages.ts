@@ -146,7 +146,7 @@ export const sitePages: SitePage[] = [
       },
       {
         title: "Sessão do painel administrativo",
-        body: "Gestores autenticados recebem um cookie de sessão necessário para manter o login do painel. Ele expira ao sair e não é usado para rastrear navegação no site público."
+        body: "Gestores autenticados recebem um cookie de sessão necessário para manter o login do painel. Sair do painel apaga o cookie do navegador; o token de sessão em si tem validade de 30 dias. Ele não é usado para rastrear navegação no site público."
       },
       {
         title: "Sem rastreadores de terceiros",

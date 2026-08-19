@@ -37,18 +37,22 @@ export function ChallengeSubmitForm() {
   function onSubmit(values: ChallengeInput) {
     setMessage(null);
     startTransition(async () => {
-      const response = await fetch("/api/challenges", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values)
-      });
-      const payload = (await response.json()) as { ok: boolean; message?: string };
-      if (payload.ok) {
-        setMessage(payload.message ?? "Desafio recebido!");
-        reset();
-        return;
+      try {
+        const response = await fetch("/api/challenges", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(values)
+        });
+        const payload = (await response.json()) as { ok: boolean; message?: string };
+        if (payload.ok) {
+          setMessage(payload.message ?? "Desafio recebido!");
+          reset();
+          return;
+        }
+        setMessage("Revise os campos e tente novamente.");
+      } catch {
+        setMessage("Não foi possível enviar agora. Verifique sua conexão e tente de novo.");
       }
-      setMessage("Revise os campos e tente novamente.");
     });
   }
 

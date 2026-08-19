@@ -1,6 +1,8 @@
 import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { challengeProposals, challenges } from "@/db/schema";
+import { openChallengesWhere } from "@/lib/challenges";
+import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
 import { challengeProposalSchema } from "@/lib/schemas";
 
@@ -15,10 +17,11 @@ export async function POST(request: Request) {
   const { consent: _consent, challengeId, ...data } = parsed.data;
   const db = getDb();
 
-  // Só aceita proposta para desafio realmente publicado — evita gravar propostas
-  // em desafios pendentes, rejeitados ou arquivados via id chutado.
+  // Só aceita proposta para desafio aberto ao público — mesmo recorte da vitrine.
+  // Barra id chutado em desafio pendente, rejeitado ou arquivado, e também o envio
+  // fora do prazo, que a ficha já esconde.
   const challenge = await db.query.challenges.findFirst({
-    where: and(eq(challenges.id, challengeId), eq(challenges.status, "published")),
+    where: and(eq(challenges.id, challengeId), openChallengesWhere(todayInBusinessTimeZone())),
     columns: { id: true }
   });
   if (!challenge) {

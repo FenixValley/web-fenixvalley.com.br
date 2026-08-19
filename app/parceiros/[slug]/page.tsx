@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { and, eq } from "drizzle-orm";
 import { ChevronRight, ExternalLink, HandHeart, Star } from "lucide-react";
 import { partners } from "@/db/schema";
@@ -13,11 +14,13 @@ import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-async function getPublishedPartner(slug: string) {
-  return getDb().query.partners.findFirst({
+// generateMetadata e a página buscam o mesmo parceiro: o cache() da request evita
+// as duas idas ao D1.
+const getPublishedPartner = cache(async (slug: string) =>
+  getDb().query.partners.findFirst({
     where: and(eq(partners.slug, slug), eq(partners.status, "published"))
-  });
-}
+  })
+);
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

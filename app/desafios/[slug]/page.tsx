@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 import { and, eq } from "drizzle-orm";
 import { Building2, CalendarClock, ChevronRight, ExternalLink, Target } from "lucide-react";
 import { challenges } from "@/db/schema";
@@ -8,25 +9,19 @@ import { Badge } from "@/components/ui/badge";
 import { ChallengeProposalForm } from "@/components/sections/challenge-proposal-form";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { formatChallengeDeadline } from "@/lib/challenges";
 import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-async function getPublishedChallenge(slug: string) {
-  return getDb().query.challenges.findFirst({
+// generateMetadata e a página buscam o mesmo desafio: o cache() da request evita
+// as duas idas ao D1.
+const getPublishedChallenge = cache(async (slug: string) =>
+  getDb().query.challenges.findFirst({
     where: and(eq(challenges.slug, slug), eq(challenges.status, "published"))
-  });
-}
-
-function formatDeadline(date: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(new Date(`${date}T12:00:00Z`));
-}
+  })
+);
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -87,7 +82,9 @@ export default async function ChallengeDetailPage({ params }: { params: Promise<
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <CalendarClock className="h-4 w-4 text-orange-300" />
-                  {challenge.deadline ? `Propostas até ${formatDeadline(challenge.deadline)}` : "Fluxo contínuo"}
+                  {challenge.deadline
+                    ? `Propostas até ${formatChallengeDeadline(challenge.deadline, "long")}`
+                    : "Fluxo contínuo"}
                 </span>
                 {challenge.companySite ? (
                   <Link

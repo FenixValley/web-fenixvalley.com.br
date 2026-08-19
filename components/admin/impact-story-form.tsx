@@ -77,7 +77,11 @@ export function ImpactStoryForm({
           <Input name="link" placeholder="https://" defaultValue={initialValues?.link ?? ""} />
         </label>
       </div>
-      {state.error ? <p className="text-sm font-medium text-destructive">{state.error}</p> : null}
+      {state.error ? (
+        <p role="alert" className="text-sm font-medium text-destructive">
+          {state.error}
+        </p>
+      ) : null}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Salvando..." : "Salvar conteúdo"}
       </Button>

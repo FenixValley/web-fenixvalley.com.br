@@ -309,6 +309,22 @@ export type LearningTrackInput = z.infer<typeof learningTrackSchema>;
 /** Checkbox de FormData: vem como "on" quando marcado e ausente quando não. */
 const checkboxField = z.preprocess((value) => value === "on" || value === "true" || value === true, z.boolean());
 
+/**
+ * Data AAAA-MM-DD que também precisa existir no calendário: só a regex aceitaria
+ * 2026-02-31, que o Date normaliza silenciosamente para 03/03 ao ser formatada.
+ */
+const calendarDateField = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD.")
+  .refine(
+    (value) => {
+      const [year, month, day] = value.split("-").map(Number);
+      const date = new Date(Date.UTC(year, month - 1, day));
+      return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+    },
+    { message: "Informe uma data que exista no calendário." }
+  );
+
 export const challengeTypes = [
   "Desafio de inovação",
   "Prova de conceito",
@@ -336,11 +352,7 @@ export const challengeSchema = z.object({
   category: z.enum(challengeCategories, { message: "Escolha a categoria do desafio." }),
   description: z.string().min(30, "Descreva o desafio em pelo menos duas frases."),
   expectedOutcome: z.string().optional().or(z.literal("")),
-  deadline: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD.")
-    .optional()
-    .or(z.literal("")),
+  deadline: calendarDateField.optional().or(z.literal("")),
   company: z.string().min(2, "Informe o nome da empresa."),
   companySegment: z.string().optional().or(z.literal("")),
   companyEmail: z.string().email("Informe um e-mail válido."),

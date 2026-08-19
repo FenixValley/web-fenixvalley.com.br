@@ -87,7 +87,11 @@ export function PartnerForm({
           Parceiro fundador
         </label>
       </div>
-      {state.error ? <p className="text-sm font-medium text-destructive">{state.error}</p> : null}
+      {state.error ? (
+        <p role="alert" className="text-sm font-medium text-destructive">
+          {state.error}
+        </p>
+      ) : null}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Salvando..." : "Salvar parceiro"}
       </Button>

@@ -440,10 +440,10 @@ export async function upsertPartner(id: number | null, _previous: FormState, for
       .returning({ id: partners.id });
     await logAudit(adminEmail, "create", "partner", created?.id ?? null, data.name);
   } else {
-    await db
-      .update(partners)
-      .set({ ...data, slug: await uniquePartnerSlug(db, data.name, id) })
-      .where(eq(partners.id, id));
+    // O slug é gerado uma vez, na criação, e não acompanha renomeações — igual a
+    // upsertActor e upsertLearningTrack. Trocá-lo aqui quebraria /parceiros/[slug]
+    // já divulgado.
+    await db.update(partners).set(data).where(eq(partners.id, id));
     await logAudit(adminEmail, "update", "partner", id, data.name);
   }
   revalidatePath("/admin/parceiros");

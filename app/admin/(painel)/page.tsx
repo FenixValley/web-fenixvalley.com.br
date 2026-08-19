@@ -16,35 +16,26 @@ export const dynamic = "force-dynamic";
 
 async function getCounts() {
   const db = getDb();
-  const [pendingVolunteers] = await db
-    .select({ value: count() })
-    .from(volunteers)
-    .where(eq(volunteers.status, "pending"));
-  const [pendingActors] = await db
-    .select({ value: count() })
-    .from(actors)
-    .where(eq(actors.status, "pending"));
-  const [publishedOpportunities] = await db
-    .select({ value: count() })
-    .from(opportunities)
-    .where(eq(opportunities.status, "published"));
-  const [pendingEvents] = await db
-    .select({ value: count() })
-    .from(events)
-    .where(eq(events.status, "pending"));
-  const [pendingChallenges] = await db
-    .select({ value: count() })
-    .from(challenges)
-    .where(eq(challenges.status, "pending"));
-  const [pendingProposals] = await db
-    .select({ value: count() })
-    .from(challengeProposals)
-    .where(eq(challengeProposals.status, "pending"));
-  const [pendingPartnerApplications] = await db
-    .select({ value: count() })
-    .from(partnerApplications)
-    .where(eq(partnerApplications.status, "pending"));
-  const [totalLeads] = await db.select({ value: count() }).from(leads);
+  // Contagens independentes: em série somariam oito idas ao D1 antes de renderizar.
+  const [
+    [pendingVolunteers],
+    [pendingActors],
+    [publishedOpportunities],
+    [pendingEvents],
+    [pendingChallenges],
+    [pendingProposals],
+    [pendingPartnerApplications],
+    [totalLeads]
+  ] = await Promise.all([
+    db.select({ value: count() }).from(volunteers).where(eq(volunteers.status, "pending")),
+    db.select({ value: count() }).from(actors).where(eq(actors.status, "pending")),
+    db.select({ value: count() }).from(opportunities).where(eq(opportunities.status, "published")),
+    db.select({ value: count() }).from(events).where(eq(events.status, "pending")),
+    db.select({ value: count() }).from(challenges).where(eq(challenges.status, "pending")),
+    db.select({ value: count() }).from(challengeProposals).where(eq(challengeProposals.status, "pending")),
+    db.select({ value: count() }).from(partnerApplications).where(eq(partnerApplications.status, "pending")),
+    db.select({ value: count() }).from(leads)
+  ]);
   return {
     pendingVolunteers: pendingVolunteers.value,
     pendingActors: pendingActors.value,
@@ -67,7 +58,7 @@ export default async function AdminDashboardPage() {
     { label: "Desafios pendentes", value: counts.pendingChallenges, href: "/admin/desafios" },
     { label: "Propostas a avaliar", value: counts.pendingProposals, href: "/admin/desafios" },
     {
-      label: "Candidaturas a parceria",
+      label: "Candidaturas pendentes",
       value: counts.pendingPartnerApplications,
       href: "/admin/parceiros"
     },

@@ -32,24 +32,22 @@ export const metadata: Metadata = {
 
 async function getLiveCounters() {
   const db = getDb();
-  const [approvedActors] = await db.select({ value: count() }).from(actors).where(eq(actors.status, "approved"));
-  const [approvedVolunteers] = await db
-    .select({ value: count() })
-    .from(volunteers)
-    .where(eq(volunteers.status, "approved"));
-  const [approvedEvents] = await db.select({ value: count() }).from(events).where(eq(events.status, "approved"));
-  const [publishedOpportunities] = await db
-    .select({ value: count() })
-    .from(opportunities)
-    .where(eq(opportunities.status, "published"));
-  const [publishedChallenges] = await db
-    .select({ value: count() })
-    .from(challenges)
-    .where(eq(challenges.status, "published"));
-  const [publishedPartners] = await db
-    .select({ value: count() })
-    .from(partners)
-    .where(eq(partners.status, "published"));
+  // Contagens independentes: em série somariam seis idas ao D1 antes de renderizar.
+  const [
+    [approvedActors],
+    [approvedVolunteers],
+    [approvedEvents],
+    [publishedOpportunities],
+    [publishedChallenges],
+    [publishedPartners]
+  ] = await Promise.all([
+    db.select({ value: count() }).from(actors).where(eq(actors.status, "approved")),
+    db.select({ value: count() }).from(volunteers).where(eq(volunteers.status, "approved")),
+    db.select({ value: count() }).from(events).where(eq(events.status, "approved")),
+    db.select({ value: count() }).from(opportunities).where(eq(opportunities.status, "published")),
+    db.select({ value: count() }).from(challenges).where(eq(challenges.status, "published")),
+    db.select({ value: count() }).from(partners).where(eq(partners.status, "published"))
+  ]);
 
   return [
     { label: "Organizações no mapa", value: approvedActors.value },

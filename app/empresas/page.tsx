@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { and, eq, gte, isNull, or } from "drizzle-orm";
-import { ArrowRight, Building2, CalendarClock, GraduationCap, HandCoins, Lightbulb, Plus } from "lucide-react";
+import { ArrowRight, GraduationCap, HandCoins, Lightbulb, Plus } from "lucide-react";
 import { challenges } from "@/db/schema";
 import { ActorCatalog } from "@/components/sections/actor-catalog";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ChallengeCard } from "@/components/sections/challenge-card";
 import { ChallengeSubmitForm } from "@/components/sections/challenge-submit-form";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { openChallengesWhere } from "@/lib/challenges";
 import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
 
@@ -45,26 +45,11 @@ const benefits = [
   }
 ];
 
-function formatDeadline(date: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(new Date(`${date}T12:00:00Z`));
-}
-
 export default async function EmpresasPage() {
-  const today = todayInBusinessTimeZone();
   const openChallenges = await getDb()
     .select()
     .from(challenges)
-    .where(
-      and(
-        eq(challenges.status, "published"),
-        or(isNull(challenges.deadline), gte(challenges.deadline, today))!
-      )
-    )
+    .where(openChallengesWhere(todayInBusinessTimeZone()))
     .orderBy(challenges.deadline, challenges.title)
     .limit(6);
 
@@ -162,38 +147,7 @@ export default async function EmpresasPage() {
             ) : (
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {openChallenges.map((challenge) => (
-                  <Link
-                    key={challenge.id}
-                    href={`/desafios/${challenge.slug}`}
-                    className="surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1"
-                  >
-                    <div className="mb-3 flex items-center justify-between gap-2">
-                      <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
-                        {challenge.category}
-                      </Badge>
-                      <span className="text-xs font-semibold text-sky-300">{challenge.type}</span>
-                    </div>
-                    <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{challenge.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-6 text-slate-300 line-clamp-3">
-                      {challenge.description}
-                    </p>
-                    <div className="mt-4 space-y-1 text-xs text-slate-400">
-                      <p className="flex items-center gap-1.5">
-                        <Building2 className="h-3.5 w-3.5 text-emerald-300" />
-                        <span className="truncate">{challenge.company}</span>
-                      </p>
-                      <p className="flex items-center gap-1.5">
-                        <CalendarClock className="h-3.5 w-3.5 text-orange-300" />
-                        {challenge.deadline
-                          ? `Propostas até ${formatDeadline(challenge.deadline)}`
-                          : "Fluxo contínuo"}
-                      </p>
-                    </div>
-                    <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
-                      Ver desafio
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Link>
+                  <ChallengeCard key={challenge.id} challenge={challenge} as="h3" />
                 ))}
               </div>
             )}
