@@ -20,15 +20,18 @@ export async function insertWithUniqueSlug<T>(
   nextSlug: () => Promise<string>,
   insert: (slug: string) => Promise<T>
 ): Promise<T> {
-  let lastError: unknown;
   for (let attempt = 0; attempt < MAX_SLUG_ATTEMPTS; attempt += 1) {
     const slug = await nextSlug();
     try {
       return await insert(slug);
     } catch (error) {
       if (!isSlugConflict(error, table)) throw error;
-      lastError = error;
     }
   }
-  throw lastError;
+  // Esgotados os candidatos determinísticos (exigiria vários envios simultâneos do
+  // mesmo título): uma última tentativa com sufixo aleatório em vez de devolver 500
+  // para quem só perdeu a corrida pelo sufixo sequencial.
+  const fallbackBase = await nextSlug();
+  const fallbackSlug = `${fallbackBase}-${Math.random().toString(36).slice(2, 8)}`;
+  return await insert(fallbackSlug);
 }

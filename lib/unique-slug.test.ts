@@ -77,7 +77,26 @@ describe("insertWithUniqueSlug", () => {
     expect(tentativas).toBe(1);
   });
 
-  it("desiste depois do limite de tentativas, propagando o último conflito", async () => {
+  it("tenta um sufixo aleatório depois do limite de candidatos determinísticos", async () => {
+    const tentados: string[] = [];
+
+    const resultado = await insertWithUniqueSlug(
+      "partners",
+      async () => "parceiro",
+      async (slug) => {
+        tentados.push(slug);
+        if (tentados.length <= 5) throw slugConflict("partners");
+        return { slug };
+      }
+    );
+
+    expect(tentados).toHaveLength(6);
+    expect(tentados.slice(0, 5)).toEqual(["parceiro", "parceiro", "parceiro", "parceiro", "parceiro"]);
+    expect(tentados[5]).toMatch(/^parceiro-[a-z0-9]+$/);
+    expect(resultado).toEqual({ slug: tentados[5] });
+  });
+
+  it("desiste quando até o sufixo aleatório colide, propagando o conflito", async () => {
     let tentativas = 0;
 
     await expect(
@@ -91,6 +110,6 @@ describe("insertWithUniqueSlug", () => {
       )
     ).rejects.toThrow("UNIQUE constraint failed: partners.slug");
 
-    expect(tentativas).toBe(5);
+    expect(tentativas).toBe(6);
   });
 });
