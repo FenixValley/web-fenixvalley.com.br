@@ -63,27 +63,6 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "empresas",
-    title: "Empresas e indústrias",
-    kicker: "Inovação corporativa",
-    description:
-      "Aproximamos empresas, indústrias e grandes organizações de startups, pesquisadores e talentos locais para resolver desafios reais.",
-    sections: [
-      {
-        title: "Inovação aberta",
-        body: "Sua empresa traz um desafio — automação, logística, eficiência energética, ESG, indústria 4.0 — e o ecossistema responde com pilotos, provas de conceito e parcerias."
-      },
-      {
-        title: "Acesso a talentos",
-        body: "A residência tecnológica e os programas estudantis formam profissionais com experiência prática em projetos reais, prontos para o mercado da região."
-      }
-    ],
-    ctas: [
-      { label: "Conhecer a inovação aberta", href: "/programas/inovacao-aberta" },
-      { label: "Falar com a coordenação", href: "/contato" }
-    ]
-  },
-  {
     slug: "conteudos",
     title: "Conteúdos",
     kicker: "Aprender com quem constrói",
@@ -126,70 +105,119 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "parceiros",
-    title: "Parceiros",
-    kicker: "Quem sustenta o movimento",
+    slug: "termos",
+    title: "Termos de uso",
+    kicker: "Regras do portal",
     description:
-      "Instituições de ensino, empresas, poder público e organizações de apoio dão legitimidade e força ao Fênix Valley.",
+      "Condições de uso do portal do Fênix Valley, responsabilidades de quem publica conteúdo e limites de responsabilidade do movimento.",
     sections: [
       {
-        title: "Categorias de apoio",
-        body: "Apoio institucional, tecnológico, acadêmico, empresarial e financeiro — cada parceiro contribui com o que tem de melhor: espaços, mentores, desafios, bolsas ou patrocínio."
+        title: "Uso do portal",
+        body: "O portal é aberto e gratuito. Ao navegar, cadastrar uma organização, enviar um evento, um desafio ou uma proposta, você concorda com estes termos e com o código de conduta do movimento."
       },
       {
-        title: "Vitrine de parceiros",
-        body: "Os parceiros aparecem na home e, conforme o portal evolui, terão páginas próprias com sua contribuição para o ecossistema."
+        title: "Conteúdo enviado por terceiros",
+        body: "Quem envia é responsável pela veracidade das informações e por ter autorização para publicá-las. A curadoria pode recusar, editar ou remover conteúdo fora do propósito do movimento, sem aviso prévio."
+      },
+      {
+        title: "Conexões entre participantes",
+        body: "O Fênix Valley aproxima empresas, startups, instituições e talentos, mas não é parte dos contratos, negociações ou resultados dessas conexões. Acordos firmados entre participantes são de responsabilidade deles."
+      },
+      {
+        title: "Disponibilidade e mudanças",
+        body: "O portal pode passar por manutenções e evoluções. Alterações relevantes nestes termos são publicadas nesta página, com a data da revisão."
       }
     ],
     ctas: [
-      { label: "Seja um parceiro", href: "/seja-parceiro" },
-      { label: "Ver parceiros na home", href: "/#conteudo" }
+      { label: "Ver a governança do movimento", href: "/governanca" },
+      { label: "Falar com a coordenação", href: "/contato" }
     ]
   },
   {
-    slug: "impacto",
-    title: "Impacto",
-    kicker: "Transparência",
+    slug: "cookies",
+    title: "Política de cookies",
+    kicker: "O que guardamos no seu navegador",
     description:
-      "O Fênix Valley se compromete a divulgar apenas indicadores validados — sem números inflados ou métricas de vaidade.",
+      "O portal usa o mínimo necessário de armazenamento local para funcionar. Não há rastreamento publicitário nem venda de dados de navegação.",
     sections: [
       {
-        title: "O que vamos medir",
-        body: "Startups e organizações no mapa, voluntários ativos, inscrições e turmas dos programas, eventos realizados e conexões geradas — tudo a partir dos dados reais do portal."
+        title: "Preferências de interface",
+        body: "A escolha entre tema escuro e claro fica salva no seu próprio navegador (localStorage), apenas para que o site abra do jeito que você prefere. Esse dado não sai do seu dispositivo."
       },
       {
-        title: "Relatórios",
-        body: "Relatórios periódicos de impacto, com depoimentos e cases, serão publicados aqui conforme o movimento gera resultados mensuráveis."
+        title: "Sessão do painel administrativo",
+        body: "Gestores autenticados recebem um cookie de sessão necessário para manter o login do painel. Sair do painel apaga o cookie do navegador; o token de sessão em si tem validade de 30 dias. Ele não é usado para rastrear navegação no site público."
+      },
+      {
+        title: "Sem rastreadores de terceiros",
+        body: "Não usamos cookies de publicidade nem perfis de comportamento. Serviços externos acionados a partir do site, como mapas e vídeos incorporados, seguem as próprias políticas dos seus provedores."
+      },
+      {
+        title: "Como limpar",
+        body: "Você pode apagar o armazenamento local e os cookies deste site a qualquer momento pelas configurações do navegador, sem perder acesso a nenhuma funcionalidade pública."
       }
     ],
     ctas: [
-      { label: "Acompanhar o ecossistema", href: "/mapa" },
-      { label: "Fazer parte", href: "/#participar" }
+      { label: "Ler a política de privacidade", href: "/privacidade" },
+      { label: "Ver a governança", href: "/governanca" }
     ]
   },
   {
-    slug: "seja-parceiro",
-    title: "Seja um parceiro",
-    kicker: "Apoie o movimento",
+    slug: "codigo-de-conduta",
+    title: "Código de conduta",
+    kicker: "Como convivemos",
     description:
-      "Sua organização pode acelerar o renascimento de Betim pela inovação: com espaços, mentoria, desafios, tecnologia ou patrocínio.",
+      "O que se espera de quem participa dos canais, eventos e programas do Fênix Valley — e o que fazer quando algo sai do combinado.",
     sections: [
       {
-        title: "Formas de apoiar",
-        body: "Ceder espaços para encontros e turmas, oferecer mentores e especialistas, publicar desafios de inovação aberta, patrocinar eventos e programas ou disponibilizar tecnologia e bolsas."
+        title: "Princípios",
+        body: "Respeito às pessoas, foco no desenvolvimento de Betim e da região, colaboração acima da disputa e generosidade com quem está começando. Todo mundo é bem-vindo, independentemente de origem, gênero, raça, religião, orientação sexual ou deficiência."
       },
       {
-        title: "Benefícios",
-        body: "Conexão direta com startups e talentos da região, presença na vitrine de parceiros, participação nas bancas e demo days e protagonismo na construção do ecossistema."
+        title: "Não é tolerado",
+        body: "Assédio, discriminação, ataque pessoal, discurso de ódio, spam, autopromoção sem contexto, uso indevido de dados de outros participantes e divulgação de conteúdo ilegal ou desalinhado ao propósito do movimento."
       },
       {
-        title: "Como começar",
-        body: "Envie uma mensagem para a coordenação contando como sua organização quer contribuir. Retornamos com uma proposta de parceria adequada ao seu momento."
+        title: "Nos eventos e programas",
+        body: "As mesmas regras valem nos encontros presenciais, nas turmas dos programas e nos espaços dos parceiros. A organização pode encerrar a participação de quem descumprir o código."
+      },
+      {
+        title: "Como relatar",
+        body: "Relatos podem ser enviados à coordenação pelos canais oficiais de contato. Cada caso é tratado com confidencialidade e respondido pela coordenação junto ao comitê de curadoria."
       }
     ],
     ctas: [
       { label: "Falar com a coordenação", href: "/contato" },
-      { label: "Conhecer a inovação aberta", href: "/programas/inovacao-aberta" }
+      { label: "Ver a governança", href: "/governanca" }
+    ]
+  },
+  {
+    slug: "politica-de-conteudo",
+    title: "Política de publicação de conteúdos",
+    kicker: "Critérios de curadoria",
+    description:
+      "O que entra no portal, como a curadoria avalia cada envio e por que alguns conteúdos são recusados.",
+    sections: [
+      {
+        title: "O que publicamos",
+        body: "Organizações do ecossistema, eventos, oportunidades, desafios de inovação aberta, trilhas de capacitação e parcerias com relação direta com Betim e região."
+      },
+      {
+        title: "Como avaliamos",
+        body: "A curadoria confere se o conteúdo é verdadeiro, está completo, tem responsável identificável e é coerente com o propósito do movimento. Cadastros entram como pendentes e só aparecem publicamente após aprovação."
+      },
+      {
+        title: "O que é recusado",
+        body: "Propaganda sem conexão com o ecossistema, conteúdo enganoso, esquemas de pirâmide ou promessa de retorno financeiro, dados de terceiros sem autorização e qualquer material que viole o código de conduta."
+      },
+      {
+        title: "Dados de contato",
+        body: "E-mails e telefones enviados nos formulários servem para a curadoria e para as conexões do movimento. Contatos de empresas que publicam desafios não são exibidos publicamente: as propostas chegam pelo próprio portal."
+      }
+    ],
+    ctas: [
+      { label: "Ler o código de conduta", href: "/codigo-de-conduta" },
+      { label: "Ler a política de privacidade", href: "/privacidade" }
     ]
   },
   {

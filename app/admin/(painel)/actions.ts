@@ -6,9 +6,15 @@ import { redirect } from "next/navigation";
 import {
   actors,
   auditLogs,
+  challengeProposals,
+  challenges,
   events,
+  impactIndicators,
+  impactStories,
   learningTracks,
   opportunities,
+  partnerApplications,
+  partners,
   programApplications,
   programSettings,
   volunteers
@@ -16,17 +22,22 @@ import {
 import { uniqueActorSlug } from "@/lib/actor-slug";
 import { auth } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import { uniquePartnerSlug } from "@/lib/partner-slug";
 import {
   actorSchema,
+  impactIndicatorSchema,
+  impactStorySchema,
   institutionDetailsSchema,
   investorDetailsSchema,
   learningTrackSchema,
   mentorDetailsSchema,
   opportunitySchema,
+  partnerSchema,
   spaceDetailsSchema,
   startupDetailsSchema
 } from "@/lib/schemas";
 import { slugify } from "@/lib/slug";
+import { insertWithUniqueSlug } from "@/lib/unique-slug";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
@@ -270,10 +281,15 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
   };
   const db = getDb();
   if (id === null) {
-    const [created] = await db
-      .insert(actors)
-      .values({ ...data, slug: await uniqueActorSlug(db, data.name), status: "approved" })
-      .returning({ id: actors.id });
+    const [created] = await insertWithUniqueSlug(
+      "actors",
+      () => uniqueActorSlug(db, data.name),
+      (slug) =>
+        db
+          .insert(actors)
+          .values({ ...data, slug, status: "approved" })
+          .returning({ id: actors.id })
+    );
     await logAudit(adminEmail, "create", "actor", created?.id ?? null, data.name);
   } else {
     await db.update(actors).set(data).where(eq(actors.id, id));
@@ -315,11 +331,15 @@ export async function upsertLearningTrack(
   };
   const db = getDb();
   if (id === null) {
-    const slug = await uniqueLearningTrackSlug(db, data.title);
-    const [created] = await db
-      .insert(learningTracks)
-      .values({ ...data, slug, status: "published" })
-      .returning({ id: learningTracks.id });
+    const [created] = await insertWithUniqueSlug(
+      "learning_tracks",
+      () => uniqueLearningTrackSlug(db, data.title),
+      (slug) =>
+        db
+          .insert(learningTracks)
+          .values({ ...data, slug, status: "published" })
+          .returning({ id: learningTracks.id })
+    );
     await logAudit(adminEmail, "create", "learning-track", created?.id ?? null, data.title);
   } else {
     await db.batch([
@@ -379,4 +399,218 @@ export async function upsertOpportunity(
   }
   revalidatePath("/admin/oportunidades");
   redirect("/admin/oportunidades");
+}
+
+// --- Issue #6: moderacao de desafios e propostas -----------------------------
+
+export async function setChallengeStatus(id: number, status: "published" | "rejected" | "archived") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(challenges).set({ status }).where(eq(challenges.id, id)),
+    auditEntry(db, adminEmail, status, "challenge", id)
+  ]);
+  revalidatePath("/admin/desafios");
+  revalidatePath("/admin");
+  revalidatePath("/desafios");
+  revalidatePath("/empresas");
+}
+
+export async function setChallengeProposalStatus(id: number, status: "approved" | "rejected") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(challengeProposals).set({ status }).where(eq(challengeProposals.id, id)),
+    auditEntry(db, adminEmail, status, "challenge-proposal", id)
+  ]);
+  revalidatePath("/admin/desafios");
+}
+
+// --- Issue #14: parceiros, impacto e governanca ------------------------------
+
+export async function upsertPartner(id: number | null, _previous: FormState, formData: FormData): Promise<FormState> {
+  const adminEmail = await requireAdmin();
+  const parsed = partnerSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return { error: first ?? "Revise os campos." };
+  }
+
+  const db = getDb();
+  const data = {
+    ...parsed.data,
+    site: parsed.data.site || null,
+    logoUrl: parsed.data.logoUrl || null,
+    since: parsed.data.since || null,
+    founding: parsed.data.founding ? 1 : 0
+  };
+
+  if (id === null) {
+    const [created] = await insertWithUniqueSlug(
+      "partners",
+      () => uniquePartnerSlug(db, data.name),
+      (slug) =>
+        db
+          .insert(partners)
+          .values({ ...data, slug, status: "draft" })
+          .returning({ id: partners.id })
+    );
+    await logAudit(adminEmail, "create", "partner", created?.id ?? null, data.name);
+  } else {
+    // O slug é gerado uma vez, na criação, e não acompanha renomeações — igual a
+    // upsertActor e upsertLearningTrack. Trocá-lo aqui quebraria /parceiros/[slug]
+    // já divulgado.
+    await db.update(partners).set(data).where(eq(partners.id, id));
+    await logAudit(adminEmail, "update", "partner", id, data.name);
+  }
+  revalidatePath("/admin/parceiros");
+  revalidatePath("/parceiros");
+  redirect("/admin/parceiros");
+}
+
+export async function setPartnerStatus(id: number, status: "published" | "draft") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(partners).set({ status }).where(eq(partners.id, id)),
+    auditEntry(db, adminEmail, status, "partner", id)
+  ]);
+  revalidatePath("/admin/parceiros");
+  revalidatePath("/parceiros");
+}
+
+export async function deletePartner(id: number) {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.delete(partners).where(eq(partners.id, id)),
+    auditEntry(db, adminEmail, "delete", "partner", id)
+  ]);
+  revalidatePath("/admin/parceiros");
+  revalidatePath("/parceiros");
+}
+
+export async function setPartnerApplicationStatus(id: number, status: "approved" | "rejected") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(partnerApplications).set({ status }).where(eq(partnerApplications.id, id)),
+    auditEntry(db, adminEmail, status, "partner-application", id)
+  ]);
+  revalidatePath("/admin/parceiros");
+  revalidatePath("/admin");
+}
+
+export async function upsertImpactIndicator(
+  id: number | null,
+  _previous: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const adminEmail = await requireAdmin();
+  const parsed = impactIndicatorSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return { error: first ?? "Revise os campos." };
+  }
+  const data = {
+    ...parsed.data,
+    note: parsed.data.note || null,
+    verified: parsed.data.verified ? 1 : 0
+  };
+  const db = getDb();
+  if (id === null) {
+    const [created] = await db.insert(impactIndicators).values(data).returning({ id: impactIndicators.id });
+    await logAudit(adminEmail, "create", "impact-indicator", created?.id ?? null, data.label);
+  } else {
+    await db.update(impactIndicators).set(data).where(eq(impactIndicators.id, id));
+    await logAudit(adminEmail, "update", "impact-indicator", id, data.label);
+  }
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
+  redirect("/admin/impacto");
+}
+
+/**
+ * Publicar um indicador e o mesmo que atesta-lo: a pagina de impacto so exibe
+ * indicadores verificados (criterio de aceite da issue #14).
+ */
+export async function setImpactIndicatorVerified(id: number, verified: boolean) {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db
+      .update(impactIndicators)
+      .set({ verified: verified ? 1 : 0 })
+      .where(eq(impactIndicators.id, id)),
+    auditEntry(db, adminEmail, verified ? "verify" : "unverify", "impact-indicator", id)
+  ]);
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
+}
+
+export async function deleteImpactIndicator(id: number) {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.delete(impactIndicators).where(eq(impactIndicators.id, id)),
+    auditEntry(db, adminEmail, "delete", "impact-indicator", id)
+  ]);
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
+}
+
+export async function upsertImpactStory(
+  id: number | null,
+  _previous: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const adminEmail = await requireAdmin();
+  const parsed = impactStorySchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    const first = Object.values(parsed.error.flatten().fieldErrors).flat()[0];
+    return { error: first ?? "Revise os campos." };
+  }
+  const data = {
+    ...parsed.data,
+    authorName: parsed.data.authorName || null,
+    authorRole: parsed.data.authorRole || null,
+    organization: parsed.data.organization || null,
+    link: parsed.data.link || null
+  };
+  const db = getDb();
+  if (id === null) {
+    const [created] = await db
+      .insert(impactStories)
+      .values({ ...data, status: "draft" })
+      .returning({ id: impactStories.id });
+    await logAudit(adminEmail, "create", "impact-story", created?.id ?? null, data.title);
+  } else {
+    await db.update(impactStories).set(data).where(eq(impactStories.id, id));
+    await logAudit(adminEmail, "update", "impact-story", id, data.title);
+  }
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
+  redirect("/admin/impacto");
+}
+
+export async function setImpactStoryStatus(id: number, status: "published" | "draft") {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.update(impactStories).set({ status }).where(eq(impactStories.id, id)),
+    auditEntry(db, adminEmail, status, "impact-story", id)
+  ]);
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
+}
+
+export async function deleteImpactStory(id: number) {
+  const adminEmail = await requireAdmin();
+  const db = getDb();
+  await db.batch([
+    db.delete(impactStories).where(eq(impactStories.id, id)),
+    auditEntry(db, adminEmail, "delete", "impact-story", id)
+  ]);
+  revalidatePath("/admin/impacto");
+  revalidatePath("/impacto");
 }
