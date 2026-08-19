@@ -5,12 +5,19 @@ import { uniqueChallengeSlug } from "@/lib/challenge-slug";
 import { openChallengesWhere } from "@/lib/challenges";
 import { todayInBusinessTimeZone } from "@/lib/date";
 import { getDb } from "@/lib/db";
-import { challengeSchema } from "@/lib/schemas";
+import { challengeFiltersSchema, challengeSchema } from "@/lib/schemas";
+import { insertWithUniqueSlug } from "@/lib/unique-slug";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const category = url.searchParams.get("categoria");
-  const type = url.searchParams.get("tipo");
+  const filters = challengeFiltersSchema.safeParse({
+    categoria: url.searchParams.get("categoria") ?? undefined,
+    tipo: url.searchParams.get("tipo") ?? undefined
+  });
+  if (!filters.success) {
+    return NextResponse.json({ ok: false, errors: filters.error.flatten().fieldErrors }, { status: 400 });
+  }
+  const { categoria: category, tipo: type } = filters.data;
 
   const conditions = [openChallengesWhere(todayInBusinessTimeZone())];
   if (category) conditions.push(eq(challenges.category, category));
@@ -50,15 +57,20 @@ export async function POST(request: Request) {
 
   const { consent: _consent, ...data } = parsed.data;
   const db = getDb();
-  await db.insert(challenges).values({
-    ...data,
-    slug: await uniqueChallengeSlug(db, data.title),
-    expectedOutcome: data.expectedOutcome || null,
-    deadline: data.deadline || null,
-    companySegment: data.companySegment || null,
-    companySite: data.companySite || null,
-    status: "pending"
-  });
+  await insertWithUniqueSlug(
+    "challenges",
+    () => uniqueChallengeSlug(db, data.title),
+    (slug) =>
+      db.insert(challenges).values({
+        ...data,
+        slug,
+        expectedOutcome: data.expectedOutcome || null,
+        deadline: data.deadline || null,
+        companySegment: data.companySegment || null,
+        companySite: data.companySite || null,
+        status: "pending"
+      })
+  );
 
   return NextResponse.json({
     ok: true,

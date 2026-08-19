@@ -95,6 +95,12 @@ export const actorTypeLabels: Record<(typeof actorTypes)[number], string> = {
   comunidade: "Comunidade"
 };
 
+/** Filtros aceitos no GET público de atores. Mesmo contrato do GET de desafios. */
+export const actorFiltersSchema = z.object({
+  type: z.enum(actorTypes, { message: "Tipo de organização desconhecido." }).optional(),
+  q: z.string().optional()
+});
+
 export const actorSchema = z.object({
   name: z.string().min(2, "Informe o nome da organização."),
   type: z.enum(actorTypes, { message: "Escolha o tipo de organização." }),
@@ -345,6 +351,15 @@ export const challengeCategories = [
   "Segurança",
   "Transformação digital"
 ] as const;
+
+/**
+ * Filtros aceitos no GET público de desafios. Valor fora do enum é erro explícito,
+ * e não lista vazia silenciosa — quem chama a API descobre o engano na hora.
+ */
+export const challengeFiltersSchema = z.object({
+  categoria: z.enum(challengeCategories, { message: "Categoria desconhecida." }).optional(),
+  tipo: z.enum(challengeTypes, { message: "Tipo de chamada desconhecido." }).optional()
+});
 
 export const challengeSchema = z.object({
   title: z.string().min(5, "Informe o título do desafio."),

@@ -37,6 +37,7 @@ import {
   startupDetailsSchema
 } from "@/lib/schemas";
 import { slugify } from "@/lib/slug";
+import { insertWithUniqueSlug } from "@/lib/unique-slug";
 
 const BETIM_CENTER = { lat: -19.9678, lng: -44.1987 };
 
@@ -280,10 +281,15 @@ export async function upsertActor(id: number | null, _previous: FormState, formD
   };
   const db = getDb();
   if (id === null) {
-    const [created] = await db
-      .insert(actors)
-      .values({ ...data, slug: await uniqueActorSlug(db, data.name), status: "approved" })
-      .returning({ id: actors.id });
+    const [created] = await insertWithUniqueSlug(
+      "actors",
+      () => uniqueActorSlug(db, data.name),
+      (slug) =>
+        db
+          .insert(actors)
+          .values({ ...data, slug, status: "approved" })
+          .returning({ id: actors.id })
+    );
     await logAudit(adminEmail, "create", "actor", created?.id ?? null, data.name);
   } else {
     await db.update(actors).set(data).where(eq(actors.id, id));
@@ -325,11 +331,15 @@ export async function upsertLearningTrack(
   };
   const db = getDb();
   if (id === null) {
-    const slug = await uniqueLearningTrackSlug(db, data.title);
-    const [created] = await db
-      .insert(learningTracks)
-      .values({ ...data, slug, status: "published" })
-      .returning({ id: learningTracks.id });
+    const [created] = await insertWithUniqueSlug(
+      "learning_tracks",
+      () => uniqueLearningTrackSlug(db, data.title),
+      (slug) =>
+        db
+          .insert(learningTracks)
+          .values({ ...data, slug, status: "published" })
+          .returning({ id: learningTracks.id })
+    );
     await logAudit(adminEmail, "create", "learning-track", created?.id ?? null, data.title);
   } else {
     await db.update(learningTracks).set(data).where(eq(learningTracks.id, id));
@@ -434,10 +444,15 @@ export async function upsertPartner(id: number | null, _previous: FormState, for
   };
 
   if (id === null) {
-    const [created] = await db
-      .insert(partners)
-      .values({ ...data, slug: await uniquePartnerSlug(db, data.name), status: "draft" })
-      .returning({ id: partners.id });
+    const [created] = await insertWithUniqueSlug(
+      "partners",
+      () => uniquePartnerSlug(db, data.name),
+      (slug) =>
+        db
+          .insert(partners)
+          .values({ ...data, slug, status: "draft" })
+          .returning({ id: partners.id })
+    );
     await logAudit(adminEmail, "create", "partner", created?.id ?? null, data.name);
   } else {
     // O slug é gerado uma vez, na criação, e não acompanha renomeações — igual a

@@ -231,3 +231,26 @@ html.theme-light .site-header .bg-slate-950\/96 {
   background-color: rgb(255 255 255 / 0.98);
   border-color: rgb(226 232 240);
 }
+
+/* Movimento reduzido.
+   O padrão de card do site anima por CSS puro (transition-transform +
+   hover:-translate-y-*, e a seta com group-hover:translate-x-*), então não há
+   useReducedMotion() para consultar. Aqui o movimento é neutralizado de uma vez
+   para todos os cards: o layout e o conteúdo ficam iguais, e o destaque do hover
+   continua existindo por cor e borda. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hover\:-translate-y-1:hover,
+  .hover\:-translate-y-0\.5:hover,
+  .group:hover .group-hover\:translate-x-1 {
+    transform: none !important;
+  }
+}
