@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import { ActorForm } from "@/components/admin/actor-form";
 import { actors } from "@/db/schema";
+import { parseActorDetails } from "@/lib/actor-details";
 import { getDb } from "@/lib/db";
 import { upsertActor } from "../../../actions";
 
@@ -18,7 +19,10 @@ export default async function EditActorPage({ params }: { params: Promise<{ id: 
   return (
     <div className="space-y-6">
       <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Editar ator</h1>
-      <ActorForm action={upsertActor.bind(null, actorId)} initialValues={actor} />
+      <ActorForm
+        action={upsertActor.bind(null, actorId)}
+        initialValues={{ ...actor, details: parseActorDetails(actor.type, actor.details) }}
+      />
     </div>
   );
 }

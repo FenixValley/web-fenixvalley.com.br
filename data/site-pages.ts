@@ -63,31 +63,6 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "startups",
-    title: "Startups",
-    kicker: "Para quem constrói",
-    description:
-      "O portal é vitrine das startups e dos empreendedores de Betim e região: presença no mapa, conexão com programas e acesso a oportunidades.",
-    sections: [
-      {
-        title: "Apareça no mapa",
-        body: "Cadastre sua startup no mapa do ecossistema para ser encontrada por empresas, investidores, mentores e talentos. O cadastro passa por curadoria antes da publicação."
-      },
-      {
-        title: "Evolua com os programas",
-        body: "Da pré-aceleração à aceleração, os programas dão ritmo à jornada: validação, tração, conexões com mercado e preparação para investimento."
-      },
-      {
-        title: "Catálogo completo",
-        body: "Um catálogo de startups com filtros por segmento, estágio e tecnologia está no roadmap do portal e será construído sobre os cadastros aprovados do mapa."
-      }
-    ],
-    ctas: [
-      { label: "Cadastrar startup no mapa", href: "/mapa" },
-      { label: "Conhecer os programas", href: "/programas" }
-    ]
-  },
-  {
     slug: "empresas",
     title: "Empresas e indústrias",
     kicker: "Inovação corporativa",
@@ -106,90 +81,6 @@ export const sitePages: SitePage[] = [
     ctas: [
       { label: "Conhecer a inovação aberta", href: "/programas/inovacao-aberta" },
       { label: "Falar com a coordenação", href: "/contato" }
-    ]
-  },
-  {
-    slug: "universidades",
-    title: "Universidades e escolas técnicas",
-    kicker: "Educação e pesquisa",
-    description:
-      "Universidades, escolas técnicas e estudantes conectados a oportunidades reais de inovação, pesquisa aplicada e mercado.",
-    sections: [
-      {
-        title: "Instituições parceiras",
-        body: "Instituições de ensino participam do mapa do ecossistema, conectam laboratórios e pesquisadores a desafios de empresas e levam seus estudantes aos programas."
-      },
-      {
-        title: "Para estudantes",
-        body: "Trilhas de capacitação, hackathons, residência tecnológica e conexão com estágios e vagas: a porta de entrada dos estudantes para o ecossistema."
-      }
-    ],
-    ctas: [
-      { label: "Programas para estudantes", href: "/programas/programas-estudantis" },
-      { label: "Residência tecnológica", href: "/programas/residencia-tecnologica" }
-    ]
-  },
-  {
-    slug: "mentores",
-    title: "Mentores",
-    kicker: "Quem ajuda a construir",
-    description:
-      "Mentores e mentoras compartilham experiência com empreendedores, startups e estudantes em formação — uma das contribuições mais valiosas para o ecossistema.",
-    sections: [
-      {
-        title: "Como funciona",
-        body: "Mentorias acontecem dentro dos programas (pré-aceleração, aceleração, residência) e em encontros da comunidade, com temas que vão de produto e vendas a carreira e gestão."
-      },
-      {
-        title: "Seja mentor(a)",
-        body: "Profissionais com experiência em tecnologia, negócios, marketing, finanças ou gestão podem se voluntariar para mentorar. A coordenação faz a curadoria e a conexão com os projetos."
-      }
-    ],
-    ctas: [
-      { label: "Quero ser mentor(a)", href: "/voluntarie-se" },
-      { label: "Entrar na comunidade", href: whatsappUrl, external: true }
-    ]
-  },
-  {
-    slug: "investidores",
-    title: "Investidores",
-    kicker: "Capital para a nova economia",
-    description:
-      "Conectamos investidores-anjo, fundos e veículos de investimento às startups de Betim e região que estão construindo negócios com tração.",
-    sections: [
-      {
-        title: "Acesso ao dealflow",
-        body: "Os programas de aceleração e os demo days aproximam investidores de startups preparadas, com métricas organizadas e teses claras."
-      },
-      {
-        title: "Participe",
-        body: "Investidores interessados em acompanhar o ecossistema podem entrar em contato com a coordenação para participar de bancas, demo days e conexões diretas."
-      }
-    ],
-    ctas: [
-      { label: "Falar com a coordenação", href: "/contato" },
-      { label: "Ver oportunidades", href: "/oportunidades" }
-    ]
-  },
-  {
-    slug: "espacos",
-    title: "Espaços de inovação",
-    kicker: "Onde as coisas acontecem",
-    description:
-      "Coworkings, laboratórios, hubs e espaços públicos e privados que recebem os encontros, programas e projetos do ecossistema.",
-    sections: [
-      {
-        title: "No mapa",
-        body: "Os espaços de inovação de Betim aparecem no mapa do ecossistema com tipo, localização e descrição — e novos espaços podem se cadastrar."
-      },
-      {
-        title: "Ceda seu espaço",
-        body: "Organizações que queiram receber eventos, mentorias ou turmas de programas podem oferecer seus espaços à comunidade pelo formulário de contato."
-      }
-    ],
-    ctas: [
-      { label: "Ver espaços no mapa", href: "/mapa" },
-      { label: "Oferecer um espaço", href: "/contato" }
     ]
   },
   {

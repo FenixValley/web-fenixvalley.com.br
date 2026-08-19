@@ -19,8 +19,25 @@ export async function GET(request: Request) {
     conditions.push(or(like(actors.name, pattern), like(actors.neighborhood, pattern))!);
   }
 
+  // Seleção explícita: este endpoint é público e alimenta o mapa e as vitrines.
+  // Canais de contato (email/whatsapp) só aparecem na ficha individual do ator,
+  // para não expor a lista inteira de contatos em um único JSON coletável.
   const rows = await getDb()
-    .select()
+    .select({
+      id: actors.id,
+      slug: actors.slug,
+      name: actors.name,
+      type: actors.type,
+      segment: actors.segment,
+      neighborhood: actors.neighborhood,
+      description: actors.description,
+      site: actors.site,
+      lat: actors.lat,
+      lng: actors.lng,
+      featured: actors.featured,
+      highlightLabel: actors.highlightLabel,
+      details: actors.details
+    })
     .from(actors)
     .where(and(...conditions));
   return NextResponse.json(rows);

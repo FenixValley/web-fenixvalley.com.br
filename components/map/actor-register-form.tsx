@@ -24,14 +24,24 @@ function isEmpty(value: FieldValue | undefined): boolean {
   return Array.isArray(value) ? value.length === 0 : !value?.toString().trim();
 }
 
-export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
-  const [values, setValues] = useState<FormState>(() => {
+export function ActorRegisterForm({
+  onSuccess,
+  defaultRole
+}: {
+  onSuccess?: () => void;
+  /** Pré-seleciona ROLE_FIELD para pular a etapa de escolha de papel (ex.: CTA em /startups). */
+  defaultRole?: string;
+}) {
+  const buildInitialValues = () => {
     const initial: FormState = {};
     for (const section of MAPA_FORM_SECTIONS) {
       for (const field of section.fields) initial[field.entry] = emptyValue(field);
     }
+    if (defaultRole) initial[ROLE_FIELD] = defaultRole;
     return initial;
-  });
+  };
+
+  const [values, setValues] = useState<FormState>(buildInitialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [done, setDone] = useState(false);
   const [networkError, setNetworkError] = useState(false);
@@ -122,11 +132,7 @@ export function ActorRegisterForm({ onSuccess }: { onSuccess?: () => void }) {
   }
 
   function resetForm() {
-    const initial: FormState = {};
-    for (const section of MAPA_FORM_SECTIONS) {
-      for (const field of section.fields) initial[field.entry] = emptyValue(field);
-    }
-    setValues(initial);
+    setValues(buildInitialValues());
     setErrors({});
     setDone(false);
   }

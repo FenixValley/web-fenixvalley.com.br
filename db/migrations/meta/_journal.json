@@ -50,6 +50,41 @@
       "when": 1781149107391,
       "tag": "0006_free_hellfire_club",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1786896405815,
+      "tag": "0007_new_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1787062100373,
+      "tag": "0008_colossal_lionheart",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1787065625751,
+      "tag": "0009_brief_korvac",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1787070009944,
+      "tag": "0010_redundant_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1787103026109,
+      "tag": "0011_yellow_obadiah_stane",
+      "breakpoints": true
     }
   ]
 }

@@ -25,11 +25,11 @@ export function NewsletterForm() {
         body: JSON.stringify({ email: email.trim() })
       });
 
-      const data = await res.json();
+      const data = (await res.json()) as { ok: boolean; message?: string; error?: string };
 
       if (res.ok && data.ok) {
         setStatus("success");
-        setMessage(data.message);
+        setMessage(data.message ?? "Inscrição confirmada! Em breve você receberá novidades do Fênix Valley.");
         setEmail("");
       } else {
         setStatus("error");

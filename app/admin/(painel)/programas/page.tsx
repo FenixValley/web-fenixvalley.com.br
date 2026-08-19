@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { Check, Lock, LockOpen, X } from "lucide-react";
 import { programsCatalog } from "@/data/programs";
 import { StatusBadge } from "@/components/admin/status-badge";

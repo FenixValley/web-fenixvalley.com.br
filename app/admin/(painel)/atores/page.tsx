@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { desc } from "drizzle-orm";
-import { Check, Pencil, Plus, X } from "lucide-react";
+import { Check, Pencil, Plus, Star, X } from "lucide-react";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { actors } from "@/db/schema";
 import { getDb } from "@/lib/db";
 import { actorTypeLabels } from "@/lib/schemas";
-import { setActorStatus } from "../actions";
+import { setActorFeatured, setActorStatus } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +75,21 @@ export default async function AdminActorsPage() {
                         <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
                           <X className="h-4 w-4" />
                           Rejeitar
+                        </Button>
+                      </form>
+                      <form
+                        action={async () => {
+                          "use server";
+                          await setActorFeatured(actor.id, !actor.featured);
+                        }}
+                      >
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className={actor.featured ? "text-amber-400 hover:text-amber-300" : "text-slate-400 hover:text-white"}
+                        >
+                          <Star className="h-4 w-4" />
+                          {actor.featured ? "Destacado" : "Destacar"}
                         </Button>
                       </form>
                       <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">

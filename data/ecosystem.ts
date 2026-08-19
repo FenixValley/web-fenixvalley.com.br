@@ -1,7 +1,6 @@
 import {
   BadgeDollarSign,
   BookOpen,
-  Building2,
   Factory,
   GraduationCap,
   Handshake,
@@ -35,13 +34,8 @@ export const pillars = [
     icon: Handshake
   },
   {
-    title: "Nova economia",
-    description: "Diversificação econômica para reduzir a dependência de um único setor produtivo.",
-    icon: Building2
-  },
-  {
-    title: "Impacto local",
-    description: "Empreendedorismo como ferramenta para mudar vidas, cidades e mercados.",
+    title: "Nova economia e impacto local",
+    description: "Diversificação econômica e empreendedorismo como ferramentas para mudar vidas, cidades e mercados.",
     icon: Sprout
   }
 ];
@@ -88,7 +82,7 @@ export const newsItems = [
   },
   {
     title: "Agenda do ecossistema",
-    description: "Meetups, mentorias e programas em uma trilha visivel para a comunidade."
+    description: "Meetups, mentorias e programas em uma trilha visível para a comunidade."
   },
   {
     title: "Código de colaboração",
@@ -106,7 +100,7 @@ export const audienceJourneys = [
   },
   {
     title: "Quero inovar na empresa",
-    description: "Publique desafios, encontre solucoes locais e conecte pesquisadores e startups.",
+    description: "Publique desafios, encontre soluções locais e conecte pesquisadores e startups.",
     cta: "Divulgar desafio",
     href: "#participar",
     icon: Factory
@@ -156,7 +150,7 @@ export const partnerBands = [
 
 export const contentTracks = [
   {
-    title: "Noticias do ecossistema",
+    title: "Notícias do ecossistema",
     description: "Novos atores, eventos, resultados de programas e chamadas relevantes para Betim.",
     icon: Newspaper
   },

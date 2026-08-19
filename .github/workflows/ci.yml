@@ -11,13 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Habilitar corepack e ativar Yarn fixado
+        run: |
+          corepack enable
+          corepack prepare yarn@4.15.0 --activate
+          yarn --version
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: yarn
-
-      - name: Habilitar corepack (Yarn Berry)
-        run: corepack enable
 
       - name: Instalar dependências
         run: yarn install --immutable

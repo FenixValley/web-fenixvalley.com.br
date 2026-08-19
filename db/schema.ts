@@ -6,7 +6,10 @@ export const users = sqliteTable("users", {
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   passwordHash: text("password_hash").notNull(),
-  role: text("role").notNull().default("admin"),
+  // Default não-administrativo de propósito: quem precisa de acesso ao painel recebe
+  // "admin" explicitamente (ver scripts/seed-admin.mjs). Um insert que esqueça o campo
+  // não deve criar gestor por omissão — middleware e requireAdmin() exigem role === "admin".
+  role: text("role").notNull().default("member"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
@@ -32,9 +35,13 @@ export const actors = sqliteTable("actors", {
   description: text("description").notNull(),
   site: text("site"),
   email: text("email"),
+  whatsapp: text("whatsapp"),
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
   status: text("status").notNull().default("pending"),
+  featured: integer("featured").notNull().default(0),
+  highlightLabel: text("highlight_label"),
+  details: text("details"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 
@@ -94,6 +101,19 @@ export const auditLogs = sqliteTable("audit_logs", {
   entity: text("entity").notNull(),
   entityId: integer("entity_id"),
   detail: text("detail"),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+
+export const learningTracks = sqliteTable("learning_tracks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  icon: text("icon").notNull(),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("published"),
+  relatedEventCategory: text("related_event_category"),
+  relatedOpportunityType: text("related_opportunity_type"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
 

@@ -14,6 +14,28 @@ export type LeadInput = z.infer<typeof leadSchema>;
 const consentField = (message: string) =>
   z.boolean({ message }).refine((value) => value === true, { message });
 
+const httpUrlField = (message: string) =>
+  z
+    .string()
+    .url(message)
+    .refine(
+      (value) => {
+        try {
+          const protocol = new URL(value).protocol;
+          return protocol === "https:" || protocol === "http:";
+        } catch {
+          return false;
+        }
+      },
+      { message: "Use uma URL http(s)." }
+    );
+
+const whatsappField = z
+  .string()
+  .refine((value) => /^\+?\d{10,15}$/.test(value.replace(/[\s()-]/g, "")), {
+    message: "Informe um WhatsApp válido, com DDD (ex.: (31) 91234-5678)."
+  });
+
 export const volunteerAreas = [
   "Tecnologia e produto",
   "Design e conteúdo",
@@ -52,6 +74,7 @@ export const actorTypes = [
   "investidor",
   "aceleradora",
   "incubadora",
+  "mentor",
   "poder-publico",
   "comunidade"
 ] as const;
@@ -67,6 +90,7 @@ export const actorTypeLabels: Record<(typeof actorTypes)[number], string> = {
   investidor: "Investidor",
   aceleradora: "Aceleradora",
   incubadora: "Incubadora",
+  mentor: "Mentor(a)",
   "poder-publico": "Poder público",
   comunidade: "Comunidade"
 };
@@ -78,22 +102,8 @@ export const actorSchema = z.object({
   neighborhood: z.string().min(2, "Informe o bairro ou região."),
   description: z.string().min(10, "Descreva a organização em uma frase."),
   email: z.string().email("Informe um e-mail válido.").optional().or(z.literal("")),
-  site: z
-    .string()
-    .url("Informe uma URL válida.")
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    )
-    .optional()
-    .or(z.literal("")),
+  site: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  whatsapp: whatsappField.optional().or(z.literal("")),
   lat: z.preprocess(
     (value) => (value === "" || value === null ? undefined : value),
     z.coerce.number().min(-90).max(90).optional()
@@ -111,6 +121,56 @@ export const actorRegisterSchema = actorSchema.extend({
 });
 
 export type ActorRegisterInput = z.infer<typeof actorRegisterSchema>;
+
+export const startupStages = [
+  "Ideação",
+  "Validação / MVP",
+  "Tração",
+  "Escala"
+] as const;
+
+export const startupBusinessModels = ["B2B", "B2C", "B2B2C", "B2G / GovTech", "Marketplace"] as const;
+
+export const startupTechFocus = [
+  "Inteligência Artificial",
+  "IoT / Hardware",
+  "Blockchain / Web3",
+  "Cloud / SaaS",
+  "Big Data / Analytics",
+  "Web / Mobile",
+  "No-code / Low-code"
+] as const;
+
+export const startupNeeds = [
+  "Investimento",
+  "Clientes",
+  "Parceiros",
+  "Programas de aceleração",
+  "Talentos"
+] as const;
+
+export const startupDetailsSchema = z.object({
+  foundedYear: z.string().optional().or(z.literal("")),
+  stage: z.enum(startupStages).optional().or(z.literal("")),
+  businessModel: z.enum(startupBusinessModels).optional().or(z.literal("")),
+  techFocus: z.array(z.enum(startupTechFocus)).optional(),
+  founders: z.string().optional().or(z.literal("")),
+  pitchVideoUrl: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  needs: z.array(z.enum(startupNeeds)).optional()
+});
+
+export type StartupDetails = z.infer<typeof startupDetailsSchema>;
+
+export const institutionDetailsSchema = z.object({
+  courses: z.string().optional().or(z.literal("")),
+  labs: z.string().optional().or(z.literal("")),
+  researchLines: z.string().optional().or(z.literal("")),
+  extensionPrograms: z.string().optional().or(z.literal("")),
+  partnerships: z.string().optional().or(z.literal(""))
+});
+
+export type InstitutionDetails = z.infer<typeof institutionDetailsSchema>;
 
 export const opportunityTypes = [
   "Meetup",
@@ -136,22 +196,7 @@ export const opportunitySchema = z.object({
   audience: z.string().min(3, "Informe o público."),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use o formato AAAA-MM-DD."),
   owner: z.string().min(2, "Informe o responsável."),
-  link: z
-    .string()
-    .url("Informe uma URL válida.")
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    )
-    .optional()
-    .or(z.literal(""))
+  link: httpUrlField("Informe uma URL válida.").optional().or(z.literal(""))
 });
 
 export type OpportunityInput = z.infer<typeof opportunitySchema>;
@@ -169,22 +214,6 @@ export const eventCategories = [
 ] as const;
 
 export const eventModes = ["Presencial", "Online", "Híbrido"] as const;
-
-const httpUrlField = (message: string) =>
-  z
-    .string()
-    .url(message)
-    .refine(
-      (value) => {
-        try {
-          const protocol = new URL(value).protocol;
-          return protocol === "https:" || protocol === "http:";
-        } catch {
-          return false;
-        }
-      },
-      { message: "Use uma URL http(s)." }
-    );
 
 export const eventSchema = z.object({
   title: z.string().min(3, "Informe o nome do evento."),
@@ -214,3 +243,63 @@ export const programApplicationSchema = z.object({
 });
 
 export type ProgramApplicationInput = z.infer<typeof programApplicationSchema>;
+
+export const mentorDetailsSchema = z.object({
+  specialties: z.string().optional().or(z.literal("")),
+  experience: z.string().optional().or(z.literal("")),
+  format: z.enum(eventModes).optional().or(z.literal("")),
+  availability: z.enum(volunteerAvailabilities).optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal("")),
+  supportedProjects: z.string().optional().or(z.literal(""))
+});
+
+export type MentorDetails = z.infer<typeof mentorDetailsSchema>;
+
+export const investorDetailsSchema = z.object({
+  thesis: z.string().optional().or(z.literal("")),
+  stage: z.enum(startupStages).optional().or(z.literal("")),
+  segments: z.string().optional().or(z.literal("")),
+  region: z.string().optional().or(z.literal("")),
+  requirements: z.string().optional().or(z.literal("")),
+  linkedin: httpUrlField("Informe uma URL válida.").optional().or(z.literal(""))
+});
+
+export type InvestorDetails = z.infer<typeof investorDetailsSchema>;
+
+export const spaceUsageTypes = ["Coworking", "Sala de reunião", "Auditório / Evento", "Laboratório"] as const;
+
+export const spaceDetailsSchema = z.object({
+  capacity: z.string().optional().or(z.literal("")),
+  amenities: z.string().optional().or(z.literal("")),
+  usageType: z.enum(spaceUsageTypes).optional().or(z.literal("")),
+  hours: z.string().optional().or(z.literal("")),
+  rules: z.string().optional().or(z.literal(""))
+});
+
+export type SpaceDetails = z.infer<typeof spaceDetailsSchema>;
+
+export const learningTrackIcons = [
+  "Lightbulb",
+  "Presentation",
+  "Megaphone",
+  "Cpu",
+  "Sparkles",
+  "Wallet",
+  "Rocket",
+  "TrendingUp",
+  "Banknote",
+  "Landmark",
+  "Factory",
+  "ShieldCheck"
+] as const;
+
+export const learningTrackSchema = z.object({
+  title: z.string().min(3, "Informe o título da trilha."),
+  description: z.string().min(10, "Descreva a trilha em uma frase."),
+  icon: z.enum(learningTrackIcons, { message: "Escolha um ícone." }),
+  order: z.preprocess((value) => (value === "" || value === null ? undefined : value), z.coerce.number().int().min(0)).default(0),
+  relatedEventCategory: z.enum(eventCategories).optional().or(z.literal("")),
+  relatedOpportunityType: z.enum(opportunityTypes).optional().or(z.literal(""))
+});
+
+export type LearningTrackInput = z.infer<typeof learningTrackSchema>;

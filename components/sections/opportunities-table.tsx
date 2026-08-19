@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Column,
   ColumnDef,
   SortingState,
   flexRender,
@@ -11,12 +12,13 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, ExternalLink, Search, Star } from "lucide-react";
 import { Opportunity } from "@/data/opportunities";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { opportunityTypes } from "@/lib/schemas";
+import { cn } from "@/lib/utils";
 
 async function fetchOpportunities() {
   const response = await fetch("/api/opportunities");
@@ -33,6 +35,29 @@ function formatDate(value: string) {
     year: "numeric",
     timeZone: "UTC"
   }).format(new Date(value));
+}
+
+// Ciclo de 3 estados (sem ordenação -> ascendente -> descendente -> sem ordenação),
+// diferente do toggleSorting padrão do TanStack Table que só alterna asc/desc.
+function cycleSorting(column: Column<Opportunity, unknown>) {
+  const sorted = column.getIsSorted();
+  if (sorted === false) column.toggleSorting(false);
+  else if (sorted === "asc") column.toggleSorting(true);
+  else column.clearSorting();
+}
+
+const typeChipClassName = (active: boolean) =>
+  cn(
+    "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
+    active
+      ? "border-primary/60 bg-primary/15 text-primary hover:bg-primary/25"
+      : "border-border bg-card/60 text-muted-foreground hover:border-muted-foreground/40 hover:bg-muted/60 hover:text-foreground"
+  );
+
+function SortIcon({ sorted }: { sorted: false | "asc" | "desc" }) {
+  if (sorted === "asc") return <ArrowUp className="h-4 w-4" />;
+  if (sorted === "desc") return <ArrowDown className="h-4 w-4" />;
+  return <ArrowUpDown className="h-4 w-4" />;
 }
 
 function StageBadge({ stage }: { stage: string }) {
@@ -64,9 +89,21 @@ function isClosingSoon(date: string) {
   return deadline >= now && deadline - now <= WEEK_IN_MS;
 }
 
-export function OpportunitiesTable({ initialData }: { initialData: Opportunity[] }) {
+export function OpportunitiesTable({
+  initialData,
+  initialType = null
+}: {
+  initialData: Opportunity[];
+  initialType?: string | null;
+}) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string | null>(initialType);
+  // Navegar entre ?tipo=X e ?tipo=Y não remonta a página no App Router, então o
+  // estado inicial do useState ficaria preso no primeiro valor da URL.
+  useEffect(() => {
+    setTypeFilter(initialType);
+  }, [initialType]);
   const { data = initialData, isFetching } = useQuery({
     queryKey: ["opportunities"],
     queryFn: fetchOpportunities,
@@ -75,15 +112,20 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
     staleTime: 0
   });
 
+  const typeFilteredData = useMemo(
+    () => (typeFilter ? data.filter((item) => item.type === typeFilter) : data),
+    [data, typeFilter]
+  );
+
   const columns = useMemo<ColumnDef<Opportunity>[]>(
     () => [
       {
         accessorKey: "title",
         header: ({ column }) => (
-          <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button variant="ghost" size="sm" onClick={() => cycleSorting(column)}
             className="text-muted-foreground hover:text-foreground">
             Oportunidade
-            <ArrowUpDown className="h-4 w-4" />
+            <SortIcon sorted={column.getIsSorted()} />
           </Button>
         ),
         cell: ({ row }) => (
@@ -116,10 +158,10 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
       {
         accessorKey: "date",
         header: ({ column }) => (
-          <Button variant="ghost" size="sm" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          <Button variant="ghost" size="sm" onClick={() => cycleSorting(column)}
             className="text-muted-foreground hover:text-foreground">
             Data
-            <ArrowUpDown className="h-4 w-4" />
+            <SortIcon sorted={column.getIsSorted()} />
           </Button>
         ),
         cell: ({ row }) => (
@@ -160,7 +202,7 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
   );
 
   const table = useReactTable({
-    data,
+    data: typeFilteredData,
     columns,
     state: { sorting, globalFilter },
     onSortingChange: setSorting,
@@ -172,6 +214,27 @@ export function OpportunitiesTable({ initialData }: { initialData: Opportunity[]
 
   return (
     <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filtrar por tipo">
+        <button
+          type="button"
+          onClick={() => setTypeFilter(null)}
+          aria-pressed={typeFilter === null}
+          className={typeChipClassName(typeFilter === null)}
+        >
+          Todos os tipos
+        </button>
+        {opportunityTypes.map((item) => (
+          <button
+            key={item}
+            type="button"
+            onClick={() => setTypeFilter(typeFilter === item ? null : item)}
+            aria-pressed={typeFilter === item}
+            className={typeChipClassName(typeFilter === item)}
+          >
+            {item}
+          </button>
+        ))}
+      </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />

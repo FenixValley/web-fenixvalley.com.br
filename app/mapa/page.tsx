@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { EcosystemMap } from "@/components/map/ecosystem-map";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
@@ -8,6 +10,14 @@ export const metadata: Metadata = {
   description:
     "Mapa interativo de startups, universidades, empresas, hubs e espaços de inovação de Betim."
 };
+
+const shortcuts = [
+  { href: "/startups", label: "Startups" },
+  { href: "/universidades", label: "Universidades" },
+  { href: "/mentores", label: "Mentores" },
+  { href: "/investidores", label: "Investidores" },
+  { href: "/espacos", label: "Espaços" }
+];
 
 export default function MapPage() {
   return (
@@ -27,6 +37,18 @@ export default function MapPage() {
                 busque por bairro e cadastre sua organização.
               </p>
             </div>
+            <nav className="flex flex-wrap items-center gap-3" aria-label="Vitrines por segmento">
+              {shortcuts.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:border-orange-400/60 hover:text-orange-300"
+                >
+                  {item.label}
+                  <ArrowRight className="h-3 w-3" />
+                </Link>
+              ))}
+            </nav>
             <EcosystemMap />
           </div>
         </section>
@@ -35,3 +57,4 @@ export default function MapPage() {
     </>
   );
 }
+
