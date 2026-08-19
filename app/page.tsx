@@ -10,8 +10,12 @@ import { ContentCommunitySection } from "@/components/sections/content-community
 import { JoinSection } from "@/components/sections/join-section";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
+import { todayInBusinessTimeZone } from "@/lib/date";
 
 export default function HomePage() {
+  const today = todayInBusinessTimeZone();
+  const activeOpportunities = opportunities.filter((opportunity) => opportunity.date >= today);
+
   return (
     <>
       <SiteHeader />
@@ -21,7 +25,7 @@ export default function HomePage() {
         <EcosystemSection />
         <ProgramsSection />
         <IndicatorsSection />
-        <OpportunitiesSection opportunities={opportunities} />
+        <OpportunitiesSection opportunities={activeOpportunities} />
         <ContentCommunitySection />
         <FacaParteSection />
         <JoinSection />
