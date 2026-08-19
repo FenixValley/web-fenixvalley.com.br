@@ -2,10 +2,11 @@ import { and, desc, eq, gte } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { opportunities } from "@/db/schema";
 import { getDb } from "@/lib/db";
+import { todayInBusinessTimeZone } from "@/lib/date";
 
 export async function GET() {
-  // Vencidas não aparecem como abertas: só datas de hoje em diante
-  const today = new Date().toISOString().slice(0, 10);
+  // Vencidas não aparecem como abertas: só datas de hoje em diante (fuso de Betim)
+  const today = todayInBusinessTimeZone();
   const rows = await getDb()
     .select()
     .from(opportunities)

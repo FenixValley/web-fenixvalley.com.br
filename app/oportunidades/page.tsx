@@ -4,6 +4,7 @@ import { OpportunitiesSection } from "@/components/sections/opportunities-sectio
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
 import { opportunityTypes } from "@/lib/schemas";
+import { todayInBusinessTimeZone } from "@/lib/date";
 
 export const metadata: Metadata = {
   title: "Oportunidades | Fênix Valley",
@@ -18,12 +19,14 @@ export default async function OpportunitiesPage({
 }) {
   const { tipo } = await searchParams;
   const initialType = opportunityTypes.find((type) => type === tipo) ?? null;
+  const today = todayInBusinessTimeZone();
+  const activeOpportunities = opportunities.filter((opportunity) => opportunity.date >= today);
 
   return (
     <>
       <SiteHeader />
       <main>
-        <OpportunitiesSection opportunities={opportunities} heading="h1" initialType={initialType} />
+        <OpportunitiesSection opportunities={activeOpportunities} heading="h1" initialType={initialType} />
       </main>
       <SiteFooter />
     </>

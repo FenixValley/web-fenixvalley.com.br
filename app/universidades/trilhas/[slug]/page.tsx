@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { and, eq, gte } from "drizzle-orm";
+import { and, eq, gte, isNotNull } from "drizzle-orm";
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,7 +50,8 @@ export default async function LearningTrackPage({ params }: { params: Promise<{ 
           and(
             eq(events.status, "approved"),
             eq(events.category, track.relatedEventCategory),
-            gte(events.date, today)
+            gte(events.date, today),
+            isNotNull(events.slug)
           )
         )
         .orderBy(events.date)

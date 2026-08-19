@@ -1,6 +1,6 @@
 ﻿import type { Metadata } from "next";
 import Link from "next/link";
-import { and, eq, gte } from "drizzle-orm";
+import { and, eq, gte, isNotNull } from "drizzle-orm";
 import { ArrowRight, CalendarDays, Clock, MapPin, Plus } from "lucide-react";
 import { events } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
@@ -52,7 +52,7 @@ export default async function EventsPage({
   const mode = eventModes.find((m) => m === modalidade) ?? null;
 
   const today = todayInBusinessTimeZone();
-  const conditions = [eq(events.status, "approved"), gte(events.date, today)];
+  const conditions = [eq(events.status, "approved"), gte(events.date, today), isNotNull(events.slug)];
   if (category) conditions.push(eq(events.category, category));
   if (mode) conditions.push(eq(events.mode, mode));
 

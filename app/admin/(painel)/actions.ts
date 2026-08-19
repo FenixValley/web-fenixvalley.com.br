@@ -322,8 +322,10 @@ export async function upsertLearningTrack(
       .returning({ id: learningTracks.id });
     await logAudit(adminEmail, "create", "learning-track", created?.id ?? null, data.title);
   } else {
-    await db.update(learningTracks).set(data).where(eq(learningTracks.id, id));
-    await logAudit(adminEmail, "update", "learning-track", id, data.title);
+    await db.batch([
+      db.update(learningTracks).set(data).where(eq(learningTracks.id, id)),
+      auditEntry(db, adminEmail, "update", "learning-track", id, data.title)
+    ]);
   }
   revalidatePath("/admin/trilhas");
   revalidatePath("/universidades");
