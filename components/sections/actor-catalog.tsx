@@ -8,7 +8,7 @@ import { ActorRegisterForm } from "@/components/map/actor-register-form";
 import type { MapActor } from "@/components/map/map-canvas";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { parseActorDetails, type ActorDetails } from "@/lib/actor-details";
 import { actorTypeLabels } from "@/lib/schemas";
@@ -177,10 +177,10 @@ export function ActorCatalog({
               </DialogTrigger>
               <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
                 <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
-                <p className="text-sm text-muted-foreground">
+                <DialogDescription>
                   Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As respostas
                   ajudam a curadoria a conectar os atores da região e a incluir seu perfil nesta vitrine.
-                </p>
+                </DialogDescription>
                 <ActorRegisterForm defaultRole={registerDefaultRole} />
               </DialogContent>
             </Dialog>

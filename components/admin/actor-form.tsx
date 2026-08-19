@@ -55,11 +55,19 @@ export function ActorForm({
 }) {
   const [state, formAction, isPending] = useActionState<FormState, FormData>(action, {});
   const [type, setType] = useState(initialValues?.type ?? "");
-  const details = initialValues?.details as StartupDetails | undefined;
-  const institutionDetails = initialValues?.details as InstitutionDetails | undefined;
-  const mentorDetails = initialValues?.details as MentorDetails | undefined;
-  const investorDetails = initialValues?.details as InvestorDetails | undefined;
-  const spaceDetails = initialValues?.details as SpaceDetails | undefined;
+  // `initialValues.details` foi parseado com o tipo persistido, então só vale para ele.
+  // Sem esse recorte, trocar o tipo no formulário faria o novo fieldset herdar valores de
+  // chaves homônimas de outro schema (`stage` existe em startup e investidor; `linkedin`,
+  // em três deles) e o submit persistiria esse dado alheio.
+  const savedType = initialValues?.type;
+  const detailsIf = (types: string[]) =>
+    savedType && types.includes(savedType) ? initialValues?.details : undefined;
+
+  const startupDetails = detailsIf(["startup"]) as StartupDetails | undefined;
+  const institutionDetails = detailsIf(INSTITUTION_TYPES) as InstitutionDetails | undefined;
+  const mentorDetails = detailsIf(["mentor"]) as MentorDetails | undefined;
+  const investorDetails = detailsIf(INVESTOR_TYPES) as InvestorDetails | undefined;
+  const spaceDetails = detailsIf(SPACE_TYPES) as SpaceDetails | undefined;
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
@@ -143,11 +151,11 @@ export function ActorForm({
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block space-y-2 text-sm font-semibold text-slate-200">
               Ano de fundação
-              <Input name="foundedYear" defaultValue={details?.foundedYear ?? ""} />
+              <Input name="foundedYear" defaultValue={startupDetails?.foundedYear ?? ""} />
             </label>
             <label className="block space-y-2 text-sm font-semibold text-slate-200">
               Estágio
-              <select name="stage" defaultValue={details?.stage ?? ""} className={selectClassName}>
+              <select name="stage" defaultValue={startupDetails?.stage ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
                 {startupStages.map((option) => (
                   <option key={option} value={option}>
@@ -159,7 +167,7 @@ export function ActorForm({
           </div>
           <label className="block space-y-2 text-sm font-semibold text-slate-200">
             Modelo de negócio
-            <select name="businessModel" defaultValue={details?.businessModel ?? ""} className={selectClassName}>
+            <select name="businessModel" defaultValue={startupDetails?.businessModel ?? ""} className={selectClassName}>
               <option value="">Não informado</option>
               {startupBusinessModels.map((option) => (
                 <option key={option} value={option}>
@@ -168,20 +176,20 @@ export function ActorForm({
               ))}
             </select>
           </label>
-          <CheckboxGroup label="Foco tecnológico" name="techFocus" options={startupTechFocus} defaultValues={details?.techFocus} />
-          <CheckboxGroup label="Principais necessidades" name="needs" options={startupNeeds} defaultValues={details?.needs} />
+          <CheckboxGroup label="Foco tecnológico" name="techFocus" options={startupTechFocus} defaultValues={startupDetails?.techFocus} />
+          <CheckboxGroup label="Principais necessidades" name="needs" options={startupNeeds} defaultValues={startupDetails?.needs} />
           <label className="block space-y-2 text-sm font-semibold text-slate-200">
             Fundadores
-            <Textarea name="founders" placeholder="Um por linha" defaultValue={details?.founders ?? ""} />
+            <Textarea name="founders" placeholder="Um por linha" defaultValue={startupDetails?.founders ?? ""} />
           </label>
           <div className="grid gap-4 md:grid-cols-2">
             <label className="block space-y-2 text-sm font-semibold text-slate-200">
               Vídeo do pitch (opcional)
-              <Input name="pitchVideoUrl" type="url" placeholder="https://" defaultValue={details?.pitchVideoUrl ?? ""} />
+              <Input name="pitchVideoUrl" type="url" placeholder="https://" defaultValue={startupDetails?.pitchVideoUrl ?? ""} />
             </label>
             <label className="block space-y-2 text-sm font-semibold text-slate-200">
               LinkedIn (opcional)
-              <Input name="linkedin" type="url" placeholder="https://" defaultValue={details?.linkedin ?? ""} />
+              <Input name="linkedin" type="url" placeholder="https://" defaultValue={startupDetails?.linkedin ?? ""} />
             </label>
           </div>
         </fieldset>

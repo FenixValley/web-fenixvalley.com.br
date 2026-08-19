@@ -5,7 +5,7 @@ import { ArrowRight, CalendarDays, Clock, MapPin, Plus } from "lucide-react";
 import { events } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { EventSubmitForm } from "@/components/sections/event-submit-form";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
@@ -99,9 +99,9 @@ export default async function EventsPage({
                 </DialogTrigger>
                 <DialogContent className="max-h-[85vh] overflow-y-auto p-6">
                   <DialogTitle>Divulgue seu evento</DialogTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <DialogDescription>
                     Eventos alinhados ao propósito do movimento entram na agenda após curadoria.
-                  </p>
+                  </DialogDescription>
                   <EventSubmitForm />
                 </DialogContent>
               </Dialog>
