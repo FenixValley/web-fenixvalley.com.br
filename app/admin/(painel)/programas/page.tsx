@@ -109,7 +109,7 @@ export default async function AdminProgramsPage() {
                     </TableCell>
                     <TableCell className="max-w-64 text-sm text-slate-300">{application.motivation}</TableCell>
                     <TableCell>
-                      <StatusBadge status={application.status} />
+                      <StatusBadge status={application.status} gender="f" />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">

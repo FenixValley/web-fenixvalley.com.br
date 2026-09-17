@@ -121,22 +121,22 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
                   </span>
                 ) : null}
               </div>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
+              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-foreground sm:text-4xl">
                 {actor.name}
               </h1>
-              <p className="flex items-center gap-2 text-sm text-slate-400">
-                <MapPin className="h-4 w-4 text-emerald-300" />
+              <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin className="h-4 w-4 text-emerald-400" />
                 {actor.neighborhood}, Betim · {actor.segment}
               </p>
             </div>
 
             <div className="surface-panel rounded-lg p-6">
-              <p className="text-base leading-8 text-slate-300">{actor.description}</p>
+              <p className="text-base leading-8 text-muted-foreground">{actor.description}</p>
             </div>
 
             {details ? (
               <div className="surface-panel space-y-5 rounded-lg p-6">
-                <h2 className="font-[var(--font-space)] text-lg font-bold text-white">Ficha da startup</h2>
+                <h2 className="font-[var(--font-space)] text-lg font-bold text-foreground">Ficha da startup</h2>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {details.foundedYear ? (
                     <FactItem label="Fundação" value={details.foundedYear} />
@@ -342,8 +342,8 @@ export default async function ActorProfilePage({ params }: { params: Promise<{ s
 function FactItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="space-y-1">
-      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
-      <p className="text-sm font-semibold text-slate-200">{value}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{label}</p>
+      <p className="text-sm font-semibold text-foreground">{value}</p>
     </div>
   );
 }
@@ -356,8 +356,8 @@ function LineList({ label, value }: { label: string; value: string }) {
   if (items.length === 0) return null;
   return (
     <div className="space-y-1.5">
-      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
-      <ul className="space-y-1 text-sm leading-6 text-slate-300">
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{label}</p>
+      <ul className="space-y-1 text-sm leading-6 text-muted-foreground">
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}
@@ -369,10 +369,10 @@ function LineList({ label, value }: { label: string; value: string }) {
 function TagList({ label, items }: { label: string; items: string[] }) {
   return (
     <div className="space-y-2">
-      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground">{label}</p>
       <div className="flex flex-wrap gap-2">
         {items.map((item) => (
-          <Badge key={item} variant="outline" className="border-white/10 bg-white/5 text-slate-300">
+          <Badge key={item} variant="outline" className="border-border bg-card text-muted-foreground">
             {item}
           </Badge>
         ))}

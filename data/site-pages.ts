@@ -63,48 +63,6 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "conteudos",
-    title: "Conteúdos",
-    kicker: "Aprender com quem constrói",
-    description:
-      "Notícias, guias, trilhas e histórias dão continuidade à comunidade entre eventos, programas e conexões presenciais.",
-    sections: [
-      {
-        title: "Trilhas de conteúdo",
-        body: "Empreendedorismo na prática, tecnologia aplicada e histórias do ecossistema: as trilhas organizam o conteúdo para cada momento da jornada."
-      },
-      {
-        title: "Em construção",
-        body: "O blog com notícias, entrevistas, cases e materiais educativos está no roadmap. Por enquanto, as atualizações circulam na home e na comunidade."
-      }
-    ],
-    ctas: [
-      { label: "Ver atualizações na home", href: "/#conteudo" },
-      { label: "Entrar na comunidade", href: whatsappUrl, external: true }
-    ]
-  },
-  {
-    slug: "comunidade",
-    title: "Comunidade",
-    kicker: "Pessoas antes de tudo",
-    description:
-      "A comunidade Fênix Valley reúne quem acredita que Betim pode construir uma nova economia baseada em tecnologia, inovação e colaboração.",
-    sections: [
-      {
-        title: "Código de colaboração",
-        body: "Respeito, foco em Betim e divulgações alinhadas ao propósito do movimento. Spam, conteúdo ofensivo e autopromoção sem contexto ficam de fora."
-      },
-      {
-        title: "Onde estamos",
-        body: "O ponto de encontro digital é o grupo oficial no WhatsApp; os encontros presenciais acontecem nos espaços parceiros e aparecem na agenda."
-      }
-    ],
-    ctas: [
-      { label: "Entrar no grupo do WhatsApp", href: whatsappUrl, external: true },
-      { label: "Ser voluntário(a)", href: "/voluntarie-se" }
-    ]
-  },
-  {
     slug: "termos",
     title: "Termos de uso",
     kicker: "Regras do portal",

@@ -27,3 +27,7 @@ pnpm-debug.log*
 
 # Cloudflare local secrets
 .dev.vars
+
+# Build info
+*.tsbuildinfo
+.claude/

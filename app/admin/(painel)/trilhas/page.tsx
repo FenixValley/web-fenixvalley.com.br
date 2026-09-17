@@ -46,7 +46,7 @@ export default async function AdminLearningTracksPage() {
                   </TableCell>
                   <TableCell className="text-sm text-slate-300">{track.order}</TableCell>
                   <TableCell>
-                    <StatusBadge status={track.status} />
+                    <StatusBadge status={track.status} gender="f" />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">

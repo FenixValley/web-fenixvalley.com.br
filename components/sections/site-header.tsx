@@ -15,7 +15,9 @@ const leftNav = [
 ];
 
 const rightNav = [
+  { href: "/conteudos", label: "Conteúdos" },
   { href: "/eventos", label: "Eventos" },
+  { href: "/membro", label: "Área do Membro" },
   { href: "/faca-parte", label: "Faça Parte", highlight: true }
 ];
 
@@ -144,9 +146,27 @@ const searchItems: SearchItem[] = [
   },
   {
     title: "Faça Parte (Formulário)",
-    description: "Inscreva seu interesse no Google Forms para participar da curadoria.",
+    description: "Inscreva seu interesse no formulário para participar da curadoria.",
     category: "Ações",
     href: "/faca-parte"
+  },
+  {
+    title: "Conteúdos e Notícias",
+    description: "Artigos, guias práticos, cases de sucesso e editais do ecossistema.",
+    category: "Conteúdos",
+    href: "/conteudos"
+  },
+  {
+    title: "Comunidade Fênix Valley",
+    description: "Canais oficiais, encontros e regras de convivência para membros.",
+    category: "Comunidade",
+    href: "/comunidade"
+  },
+  {
+    title: "Área do Membro",
+    description: "Acesse seu perfil, itens salvos e acompanhe inscrições e candidaturas.",
+    category: "Membro",
+    href: "/membro"
   },
   {
     title: "Comunidade no WhatsApp",
@@ -157,7 +177,6 @@ const searchItems: SearchItem[] = [
   }
 ];
 
-
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
@@ -165,6 +184,58 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const [liveResults, setLiveResults] = useState<{
+    actors: { id: number; name: string; segment: string; slug: string }[];
+    opportunities: { id: number; title: string; type: string; link: string | null }[];
+    events: { id: number; title: string; category: string; slug: string }[];
+    challenges: { id: number; title: string; company: string; slug: string }[];
+    partners: { id: number; name: string; category: string; slug: string }[];
+    contents: { slug: string; title: string; category: string; summary: string }[];
+  }>({
+    actors: [],
+    opportunities: [],
+    events: [],
+    challenges: [],
+    partners: [],
+    contents: []
+  });
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    const q = searchVal.trim();
+    if (!q || q.length < 2) {
+      setLiveResults({
+        actors: [],
+        opportunities: [],
+        events: [],
+        challenges: [],
+        partners: [],
+        contents: []
+      });
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        if (res.ok) {
+          const data = (await res.json()) as { results?: typeof liveResults };
+          if (data.results) {
+            setLiveResults(data.results);
+          }
+        }
+      } catch {
+        // Fallback
+      } finally {
+        setIsSearching(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [searchVal]);
 
   const toggleSearch = useCallback(() => {
     setSearchOpen((prev) => !prev);
@@ -326,40 +397,160 @@ export function SiteHeader() {
                   />
 
                   {searchVal.trim() && (
-                    <div className="absolute left-0 right-0 mt-3 rounded-2xl border border-white/10 bg-slate-950/98 p-2.5 shadow-2xl backdrop-blur-2xl max-h-[350px] overflow-y-auto z-50 text-white">
-                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                        Páginas e atalhos encontrados
-                      </div>
-                      <div className="mt-1.5 space-y-1">
-                        {filteredItems.length > 0 ? (
-                          filteredItems.map((item, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleItemClick(item)}
-                              className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors hover:bg-white/5 border border-transparent hover:border-white/5"
-                            >
-                              <div className="flex-1 pr-4">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-semibold text-slate-200 text-sm">{item.title}</span>
-                                  <span className="rounded bg-orange-950/50 text-orange-400 border border-orange-500/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide">
-                                    {item.category}
-                                  </span>
+                    <div className="absolute left-0 right-0 mt-3 rounded-2xl border border-white/10 bg-slate-950/98 p-2.5 shadow-2xl backdrop-blur-2xl max-h-[400px] overflow-y-auto z-50 text-white space-y-3">
+                      {/* Resultados da busca viva no ecossistema */}
+                      {liveResults.actors.length > 0 && (
+                        <div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                            Startups & Organizações
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            {liveResults.actors.map((actor) => (
+                              <button
+                                key={`actor-${actor.id}`}
+                                onClick={() => {
+                                  setSearchOpen(false);
+                                  setSearchVal("");
+                                  router.push(actor.slug ? `/atores/${actor.slug}` : "/mapa");
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
+                              >
+                                <div>
+                                  <p className="font-semibold text-sm text-slate-200">{actor.name}</p>
+                                  <p className="text-xs text-slate-400">{actor.segment}</p>
                                 </div>
-                                <p className="mt-0.5 text-xs text-slate-400 line-clamp-1">{item.description}</p>
-                              </div>
-                              {item.target === "_blank" ? (
-                                <ExternalLink className="h-4 w-4 text-slate-500 shrink-0" />
-                              ) : (
                                 <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              )}
-                            </button>
-                          ))
-                        ) : (
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {liveResults.events.length > 0 && (
+                        <div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-400">
+                            Eventos
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            {liveResults.events.map((event) => (
+                              <button
+                                key={`event-${event.id}`}
+                                onClick={() => {
+                                  setSearchOpen(false);
+                                  setSearchVal("");
+                                  router.push(`/eventos/${event.slug}`);
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
+                              >
+                                <div>
+                                  <p className="font-semibold text-sm text-slate-200">{event.title}</p>
+                                  <p className="text-xs text-slate-400">{event.category}</p>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {liveResults.challenges.length > 0 && (
+                        <div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400">
+                            Desafios de Inovação
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            {liveResults.challenges.map((challenge) => (
+                              <button
+                                key={`challenge-${challenge.id}`}
+                                onClick={() => {
+                                  setSearchOpen(false);
+                                  setSearchVal("");
+                                  router.push(`/desafios/${challenge.slug}`);
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
+                              >
+                                <div>
+                                  <p className="font-semibold text-sm text-slate-200">{challenge.title}</p>
+                                  <p className="text-xs text-slate-400">{challenge.company}</p>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {liveResults.contents.length > 0 && (
+                        <div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                            Conteúdos & Artigos
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            {liveResults.contents.map((content) => (
+                              <button
+                                key={`content-${content.slug}`}
+                                onClick={() => {
+                                  setSearchOpen(false);
+                                  setSearchVal("");
+                                  router.push(`/conteudos/${content.slug}`);
+                                }}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
+                              >
+                                <div>
+                                  <p className="font-semibold text-sm text-slate-200">{content.title}</p>
+                                  <p className="text-xs text-slate-400">{content.category}</p>
+                                </div>
+                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Páginas e atalhos de navegação */}
+                      {filteredItems.length > 0 && (
+                        <div>
+                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                            Páginas e atalhos
+                          </div>
+                          <div className="mt-1 space-y-1">
+                            {filteredItems.map((item, index) => (
+                              <button
+                                key={index}
+                                onClick={() => handleItemClick(item)}
+                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
+                              >
+                                <div className="flex-1 pr-4">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-semibold text-slate-200 text-sm">{item.title}</span>
+                                    <span className="rounded bg-orange-950/50 text-orange-400 border border-orange-500/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide">
+                                      {item.category}
+                                    </span>
+                                  </div>
+                                  <p className="mt-0.5 text-xs text-slate-400 line-clamp-1">{item.description}</p>
+                                </div>
+                                {item.target === "_blank" ? (
+                                  <ExternalLink className="h-4 w-4 text-slate-500 shrink-0" />
+                                ) : (
+                                  <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {filteredItems.length === 0 &&
+                        liveResults.actors.length === 0 &&
+                        liveResults.events.length === 0 &&
+                        liveResults.challenges.length === 0 &&
+                        liveResults.contents.length === 0 && (
                           <div className="px-3 py-8 text-center text-sm text-slate-400 font-medium">
-                            Nenhum recurso ou atalho encontrado para &ldquo;{searchVal}&rdquo;
+                            {isSearching
+                              ? "Buscando no ecossistema..."
+                              : `Nenhum resultado encontrado para "${searchVal}"`}
                           </div>
                         )}
-                      </div>
                     </div>
                   )}
                 </div>

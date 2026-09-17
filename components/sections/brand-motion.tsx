@@ -43,7 +43,7 @@ export function BrandMotion() {
         className="absolute inset-[6%] rounded-full border-2 border-dashed border-orange-300/70"
       />
       <motion.div
-        initial={prefersReducedMotion ? false : { y: 18, opacity: 0 }}
+        initial={{ y: 18, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.65, ease: "easeOut" }}
         className="absolute left-8 top-12"
@@ -51,7 +51,7 @@ export function BrandMotion() {
         <Badge variant="secondary" className="border border-white/10">Betim Tech</Badge>
       </motion.div>
       <motion.div
-        initial={prefersReducedMotion ? false : { y: -12, opacity: 0 }}
+        initial={{ y: -12, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.18, duration: 0.65, ease: "easeOut" }}
         className="absolute bottom-16 right-4"
@@ -59,7 +59,7 @@ export function BrandMotion() {
         <Badge variant="accent" className="border border-white/10">Nova economia</Badge>
       </motion.div>
       <motion.div
-        initial={prefersReducedMotion ? false : { scale: 0.92, opacity: 0 }}
+        initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.08, duration: 0.75, ease: "easeOut" }}
         className="absolute inset-0 flex items-center justify-center"

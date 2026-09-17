@@ -36,8 +36,8 @@ const chipClassName = (active: boolean) =>
   cn(
     "cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
     active
-      ? "border-orange-400/60 bg-orange-500/15 text-orange-300 hover:bg-orange-500/25"
-      : "border-white/10 bg-white/5 text-slate-300 hover:border-white/20 hover:bg-white/10 hover:text-white"
+      ? "border-primary/60 bg-primary/15 text-primary hover:bg-primary/25"
+      : "border-border bg-card/60 text-muted-foreground hover:border-border hover:bg-muted hover:text-foreground"
   );
 
 function getFacetValue(details: ActorDetails | null | undefined, key: DetailFacetKey): string | undefined {
@@ -227,15 +227,15 @@ export function ActorCatalog({
       ) : null}
 
       {isPending ? (
-        <p className="surface-panel max-w-2xl rounded-lg p-8 text-sm text-slate-300">Carregando...</p>
+        <p className="surface-panel max-w-2xl rounded-lg p-8 text-sm text-muted-foreground">Carregando...</p>
       ) : isError ? (
-        <p className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-4 text-sm text-rose-300">
+        <p className="rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
           Não foi possível carregar os dados agora. Tente novamente em instantes.
         </p>
       ) : filtered.length === 0 ? (
         <div className="surface-panel max-w-2xl rounded-lg p-8">
-          <h2 className="font-[var(--font-space)] text-xl font-bold text-white">{emptyTitle}</h2>
-          <p className="mt-3 text-sm leading-7 text-slate-300">{emptyDescription}</p>
+          <h2 className="font-[var(--font-space)] text-xl font-bold text-foreground">{emptyTitle}</h2>
+          <p className="mt-3 text-sm leading-7 text-muted-foreground">{emptyDescription}</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -244,25 +244,25 @@ export function ActorCatalog({
             const content = (
               <>
                 <div className="mb-3 flex items-center justify-between gap-2">
-                  <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                  <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">
                     {actorTypeLabels[actor.type as keyof typeof actorTypeLabels] ?? actor.type}
                   </Badge>
                   {actor.featured ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-300">
-                      <Star className="h-3.5 w-3.5 fill-amber-300" />
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-400">
+                      <Star className="h-3.5 w-3.5 fill-amber-400" />
                       {actor.highlightLabel ?? "Destaque"}
                     </span>
                   ) : null}
                 </div>
-                <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{actor.name}</h3>
-                <p className="mt-1 text-xs text-slate-400">{actor.segment}</p>
-                <p className="mt-2 flex-1 text-sm leading-6 text-slate-300 line-clamp-3">{actor.description}</p>
-                <p className="mt-4 flex items-center gap-1.5 text-xs text-slate-400">
-                  <MapPin className="h-3.5 w-3.5 text-emerald-300" />
+                <h3 className="font-[var(--font-space)] text-lg font-bold text-foreground">{actor.name}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{actor.segment}</p>
+                <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground line-clamp-3">{actor.description}</p>
+                <p className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-400" />
                   {actor.neighborhood}
                 </p>
                 {actor.slug ? (
-                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
+                  <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary group-hover:underline">
                     Ver perfil
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>

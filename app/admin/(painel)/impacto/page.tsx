@@ -163,7 +163,7 @@ export default async function AdminImpactPage() {
                       {impactStoryTypeLabels[story.type as keyof typeof impactStoryTypeLabels] ?? story.type}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={story.status} />
+                      <StatusBadge status={story.status} gender="f" />
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

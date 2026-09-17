@@ -19,7 +19,7 @@ export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main>
+      <main id="main-content" tabIndex={-1} className="outline-none">
         <HeroSection />
         <AudienceSection />
         <EcosystemSection />

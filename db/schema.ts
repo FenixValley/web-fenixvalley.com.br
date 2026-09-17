@@ -226,3 +226,20 @@ export const impactStories = sqliteTable("impact_stories", {
   status: text("status").notNull().default("draft"),
   createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
 });
+
+// --- Issue #15: Área do membro e favoritos -----------------------------------
+
+/** Itens favoritados e salvos pelos membros (oportunidades, eventos, desafios). */
+export const userFavorites = sqliteTable("user_favorites", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  itemType: text("item_type").notNull(), // "opportunity" | "event" | "challenge"
+  itemId: text("item_id").notNull(),
+  title: text("title").notNull(),
+  subtitle: text("subtitle"),
+  link: text("link").notNull(),
+  createdAt: text("created_at").notNull().default(sql`(datetime('now'))`)
+});
+

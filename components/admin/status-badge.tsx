@@ -7,21 +7,38 @@ const styles: Record<string, string> = {
   draft: "bg-slate-500/15 text-slate-400 border-slate-500/30"
 };
 
-const labels: Record<string, string> = {
+const labelsM: Record<string, string> = {
   pending: "Pendente",
   approved: "Aprovado",
   rejected: "Rejeitado",
+  published: "Publicado",
+  archived: "Arquivado",
+  draft: "Rascunho"
+};
+
+const labelsF: Record<string, string> = {
+  pending: "Pendente",
+  approved: "Aprovada",
+  rejected: "Rejeitada",
   published: "Publicada",
   archived: "Arquivada",
   draft: "Rascunho"
 };
 
-export function StatusBadge({ status }: { status: string }) {
+export function StatusBadge({
+  status,
+  gender = "m"
+}: {
+  status: string;
+  gender?: "m" | "f";
+}) {
+  const labelMap = gender === "f" ? labelsF : labelsM;
   return (
     <span
       className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${styles[status] ?? styles.archived}`}
     >
-      {labels[status] ?? status}
+      {labelMap[status] ?? status}
     </span>
   );
 }
+

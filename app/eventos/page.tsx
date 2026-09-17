@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { and, eq, gte, isNotNull } from "drizzle-orm";
 import { ArrowRight, CalendarDays, Clock, MapPin, Plus } from "lucide-react";
@@ -82,11 +82,11 @@ export default async function EventsPage({
           <div className="section-shell relative space-y-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="max-w-3xl space-y-4">
-                <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Agenda</p>
-                <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-primary">Agenda</p>
+                <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-foreground sm:text-4xl">
                   Eventos do ecossistema
                 </h1>
-                <p className="text-lg leading-8 text-slate-300">
+                <p className="text-lg leading-8 text-muted-foreground">
                   Meetups, palestras, workshops, hackathons e demo days de Betim e região.
                 </p>
               </div>
@@ -114,8 +114,8 @@ export default async function EventsPage({
                   className={cn(
                     "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
                     category === null
-                      ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                      : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                      ? "border-primary/60 bg-primary/15 text-primary"
+                      : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
                   )}
                 >
                   Todas as categorias
@@ -127,8 +127,8 @@ export default async function EventsPage({
                     className={cn(
                       "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
                       category === item
-                        ? "border-orange-400/60 bg-orange-500/15 text-orange-300"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                        ? "border-primary/60 bg-primary/15 text-primary"
+                        : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {item}
@@ -143,8 +143,8 @@ export default async function EventsPage({
                     className={cn(
                       "rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors",
                       mode === item
-                        ? "border-sky-400/60 bg-sky-500/15 text-sky-300"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:text-white"
+                        ? "border-primary/60 bg-primary/15 text-primary"
+                        : "border-border bg-card/60 text-muted-foreground hover:text-foreground"
                     )}
                   >
                     {item}
@@ -155,10 +155,10 @@ export default async function EventsPage({
 
             {rows.length === 0 ? (
               <div className="surface-panel max-w-2xl rounded-lg p-8">
-                <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
+                <h2 className="font-[var(--font-space)] text-xl font-bold text-foreground">
                   Nenhum evento aprovado na agenda{category || mode ? " com esses filtros" : " por enquanto"}.
                 </h2>
-                <p className="mt-3 text-sm leading-7 text-slate-300">
+                <p className="mt-3 text-sm leading-7 text-muted-foreground">
                   Os encontros são divulgados aqui e na comunidade do WhatsApp assim que confirmados.
                   Organiza algo alinhado ao movimento? Use o botão “Divulgar evento”.
                 </p>
@@ -167,7 +167,7 @@ export default async function EventsPage({
               <div className="space-y-10">
                 {[...byMonth.entries()].map(([month, monthEvents]) => (
                   <div key={month} className="space-y-4">
-                    <h2 className="font-[var(--font-space)] text-xl font-bold capitalize text-white">{month}</h2>
+                    <h2 className="font-[var(--font-space)] text-xl font-bold capitalize text-foreground">{month}</h2>
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                       {monthEvents.map((event) => (
                         <Link
@@ -176,28 +176,28 @@ export default async function EventsPage({
                           className="surface-panel group flex flex-col rounded-lg p-5 transition-transform hover:-translate-y-1"
                         >
                           <div className="mb-3 flex items-center justify-between gap-2">
-                            <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                            <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">
                               {event.category}
                             </Badge>
-                            <span className="text-xs font-semibold text-sky-300">{event.mode}</span>
+                            <span className="text-xs font-semibold text-primary">{event.mode}</span>
                           </div>
-                          <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{event.title}</h3>
-                          <p className="mt-2 flex-1 text-sm leading-6 text-slate-300 line-clamp-3">
+                          <h3 className="font-[var(--font-space)] text-lg font-bold text-foreground">{event.title}</h3>
+                          <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground line-clamp-3">
                             {event.description}
                           </p>
-                          <div className="mt-4 space-y-1 text-xs text-slate-400">
+                          <div className="mt-4 space-y-1 text-xs text-muted-foreground">
                             <p className="flex items-center gap-1.5">
-                              <CalendarDays className="h-3.5 w-3.5 text-orange-300" />
+                              <CalendarDays className="h-3.5 w-3.5 text-primary" />
                               {formatDay(event.date)}
-                              <Clock className="ml-2 h-3.5 w-3.5 text-sky-300" />
+                              <Clock className="ml-2 h-3.5 w-3.5 text-muted-foreground" />
                               {event.time}
                             </p>
                             <p className="flex items-center gap-1.5">
-                              <MapPin className="h-3.5 w-3.5 text-emerald-300" />
+                              <MapPin className="h-3.5 w-3.5 text-emerald-400" />
                               <span className="truncate">{event.location}</span>
                             </p>
                           </div>
-                          <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 group-hover:text-orange-200">
+                          <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-primary group-hover:underline">
                             Ver evento
                             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                           </span>

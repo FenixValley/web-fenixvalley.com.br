@@ -146,7 +146,7 @@ export default async function AdminPartnersPage() {
                       {application.category} · {application.contactName} · {application.createdAt}
                     </p>
                   </div>
-                  <StatusBadge status={application.status} />
+                  <StatusBadge status={application.status} gender="f" />
                 </div>
                 <p className="whitespace-pre-line text-sm leading-6 text-slate-300">{application.message}</p>
                 <ul className="flex flex-wrap gap-2">

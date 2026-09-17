@@ -1,12 +1,38 @@
 # Handoff — Fênix Valley Portal
 
-**Data:** 2026-06-09
-**Branch ativo:** `develop`
+**Data:** 2026-09-17
+**Branch ativo:** `main`
 **Repositório:** https://github.com/FenixValley/web-fenixvalley.com.br
 
 ---
 
-## O que foi feito nesta sessão
+## Sessão de Finalização — Fechamento das 7 Issues do GitHub
+
+Todas as 7 issues pendentes foram implementadas e verificadas com sucesso:
+
+1. **Issue #28 (Bug):** `yarn seed:admin falha no Windows (spawnSync yarn ENOENT)`
+   - Corrigido em `scripts/seed-admin.mjs` invocando `yarn.cmd` dinamicamente quando `process.platform === "win32"`.
+2. **Issue #29 (Bug):** `StatusBadge usa rótulos no feminino para entidades masculinas`
+   - Adicionado parâmetro `gender?: "m" | "f"` em `StatusBadge` com vocabulário contextual ("Publicado / Publicada", "Rascunho", "Arquivado / Arquivada") nos módulos do admin.
+3. **Issue #30 (Bug):** `Erro de hidratação na home (BrandMotion)`
+   - Eliminado descasamento entre SSR e cliente removendo a ramificação ternária no render e centralizando a preferência do usuário no `<MotionConfig reducedMotion="user">` no `Providers`.
+4. **Issue #31 (Enhancement):** `Acessibilidade: widget VLibras, skip link e reduced-motion consistente`
+   - Integrado o widget oficial do VLibras via `components/accessibility/vlibras.tsx` (SSR safe).
+   - Adicionado Skip Link acessível para `#main-content` no `app/layout.tsx`.
+   - Adicionado suporte padronizado para `@media (prefers-reduced-motion: reduce)` e foco visível `:focus-visible` em `app/globals.css`.
+5. **Issue #26 (Enhancement):** `Migrar cores hardcoded para os tokens do design system`
+   - Substituição sistemática de cores literais Tailwind (`text-white`, `text-slate-*`, `border-white/*`, etc.) por variáveis semânticas do tema (`text-foreground`, `text-muted-foreground`, `border-border`, `bg-card`, etc.) em páginas e componentes da aplicação.
+6. **Issue #16 (Epic):** `[Epic] Conteúdos, newsletter e comunidade`
+   - Catálogo de artigos, editais e cases em `/conteudos` com filtros por tipo e pesquisa integrada.
+   - Páginas de leitura dinâmica em `/conteudos/[slug]` com tempo estimado de leitura, SEO/OpenGraph e botões de compartilhamento social (WhatsApp, LinkedIn, X, copiar link).
+   - Página de comunidade oficial em `/comunidade` com link direto para o WhatsApp oficial e diretrizes do ecossistema.
+7. **Issue #15 (Epic):** `[Epic] Área do membro e busca inteligente`
+   - Nova tabela D1 `user_favorites` com migração aplicada (`0013_mute_darkstar.sql`).
+   - Rotas de autenticação e sessão para membros (`/login`, `/cadastro`, `/api/auth/register`).
+   - Painel do membro em `/membro` exibindo perfil, histórico de voluntariado, inscrições em programas, propostas de desafios e lista de itens favoritados com remoção dinâmica.
+   - Botão de favoritar interativo (`components/ui/favorite-button.tsx`) em desafios e itens do ecossistema.
+   - Busca global agregada em `/api/search` conectada à modal do cabeçalho com debounce e categorização em tempo real (atores, eventos, oportunidades, desafios, parceiros e conteúdos).
+
 
 ### PR #17 → #18 (mergeado em `main`)
 

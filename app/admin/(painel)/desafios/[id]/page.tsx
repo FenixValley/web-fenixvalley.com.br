@@ -94,7 +94,7 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
                       {proposal.profile} · {proposal.createdAt}
                     </p>
                   </div>
-                  <StatusBadge status={proposal.status} />
+                  <StatusBadge status={proposal.status} gender="f" />
                 </div>
                 <p className="whitespace-pre-line text-sm leading-6 text-slate-300">{proposal.solution}</p>
                 <div className="flex flex-wrap items-center gap-4 text-sm">

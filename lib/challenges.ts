@@ -19,3 +19,9 @@ export function formatChallengeDeadline(date: string, style: "short" | "long" = 
     timeZone: "UTC"
   }).format(new Date(`${date}T12:00:00Z`));
 }
+
+/** Verifica se um desafio com prazo encerrou. Desafio sem prazo segue aberto. */
+export function isChallengeClosed(deadline: string | null | undefined, referenceDate = new Date().toISOString().slice(0, 10)): boolean {
+  if (!deadline) return false;
+  return deadline < referenceDate;
+}
