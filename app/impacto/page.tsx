@@ -12,8 +12,11 @@ import {
   partners,
   volunteers
 } from "@/db/schema";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { MotionCard } from "@/components/editorial/motion-card";
+import { SpotlightCard } from "@/components/editorial/spotlight-card";
 import { getDb } from "@/lib/db";
 import { impactStoryTypeLabels } from "@/lib/schemas";
 
@@ -32,7 +35,6 @@ export const metadata: Metadata = {
 
 async function getLiveCounters() {
   const db = getDb();
-  // Contagens independentes: em série somariam seis idas ao D1 antes de renderizar.
   const [
     [approvedActors],
     [approvedVolunteers],
@@ -63,7 +65,6 @@ export default async function ImpactoPage() {
   const db = getDb();
   const counters = await getLiveCounters();
 
-  // Só indicadores verificados pela coordenação vão ao ar — critério de aceite da issue #14.
   const indicators = await db
     .select()
     .from(impactIndicators)
@@ -81,178 +82,255 @@ export default async function ImpactoPage() {
   const reports = stories.filter((story) => story.type === "relatorio");
 
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative space-y-8">
-            <div className="max-w-3xl space-y-4">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-300">Transparência</p>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                Impacto do Fênix Valley
-              </h1>
-              <p className="text-lg leading-8 text-slate-300">
-                Não publicamos métrica de vaidade. Os números abaixo vêm dos registros do próprio portal ou de
-                indicadores conferidos pela coordenação, sempre com fonte e período declarados. O que ainda não
-                foi apurado simplesmente não aparece aqui.
-              </p>
-            </div>
+    <EditorialShell active="/impacto">
+      <PageHeader
+        kicker="Transparência"
+        title="Impacto e dados apurados do ecossistema."
+        accent="Impacto"
+        lede="Não publicamos métrica de vaidade. Os números abaixo vêm dos registros do próprio portal ou de indicadores apurados pela curadoria, sempre com fonte e período declarados."
+      />
 
-            <div className="space-y-4">
+      {/* Dados do portal em tempo real */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-14 sm:px-10">
+        <EditorialReveal>
+          <div className="max-w-2xl space-y-3">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5" style={{ color: "var(--fx-accent)" }} aria-hidden="true" />
+              <h2 className="font-display text-2xl font-bold sm:text-3xl" style={{ color: "var(--fx-ink)" }}>
+                Dados do portal, em tempo real
+              </h2>
+            </div>
+            <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+              Contagens lidas diretamente da base do ecossistema. Apenas registros aprovados pela curadoria entram na soma.
+            </p>
+          </div>
+        </EditorialReveal>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+          {counters.map((counter, index) => (
+            <SpotlightCard
+              key={counter.label}
+              delay={index * 0.06}
+              className="flex flex-col rounded-xl p-6"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              spotlightColor="rgba(27, 59, 255, 0.10)"
+            >
+              <span className="font-display text-4xl font-black leading-none" style={{ color: "var(--fx-accent)" }}>
+                {counter.value}
+              </span>
+              <p className="mt-3 font-display text-base font-semibold" style={{ color: "var(--fx-ink)" }}>
+                {counter.label}
+              </p>
+            </SpotlightCard>
+          ))}
+        </div>
+      </section>
+
+      {/* Indicadores verificados */}
+      <section className="border-t py-16 sm:py-20" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
+        <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+          <EditorialReveal>
+            <div className="max-w-2xl space-y-3">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="h-5 w-5 text-emerald-300" aria-hidden="true" />
-                <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
-                  Dados do portal, em tempo real
+                <BadgeCheck className="h-5 w-5" style={{ color: "var(--fx-accent)" }} aria-hidden="true" />
+                <h2 className="font-display text-2xl font-bold sm:text-3xl" style={{ color: "var(--fx-ink)" }}>
+                  Indicadores verificados
                 </h2>
               </div>
-              <p className="max-w-3xl text-sm leading-6 text-slate-400">
-                Contagens lidas diretamente do banco do portal no momento da visita. Só entram registros
-                aprovados pela curadoria — cadastros pendentes ou rejeitados não são contados.
+              <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                Métricas históricas e apurações metodológicas com fonte e período de medição.
               </p>
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {counters.map((counter) => (
-                  <div key={counter.label} className="surface-panel rounded-lg p-5">
-                    <p className="font-[var(--font-space)] text-3xl font-black text-orange-300">{counter.value}</p>
-                    <p className="mt-1 text-sm font-semibold text-white">{counter.label}</p>
-                  </div>
-                ))}
-              </div>
             </div>
-          </div>
-        </section>
+          </EditorialReveal>
 
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="section-shell relative space-y-6">
-            <div className="flex items-center gap-2">
-              <BadgeCheck className="h-5 w-5 text-emerald-300" aria-hidden="true" />
-              <h2 className="font-[var(--font-space)] text-xl font-bold text-white">Indicadores verificados</h2>
-            </div>
+          <div className="mt-10">
             {indicators.length === 0 ? (
-              <p className="surface-panel max-w-2xl rounded-lg p-6 text-sm leading-7 text-slate-300">
+              <div
+                className="max-w-2xl rounded-xl p-6 font-body text-sm leading-relaxed"
+                style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)", color: "var(--fx-muted)" }}
+              >
                 Nenhum indicador foi apurado e verificado até agora. Assim que a coordenação fechar o primeiro
                 ciclo de medição, os números aparecem aqui com fonte e período.
-              </p>
+              </div>
             ) : (
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                {indicators.map((indicator) => (
-                  <div key={indicator.id} className="surface-panel flex flex-col rounded-lg p-5">
-                    <p className="font-[var(--font-space)] text-3xl font-black text-orange-300">
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {indicators.map((indicator, index) => (
+                  <MotionCard
+                    key={indicator.id}
+                    delay={index * 0.06}
+                    className="flex flex-col rounded-xl p-6"
+                    style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+                  >
+                    <span className="font-display text-3xl font-black" style={{ color: "var(--fx-accent)" }}>
                       {indicator.value}
+                    </span>
+                    <p className="mt-2 font-display text-base font-semibold" style={{ color: "var(--fx-ink)" }}>
+                      {indicator.label}
                     </p>
-                    <p className="mt-1 text-sm font-semibold text-white">{indicator.label}</p>
                     {indicator.note ? (
-                      <p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{indicator.note}</p>
+                      <p className="mt-2 flex-1 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                        {indicator.note}
+                      </p>
                     ) : null}
-                    <p className="mt-4 text-xs text-slate-400">
+                    <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--fx-muted)" }}>
                       {indicator.period} · Fonte: {indicator.source}
                     </p>
-                  </div>
+                  </MotionCard>
                 ))}
               </div>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* Cases do ecossistema */}
+      {cases.length > 0 ? (
+        <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+          <EditorialReveal>
+            <div className="max-w-2xl space-y-3">
+              <h2 className="font-display text-2xl font-bold sm:text-3xl" style={{ color: "var(--fx-ink)" }}>
+                Cases do ecossistema
+              </h2>
+            </div>
+          </EditorialReveal>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {cases.map((story) => (
+              <article
+                key={story.id}
+                className="flex flex-col rounded-xl p-6"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
+                <h3 className="font-display text-lg font-bold" style={{ color: "var(--fx-ink)" }}>
+                  {story.title}
+                </h3>
+                {story.organization ? (
+                  <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--fx-muted)" }}>
+                    {story.organization}
+                  </p>
+                ) : null}
+                <p className="mt-3 flex-1 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                  {story.summary}
+                </p>
+                {story.link ? (
+                  <Link
+                    href={story.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em]"
+                    style={{ color: "var(--fx-accent)" }}
+                  >
+                    Ler o case
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </Link>
+                ) : null}
+              </article>
+            ))}
+          </div>
         </section>
+      ) : null}
 
-        {cases.length > 0 ? (
-          <section className="relative overflow-hidden py-14 sm:py-18">
-            <div className="section-shell relative space-y-6">
-              <h2 className="font-[var(--font-space)] text-xl font-bold text-white">Cases do ecossistema</h2>
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {cases.map((story) => (
-                  <article key={story.id} className="surface-panel flex flex-col rounded-lg p-5">
-                    <h3 className="font-[var(--font-space)] text-lg font-bold text-white">{story.title}</h3>
-                    {story.organization ? (
-                      <p className="mt-1 text-xs text-slate-400">{story.organization}</p>
-                    ) : null}
-                    <p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{story.summary}</p>
-                    {story.link ? (
-                      <Link
-                        href={story.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
-                      >
-                        Ler o case
-                        <ExternalLink className="h-4 w-4" />
-                      </Link>
-                    ) : null}
-                  </article>
-                ))}
+      {/* Depoimentos */}
+      {testimonials.length > 0 ? (
+        <section className="border-t py-16 sm:py-20" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
+          <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+            <EditorialReveal>
+              <div className="max-w-2xl space-y-3">
+                <h2 className="font-display text-2xl font-bold sm:text-3xl" style={{ color: "var(--fx-ink)" }}>
+                  Depoimentos
+                </h2>
               </div>
-            </div>
-          </section>
-        ) : null}
+            </EditorialReveal>
 
-        {testimonials.length > 0 ? (
-          <section className="relative overflow-hidden py-14 sm:py-18">
-            <div className="section-shell relative space-y-6">
-              <h2 className="font-[var(--font-space)] text-xl font-bold text-white">Depoimentos</h2>
-              <div className="grid gap-4 md:grid-cols-2">
-                {testimonials.map((story) => (
-                  <figure key={story.id} className="surface-panel flex flex-col rounded-lg p-6">
-                    <Quote className="h-6 w-6 text-orange-300" aria-hidden="true" />
-                    <blockquote className="mt-3 flex-1 text-sm leading-7 text-slate-300">{story.summary}</blockquote>
-                    <figcaption className="mt-4 text-sm">
-                      <span className="font-bold text-white">{story.authorName ?? story.title}</span>
-                      {story.authorRole || story.organization ? (
-                        <span className="block text-xs text-slate-400">
-                          {[story.authorRole, story.organization].filter(Boolean).join(" · ")}
-                        </span>
-                      ) : null}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {testimonials.map((story) => (
+                <figure
+                  key={story.id}
+                  className="flex flex-col rounded-xl p-6"
+                  style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+                >
+                  <Quote className="h-6 w-6" style={{ color: "var(--fx-accent)" }} aria-hidden="true" />
+                  <blockquote className="mt-3 flex-1 font-body text-sm leading-relaxed italic" style={{ color: "var(--fx-ink)" }}>
+                    &ldquo;{story.summary}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-4 border-t pt-4" style={{ borderColor: "var(--fx-line)" }}>
+                    <span className="font-display text-sm font-bold" style={{ color: "var(--fx-ink)" }}>
+                      {story.authorName ?? story.title}
+                    </span>
+                    {story.authorRole || story.organization ? (
+                      <span className="block font-body text-xs" style={{ color: "var(--fx-muted)" }}>
+                        {[story.authorRole, story.organization].filter(Boolean).join(" · ")}
+                      </span>
+                    ) : null}
+                  </figcaption>
+                </figure>
+              ))}
             </div>
-          </section>
-        ) : null}
+          </div>
+        </section>
+      ) : null}
 
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="section-shell relative space-y-6">
+      {/* Relatórios e prestação de contas */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <EditorialReveal>
+          <div className="max-w-2xl space-y-3">
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-sky-300" aria-hidden="true" />
-              <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
+              <FileText className="h-5 w-5" style={{ color: "var(--fx-accent)" }} aria-hidden="true" />
+              <h2 className="font-display text-2xl font-bold sm:text-3xl" style={{ color: "var(--fx-ink)" }}>
                 Relatórios e prestação de contas
               </h2>
             </div>
-            {reports.length === 0 ? (
-              <p className="surface-panel max-w-2xl rounded-lg p-6 text-sm leading-7 text-slate-300">
-                Os relatórios periódicos de impacto são publicados aqui conforme cada ciclo é fechado. As regras
-                de governança e prestação de contas estão em{" "}
-                <Link href="/governanca" className="font-bold text-orange-300 hover:text-orange-200">
-                  /governanca
-                </Link>
-                .
-              </p>
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2">
-                {reports.map((story) => (
-                  <article key={story.id} className="surface-panel flex flex-col rounded-lg p-5">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
-                      {impactStoryTypeLabels[story.type as keyof typeof impactStoryTypeLabels] ?? story.type}
-                    </p>
-                    <h3 className="mt-2 font-[var(--font-space)] text-lg font-bold text-white">{story.title}</h3>
-                    <p className="mt-2 flex-1 text-sm leading-6 text-slate-300">{story.summary}</p>
-                    {story.link ? (
-                      <Link
-                        href={story.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-300 hover:text-orange-200"
-                      >
-                        Abrir relatório
-                        <ExternalLink className="h-4 w-4" />
-                      </Link>
-                    ) : null}
-                  </article>
-                ))}
-              </div>
-            )}
           </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+        </EditorialReveal>
+
+        <div className="mt-8">
+          {reports.length === 0 ? (
+            <div
+              className="max-w-2xl rounded-xl p-6 font-body text-sm leading-relaxed"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)", color: "var(--fx-muted)" }}
+            >
+              Os relatórios periódicos de impacto são publicados aqui conforme cada ciclo é fechado. As regras
+              de governança e prestação de contas estão em{" "}
+              <Link href="/governanca" className="font-semibold underline" style={{ color: "var(--fx-accent)" }}>
+                /governanca
+              </Link>
+              .
+            </div>
+          ) : (
+            <div className="grid gap-5 md:grid-cols-2">
+              {reports.map((story) => (
+                <article
+                  key={story.id}
+                  className="flex flex-col rounded-xl p-6"
+                  style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+                >
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--fx-accent)" }}>
+                    {impactStoryTypeLabels[story.type as keyof typeof impactStoryTypeLabels] ?? story.type}
+                  </p>
+                  <h3 className="mt-2 font-display text-lg font-bold" style={{ color: "var(--fx-ink)" }}>
+                    {story.title}
+                  </h3>
+                  <p className="mt-2 flex-1 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                    {story.summary}
+                  </p>
+                  {story.link ? (
+                    <Link
+                      href={story.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em]"
+                      style={{ color: "var(--fx-accent)" }}
+                    >
+                      Abrir relatório
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Link>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    </EditorialShell>
   );
 }

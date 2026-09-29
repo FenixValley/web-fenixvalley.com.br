@@ -64,10 +64,10 @@ export function NewsletterForm() {
           placeholder="seu@email.com"
           required
           disabled={status === "loading"}
-          className="h-11 rounded-md border border-white/10 bg-slate-900 px-3 text-sm text-white outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-orange-400 disabled:opacity-50"
+          className="h-11 rounded-md border border-border bg-background px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary disabled:opacity-50"
         />
         {status === "error" && (
-          <p className="flex items-center gap-1.5 text-xs text-red-400">
+          <p className="flex items-center gap-1.5 text-xs text-destructive">
             <XCircle className="h-3.5 w-3.5 shrink-0" />
             {message}
           </p>
@@ -76,7 +76,7 @@ export function NewsletterForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-orange-600 disabled:opacity-60"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
       >
         {status === "loading" ? (
           <>

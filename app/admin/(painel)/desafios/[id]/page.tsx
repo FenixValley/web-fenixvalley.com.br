@@ -29,33 +29,36 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
     <div className="space-y-6">
       <Link
         href="/admin/desafios"
-        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white"
+        className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         Voltar para os desafios
       </Link>
 
-      <div className="surface-panel space-y-3 rounded-lg p-5">
+      <div
+        className="space-y-3 rounded-xl border border-border p-6"
+        style={{ background: "var(--fx-paper)" }}
+      >
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-[var(--font-space)] text-2xl font-black text-white">{challenge.title}</h1>
+          <h1 className="font-display text-2xl font-black text-foreground">{challenge.title}</h1>
           <StatusBadge status={challenge.status} />
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
           {challenge.company}
           {challenge.companySegment ? ` · ${challenge.companySegment}` : ""} · {challenge.category} ·{" "}
           {challenge.type}
         </p>
-        <p className="whitespace-pre-line text-sm leading-6 text-slate-300">{challenge.description}</p>
+        <p className="whitespace-pre-line font-body text-sm leading-relaxed text-foreground">{challenge.description}</p>
         {challenge.expectedOutcome ? (
-          <p className="whitespace-pre-line text-sm leading-6 text-slate-400">
-            <span className="font-semibold text-slate-200">Resultado esperado: </span>
+          <p className="whitespace-pre-line font-body text-sm leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">Resultado esperado: </span>
             {challenge.expectedOutcome}
           </p>
         ) : null}
-        <div className="flex flex-wrap gap-4 text-sm">
+        <div className="flex flex-wrap gap-4 pt-2 font-mono text-xs">
           <a
             href={`mailto:${challenge.companyEmail}`}
-            className="inline-flex items-center gap-1.5 font-semibold text-orange-300 hover:text-orange-200"
+            className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
           >
             <Mail className="h-4 w-4" />
             {challenge.companyEmail}
@@ -65,7 +68,7 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
               href={challenge.companySite}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 font-semibold text-slate-300 hover:text-white"
+              className="inline-flex items-center gap-1.5 font-semibold text-muted-foreground hover:text-foreground"
             >
               <ExternalLink className="h-4 w-4" />
               Site da empresa
@@ -75,32 +78,36 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
       </div>
 
       <div className="space-y-4">
-        <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
+        <h2 className="font-display text-xl font-bold text-foreground">
           Propostas recebidas ({proposals.length})
         </h2>
         {proposals.length === 0 ? (
-          <p className="text-sm text-slate-400">Nenhuma proposta enviada para este desafio até agora.</p>
+          <p className="font-body text-sm text-muted-foreground">Nenhuma proposta enviada para este desafio até agora.</p>
         ) : (
           <div className="space-y-4">
             {proposals.map((proposal) => (
-              <article key={proposal.id} className="surface-panel space-y-3 rounded-lg p-5">
+              <article
+                key={proposal.id}
+                className="space-y-3 rounded-xl border border-border p-5"
+                style={{ background: "var(--fx-surface)" }}
+              >
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-semibold text-white">
+                    <p className="font-display font-semibold text-foreground">
                       {proposal.name}
                       {proposal.organization ? ` · ${proposal.organization}` : ""}
                     </p>
-                    <p className="text-xs text-slate-400">
+                    <p className="font-mono text-xs text-muted-foreground">
                       {proposal.profile} · {proposal.createdAt}
                     </p>
                   </div>
                   <StatusBadge status={proposal.status} gender="f" />
                 </div>
-                <p className="whitespace-pre-line text-sm leading-6 text-slate-300">{proposal.solution}</p>
-                <div className="flex flex-wrap items-center gap-4 text-sm">
+                <p className="whitespace-pre-line font-body text-sm leading-relaxed text-foreground">{proposal.solution}</p>
+                <div className="flex flex-wrap items-center gap-4 font-mono text-xs">
                   <a
                     href={`mailto:${proposal.email}`}
-                    className="inline-flex items-center gap-1.5 font-semibold text-orange-300 hover:text-orange-200"
+                    className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
                   >
                     <Mail className="h-4 w-4" />
                     {proposal.email}
@@ -110,14 +117,14 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
                       href={proposal.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 font-semibold text-slate-300 hover:text-white"
+                      className="inline-flex items-center gap-1.5 font-semibold text-muted-foreground hover:text-foreground"
                     >
                       <ExternalLink className="h-4 w-4" />
                       Material de apoio
                     </a>
                   ) : null}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 pt-1">
                   {proposal.status !== "approved" ? (
                     <form
                       action={async () => {
@@ -125,7 +132,7 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
                         await setChallengeProposalStatus(proposal.id, "approved");
                       }}
                     >
-                      <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                      <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                         <Check className="h-4 w-4" />
                         Aprovar e encaminhar
                       </Button>
@@ -138,7 +145,7 @@ export default async function AdminChallengeProposalsPage({ params }: { params: 
                         await setChallengeProposalStatus(proposal.id, "rejected");
                       }}
                     >
-                      <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                      <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                         <X className="h-4 w-4" />
                         Rejeitar
                       </Button>

@@ -27,15 +27,15 @@ export default async function AdminChallengesPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Desafios de inovação</h1>
-        <p className="text-sm text-slate-400">
+        <h1 className="font-display text-2xl font-black text-foreground">Desafios de inovação</h1>
+        <p className="font-body text-sm text-muted-foreground">
           Desafios enviados por empresas. Só os publicados aparecem em /desafios e em /empresas.
         </p>
       </div>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-400">Nenhum desafio recebido até agora.</p>
+        <p className="font-body text-sm text-muted-foreground">Nenhum desafio recebido até agora.</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -53,27 +53,27 @@ export default async function AdminChallengesPage() {
                 return (
                   <TableRow key={challenge.id}>
                     <TableCell>
-                      <p className="font-semibold text-white">{challenge.title}</p>
-                      <p className="text-xs text-slate-400">
+                      <p className="font-semibold text-foreground">{challenge.title}</p>
+                      <p className="text-xs text-muted-foreground">
                         {challenge.category} · {challenge.type}
                       </p>
                     </TableCell>
                     <TableCell>
-                      <p className="text-sm text-slate-300">{challenge.company}</p>
-                      <p className="text-xs text-slate-500">{challenge.companyEmail}</p>
+                      <p className="text-sm text-foreground">{challenge.company}</p>
+                      <p className="text-xs text-muted-foreground">{challenge.companyEmail}</p>
                     </TableCell>
-                    <TableCell className="text-sm text-slate-300">
+                    <TableCell className="text-sm text-muted-foreground">
                       {challenge.deadline ?? "Contínuo"}
                     </TableCell>
                     <TableCell>
                       <Link
                         href={`/admin/desafios/${challenge.id}`}
-                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-300 hover:text-orange-200"
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
                       >
                         <Inbox className="h-4 w-4" />
                         {counts?.total ?? 0}
                         {counts?.pending ? (
-                          <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-400">
+                          <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs text-amber-700">
                             {counts.pending} nova(s)
                           </span>
                         ) : null}
@@ -91,7 +91,7 @@ export default async function AdminChallengesPage() {
                               await setChallengeStatus(challenge.id, "published");
                             }}
                           >
-                            <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                            <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                               <Check className="h-4 w-4" />
                               Publicar
                             </Button>
@@ -103,7 +103,7 @@ export default async function AdminChallengesPage() {
                               await setChallengeStatus(challenge.id, "archived");
                             }}
                           >
-                            <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                            <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                               <Archive className="h-4 w-4" />
                               Arquivar
                             </Button>
@@ -116,7 +116,7 @@ export default async function AdminChallengesPage() {
                               await setChallengeStatus(challenge.id, "rejected");
                             }}
                           >
-                            <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                            <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                               <X className="h-4 w-4" />
                               Rejeitar
                             </Button>

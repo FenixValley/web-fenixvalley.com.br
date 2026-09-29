@@ -17,7 +17,7 @@ export default async function EditPartnerPage({ params }: { params: Promise<{ id
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Editar parceiro</h1>
+      <h1 className="font-display text-2xl font-black text-foreground">Editar parceiro</h1>
       <PartnerForm action={upsertPartner.bind(null, partnerId)} initialValues={partner} />
     </div>
   );

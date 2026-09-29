@@ -9,14 +9,18 @@ import {
   Network,
   Star,
   ArrowRight,
+  ArrowUpRight,
   Calendar,
   TrendingUp,
   MapPin,
   Eye,
   Handshake,
 } from "lucide-react";
-import { SiteHeader } from "@/components/sections/site-header";
-import { SiteFooter } from "@/components/sections/site-footer";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { MotionCard } from "@/components/editorial/motion-card";
+import { SpotlightCard } from "@/components/editorial/spotlight-card";
 
 export const metadata: Metadata = {
   title: "Sobre | Fênix Valley",
@@ -24,37 +28,31 @@ export const metadata: Metadata = {
     "Conheça a história, os pilares e a jornada do Fênix Valley, o ecossistema de inovação de Betim que renasce das cinzas."
 };
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-
 const pillars = [
   {
     icon: Handshake,
     title: "Colaboração Real",
     description:
-      "Menos hierarquia, mais mão na massa. Aqui as parcerias nascem de conversas honestas e trabalho compartilhado.",
-    color: "orange",
+      "Menos hierarquia, mais mão na massa. Aqui as parcerias nascem de conversas honestas e trabalho compartilhado."
   },
   {
     icon: Network,
     title: "Conexão de Alto Valor",
     description:
-      "O lugar onde você encontra seus futuros sócios, mentores e amigos que compartilham a mesma chama.",
-    color: "sky",
+      "O lugar onde você encontra seus futuros sócios, mentores e parceiros que compartilham a mesma visão."
   },
   {
     icon: Lightbulb,
     title: "Inovação Aberta",
     description:
-      "Ideias que circulam livremente para que todos cresçam juntos. Nenhum conhecimento fica preso em uma sala.",
-    color: "emerald",
+      "Ideias que circulam livremente para que todos cresçam juntos. Nenhum conhecimento fica preso em uma sala."
   },
   {
     icon: Zap,
     title: "Bias for Action",
     description:
-      "Não somos um clube de debates, somos um hub de execução. Construímos, testamos e aprendemos em ciclos rápidos.",
-    color: "amber",
-  },
+      "Não somos um clube de debates, somos um hub de execução. Construímos, testamos e aprendemos em ciclos rápidos."
+  }
 ];
 
 const journey = [
@@ -63,28 +61,28 @@ const journey = [
     title: "A Semente Germinada",
     description:
       "O governo iniciou um trabalho estratégico nas principais regiões de Minas Gerais para fortalecer ecossistemas de inovação. Gisele Ribeiro Ramos liderou a região metropolitana (Betim, Contagem, Ibirité e entorno), estimulando a comunidade através de eventos, hackathons, palestras e articulação entre governo, prefeituras e empreendedores.",
-    icon: Star,
+    icon: Star
   },
   {
     year: "2018-2020",
     title: "Crescimento em Movimento",
     description:
       "Cada líder de território, junto com apoiadores locais, começou a fortalecer sua comunidade. Nesse processo, identificou-se a necessidade de um nome que representasse esse renascimento. Assim nasceu 'Fênix Valley' — a fênix que renasce das cinzas, simbolizando a inovação em ascensão na região.",
-    icon: Network,
+    icon: Network
   },
   {
     year: "2020-2023",
     title: "Pausa Necessária",
     description:
       "A pandemia desacelerou o movimento. Eventos presenciais foram interrompidos e a energia comunitária minguou. Mas as sementes já estavam plantadas, e a comunidade nunca deixou de acreditar que retornaria.",
-    icon: Star,
+    icon: Star
   },
   {
     year: "2024-2025",
     title: "O Retorno com Força Total",
     description:
       "A Fênix Valley ressurge com toda energia. Programas estruturados, agenda intensiva de eventos, mentorias ativas e uma base crescente de membros comprometidos. Betim se consolida como polo de inovação que atrai talentos de toda a região metropolitana.",
-    icon: TrendingUp,
+    icon: TrendingUp
   },
   {
     year: "Hoje",
@@ -92,8 +90,8 @@ const journey = [
     description:
       "Somos um ecossistema em expansão, conectando ideias, pessoas e oportunidades. O próximo capítulo precisa de você.",
     icon: Rocket,
-    highlight: true,
-  },
+    highlight: true
+  }
 ];
 
 const benefits = [
@@ -102,390 +100,360 @@ const benefits = [
     title: "Networking",
     tagline: "Pare de procurar contatos e comece a construir parcerias.",
     description:
-      "Acesso a uma rede curada de empreendedores, desenvolvedores, designers, investidores e mentores que compartilham do mesmo propósito.",
+      "Acesso a uma rede curada de empreendedores, desenvolvedores, designers, investidores e mentores que compartilham do mesmo propósito."
   },
   {
     icon: Eye,
     title: "Mentoria",
     tagline: "Acesso a quem já percorreu o caminho que você quer seguir.",
     description:
-      "Conectamos você com profissionais experientes que já erraram, aprenderam e escalaram. Economize anos de tentativa e erro.",
+      "Conectamos você com profissionais experientes que já erraram, aprenderam e escalaram. Economize anos de tentativa e erro."
   },
   {
     icon: MapPin,
     title: "Visibilidade",
     tagline: "Sua ideia apresentada para as pessoas certas.",
     description:
-      "Showcases, pitches, eventos e canais da comunidade colocam seu projeto em destaque para quem realmente pode ajudá-lo a crescer.",
-  },
+      "Showcases, pitches, eventos e canais da comunidade colocam seu projeto em destaque para quem realmente pode ajudá-lo a crescer."
+  }
 ];
 
 const teamMembers = [
   { name: "Fundadores", role: "Líderes do Movimento", initials: "FV" },
   { name: "Mentores", role: "Guias de Jornada", initials: "MT" },
   { name: "Parceiros", role: "Empresas & Instituições", initials: "PR" },
-  { name: "Membros Ativos", role: "O Coração do Ecossistema", initials: "MA" },
+  { name: "Membros Ativos", role: "O Coração do Ecossistema", initials: "MA" }
 ];
-
-// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function SobrePage() {
   return (
-    <>
-      <SiteHeader />
+    <EditorialShell active="/sobre">
+      <PageHeader
+        kicker="Nosso Ecossistema"
+        title="Mais que um ecossistema, o combustível da inovação em Betim."
+        accent="combustível"
+        lede="Construímos o ambiente onde as ideias de Betim tomam forma, ganham impulso e se transformam em negócios e soluções que impactam vidas."
+      />
 
-      <main>
-        {/* ── 1. Hero Headline ── */}
-        <section className="relative overflow-hidden py-24 sm:py-32">
-          <div className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[500px] w-[900px] rounded-full bg-orange-500/10 blur-3xl" aria-hidden="true" />
-          <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-sky-400/10 blur-3xl" aria-hidden="true" />
-          <div className="brand-grid absolute inset-x-0 top-0 h-[400px]" aria-hidden="true" />
-
-          <div className="section-shell relative text-center space-y-8 max-w-4xl mx-auto">
-            <p className="inline-flex items-center gap-2 rounded-full border border-orange-500/30 bg-orange-500/10 px-4 py-1.5 text-sm font-bold uppercase tracking-widest text-orange-400">
-              <Rocket className="h-3.5 w-3.5" />
-              Nosso Ecossistema
-            </p>
-            <h1 className="font-[var(--font-space)] text-4xl font-black leading-tight tracking-tight text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
-              Mais que um ecossistema, o{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400">
-                combustível
-              </span>{" "}
-              da próxima geração de inovadores.
-            </h1>
-            <p className="text-lg leading-8 text-slate-300 max-w-2xl mx-auto">
-              Construímos o ambiente onde as ideias de Betim tomam forma, ganham impulso
-              e se transformam em realidades que impactam vidas e mudam cidades.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link
-                href="/faca-parte"
-                className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600 hover:shadow-xl hover:shadow-orange-500/30 hover:-translate-y-0.5"
-              >
-                Quero me tornar membro
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/#oportunidades"
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-slate-200 backdrop-blur transition-all hover:bg-white/10 hover:border-white/25"
-              >
-                Conhecer eventos
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 2. Manifesto ── */}
-        <section className="py-16 sm:py-24">
-          <div className="section-shell">
-            <div className="grid gap-12 lg:grid-cols-[1fr_1fr] items-center">
-              <div className="space-y-6">
-                <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-400">
-                  O Manifesto
+      {/* Manifesto */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <EditorialReveal>
+            <div className="space-y-6">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+                O Manifesto
+              </p>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+                Por que existimos
+              </h2>
+              <div className="space-y-4 font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                <p>
+                  Betim carrega um potencial imenso. Uma cidade industrial com uma das maiores
+                  economias de Minas Gerais, cheia de talentos que precisam de conexão, de
+                  oportunidades que precisam de visibilidade, e de ideias que precisam de combustível.
                 </p>
-                <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-                  Por que existimos
-                </h2>
-                <div className="space-y-4 text-slate-300 text-lg leading-8">
-                  <p>
-                    Betim carrega um potencial imenso. Uma cidade industrial com uma das maiores
-                    economias de Minas Gerais, cheia de talentos que precisam de conexão, de
-                    oportunidades que precisam de visibilidade, e de ideias que precisam de combustível.
-                  </p>
-                  <p>
-                    O <strong className="text-white">Fênix Valley</strong> nasceu exatamente dessa lacuna.
-                    Como a fênix que renasce das cinzas, acreditamos na capacidade de transformar o cenário
-                    local — não esperando que alguém de fora venha fazer por nós, mas construindo com as
-                    próprias mãos um ecossistema vibrante, inclusivo e de impacto real.
-                  </p>
-                  <p>
-                    Não fazemos eventos pelo evento. Conectamos pessoas que vão criar as empresas,
-                    soluções e empregos que Betim merece ter. Somos o movimento que faltava.
-                  </p>
-                </div>
-              </div>
-              <div className="relative aspect-video lg:aspect-square overflow-hidden rounded-2xl">
-                <Image
-                  src="/community-event.png"
-                  alt="Comunidade Fênix Valley em ação"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="surface-panel rounded-xl px-4 py-3">
-                    <p className="text-sm font-semibold text-white">Comunidade em movimento</p>
-                    <p className="text-xs text-slate-400 mt-0.5">Betim, Minas Gerais</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 3. Pilares ── */}
-        <section className="py-16 sm:py-24 relative">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-slate-950/0 via-sky-950/20 to-slate-950/0" aria-hidden="true" />
-          <div className="section-shell relative space-y-12">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-400">
-                Nossos Pilares
-              </p>
-              <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-                O que nos move todos os dias
-              </h2>
-              <p className="text-lg leading-8 text-slate-400">
-                Quatro princípios que guiam cada decisão, cada evento e cada conexão que facilitamos.
-              </p>
-            </div>
-
-            <div className="grid gap-6 sm:grid-cols-2">
-              {pillars.map((pillar) => {
-                const Icon = pillar.icon;
-                const colorMap: Record<string, string> = {
-                  orange: "bg-orange-500/15 text-orange-400 border-orange-500/20",
-                  sky: "bg-sky-500/15 text-sky-400 border-sky-500/20",
-                  emerald: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
-                  amber: "bg-amber-500/15 text-amber-400 border-amber-500/20",
-                };
-                const hoverMap: Record<string, string> = {
-                  orange: "hover:border-orange-500/30 hover:shadow-[0_16px_48px_rgb(249_115_22_/_0.12)]",
-                  sky: "hover:border-sky-500/30 hover:shadow-[0_16px_48px_rgb(56_189_248_/_0.12)]",
-                  emerald: "hover:border-emerald-500/30 hover:shadow-[0_16px_48px_rgb(52_211_153_/_0.12)]",
-                  amber: "hover:border-amber-500/30 hover:shadow-[0_16px_48px_rgb(251_191_36_/_0.12)]",
-                };
-                return (
-                  <article
-                    key={pillar.title}
-                    className={`surface-panel rounded-2xl p-8 flex flex-col gap-5 transition-all duration-300 hover:-translate-y-1 ${hoverMap[pillar.color]}`}
-                  >
-                    <div className={`flex h-12 w-12 items-center justify-center rounded-xl border ${colorMap[pillar.color]}`}>
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="space-y-2">
-                      <h3 className="font-[var(--font-space)] text-xl font-bold text-white">
-                        {pillar.title}
-                      </h3>
-                      <p className="text-sm leading-7 text-slate-400">
-                        {pillar.description}
-                      </p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 4. Jornada (Timeline) ── */}
-        <section className="py-16 sm:py-24">
-          <div className="section-shell space-y-14">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-400">
-                A Jornada
-              </p>
-              <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-                De uma faísca a um movimento
-              </h2>
-            </div>
-
-            <div className="relative">
-              {/* vertical line */}
-              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-orange-500/0 via-orange-500/40 to-orange-500/0 hidden sm:block" aria-hidden="true" />
-
-              <div className="space-y-10">
-                {journey.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={item.year} className="relative flex gap-8 sm:gap-10">
-                      {/* icon node */}
-                      <div className={`relative z-10 hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-full border ${item.highlight ? "border-orange-500/60 bg-orange-500/20 text-orange-400" : "border-white/15 bg-slate-900 text-slate-400"}`}>
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div className={`surface-panel flex-1 rounded-2xl p-6 sm:p-8 space-y-3 transition-all duration-300 ${item.highlight ? "border-orange-500/25 shadow-lg shadow-orange-500/10" : ""}`}>
-                        <div className="flex items-center gap-3">
-                          <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${item.highlight ? "border-orange-500/40 bg-orange-500/15 text-orange-400" : "border-white/10 bg-white/5 text-slate-400"}`}>
-                            <Calendar className="h-3 w-3" />
-                            {item.year}
-                          </span>
-                          {item.highlight && (
-                            <span className="text-xs font-semibold text-orange-400 animate-pulse">
-                              • Ao vivo agora
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="font-[var(--font-space)] text-xl font-bold text-white">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm leading-7 text-slate-400">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 5. Benefícios ── */}
-        <section className="py-16 sm:py-24 relative">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-950/20 via-transparent to-sky-950/20" aria-hidden="true" />
-          <div className="section-shell relative space-y-14">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-amber-400">
-                O que você vai encontrar aqui
-              </p>
-              <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-                Mais do que uma comunidade — uma alavanca.
-              </h2>
-              <p className="text-lg leading-8 text-slate-400">
-                A diferença entre um membro passivo e um membro ativo é o que você faz com as conexões que criamos para você.
-              </p>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-3">
-              {benefits.map((benefit) => {
-                const Icon = benefit.icon;
-                return (
-                  <article
-                    key={benefit.title}
-                    className="surface-panel rounded-2xl p-8 flex flex-col gap-6 hover:-translate-y-1 transition-all duration-300 hover:border-orange-500/25"
-                  >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-orange-500/25 bg-orange-500/10 text-orange-400">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <div className="space-y-3">
-                      <h3 className="font-[var(--font-space)] text-lg font-bold text-white">
-                        {benefit.title}
-                      </h3>
-                      <p className="text-sm font-semibold italic text-orange-300/90">
-                        &ldquo;{benefit.tagline}&rdquo;
-                      </p>
-                      <p className="text-sm leading-7 text-slate-400">
-                        {benefit.description}
-                      </p>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 6. A Cara da Comunidade ── */}
-        <section className="py-16 sm:py-24">
-          <div className="section-shell space-y-14">
-            <div className="text-center space-y-4 max-w-2xl mx-auto">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-sky-400">
-                Nossa Comunidade
-              </p>
-              <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl">
-                A cara do ecossistema
-              </h2>
-              <p className="text-lg leading-8 text-slate-400">
-                Somos feitos de pessoas reais, com sonhos reais. Cada rosto aqui representa uma ideia que pode mudar Betim.
-              </p>
-            </div>
-
-            {/* photo grid */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="relative aspect-video overflow-hidden rounded-2xl">
-                <Image
-                  src="/community-event.png"
-                  alt="Encontro da comunidade Fênix Valley"
-                  fill
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
-                <div className="absolute bottom-4 left-4">
-                  <p className="text-sm font-bold text-white">Encontros & Networking</p>
-                  <p className="text-xs text-slate-300">Onde as parcerias nascem</p>
-                </div>
-              </div>
-              <div className="relative aspect-video overflow-hidden rounded-2xl">
-                <Image
-                  src="/brainstorm-session.png"
-                  alt="Sessão de brainstorm no Fênix Valley"
-                  fill
-                  className="object-cover transition-transform duration-500 hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent" />
-                <div className="absolute bottom-4 left-4">
-                  <p className="text-sm font-bold text-white">Workshops & Mentoria</p>
-                  <p className="text-xs text-slate-300">Conhecimento que circula</p>
-                </div>
-              </div>
-            </div>
-
-            {/* member types grid */}
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {teamMembers.map((member) => (
-                <div
-                  key={member.name}
-                  className="surface-panel rounded-2xl p-6 text-center space-y-3 hover:-translate-y-1 transition-all duration-300 hover:border-orange-500/25"
-                >
-                  <div className="mx-auto h-16 w-16 rounded-full border-2 border-orange-500/30 bg-gradient-to-br from-orange-500/20 to-sky-500/20 flex items-center justify-center">
-                    <span className="font-[var(--font-space)] text-sm font-black text-orange-300">
-                      {member.initials}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">{member.name}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">{member.role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── 7. CTA Final ── */}
-        <section className="py-16 sm:py-24">
-          <div className="section-shell">
-            <div className="relative overflow-hidden surface-panel rounded-3xl px-8 py-16 sm:px-16 text-center space-y-8">
-              {/* decorative glows */}
-              <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-64 w-96 rounded-full bg-orange-500/20 blur-3xl" aria-hidden="true" />
-              <div className="pointer-events-none absolute -bottom-24 left-1/4 h-64 w-64 rounded-full bg-sky-500/15 blur-3xl" aria-hidden="true" />
-
-              <div className="relative space-y-4 max-w-2xl mx-auto">
-                <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-400">
-                  O Convite
+                <p>
+                  O <strong style={{ color: "var(--fx-ink)" }}>Fênix Valley</strong> nasceu exatamente dessa lacuna.
+                  Como a fênix que renasce das cinzas, acreditamos na capacidade de transformar o cenário
+                  local — não esperando que alguém venha fazer por nós, mas construindo com as
+                  próprias mãos um ecossistema vibrante, inclusivo e de impacto real.
                 </p>
-                <h2 className="font-[var(--font-space)] text-3xl font-black leading-tight sm:text-4xl lg:text-5xl">
-                  O próximo capítulo do Fênix Valley precisa de{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">
-                    você.
-                  </span>
-                </h2>
-                <p className="text-lg leading-8 text-slate-300 max-w-xl mx-auto">
-                  Não somos uma plateia, somos um ecossistema. Venha cocriar, aprender e
-                  escalar conosco. Betim está pronta para o próximo movimento.
+                <p>
+                  Não fazemos eventos pelo evento. Conectamos pessoas que vão criar as empresas,
+                  soluções e empregos que Betim merece ter. Somos o movimento que faltava.
                 </p>
               </div>
-
-              <div className="relative flex flex-wrap items-center justify-center gap-4">
+              <div className="pt-2">
                 <Link
                   href="/faca-parte"
-                  className="inline-flex items-center gap-2 rounded-full bg-orange-500 px-8 py-3.5 text-sm font-bold text-white shadow-xl shadow-orange-500/30 transition-all hover:bg-orange-600 hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-0.5"
+                  className="inline-flex items-center gap-2 px-6 py-3 font-mono text-xs uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-90"
+                  style={{ background: "var(--fx-accent)" }}
                 >
-                  Quero me tornar membro
+                  Quero fazer parte
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </EditorialReveal>
+
+          <EditorialReveal delay={0.15}>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border" style={{ borderColor: "var(--fx-line)" }}>
+              <Image
+                src="/community-event.png"
+                alt="Comunidade Fênix Valley em ação"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,16,32,0.6)] via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5">
+                <div
+                  className="rounded-xl p-4 backdrop-blur-md"
+                  style={{ background: "rgba(255, 255, 255, 0.9)", border: "1px solid var(--fx-line)" }}
+                >
+                  <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
+                    Comunidade em movimento
+                  </p>
+                  <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>
+                    Betim, Minas Gerais
+                  </p>
+                </div>
+              </div>
+            </div>
+          </EditorialReveal>
+        </div>
+      </section>
+
+      {/* Pilares */}
+      <section className="border-t py-16 sm:py-20" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
+        <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+          <EditorialReveal>
+            <div className="max-w-2xl space-y-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+                Nossos Pilares
+              </p>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+                O que nos move todos os dias
+              </h2>
+              <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                Quatro princípios que guiam cada decisão, cada encontro e cada conexão que facilitamos.
+              </p>
+            </div>
+          </EditorialReveal>
+
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            {pillars.map((pillar, index) => {
+              const Icon = pillar.icon;
+              return (
+                <SpotlightCard
+                  key={pillar.title}
+                  delay={index * 0.08}
+                  className="flex flex-col gap-4 rounded-xl p-8"
+                  style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+                  spotlightColor="rgba(27, 59, 255, 0.12)"
+                >
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-xl"
+                    style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-xl font-bold" style={{ color: "var(--fx-ink)" }}>
+                      {pillar.title}
+                    </h3>
+                    <p className="mt-2 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                      {pillar.description}
+                    </p>
+                  </div>
+                </SpotlightCard>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Jornada / Timeline */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <EditorialReveal>
+          <div className="max-w-2xl space-y-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+              A Jornada
+            </p>
+            <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+              De uma faísca a um movimento
+            </h2>
+          </div>
+        </EditorialReveal>
+
+        <div className="relative mt-12">
+          <div
+            className="absolute bottom-0 left-6 top-0 hidden w-px sm:block"
+            style={{ background: "var(--fx-line)" }}
+            aria-hidden="true"
+          />
+
+          <div className="space-y-8">
+            {journey.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <EditorialReveal key={item.year} delay={index * 0.08}>
+                  <div className="relative flex gap-6 sm:gap-10">
+                    <div
+                      className="relative z-10 hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border sm:flex"
+                      style={
+                        item.highlight
+                          ? { background: "var(--fx-accent)", color: "#ffffff", borderColor: "var(--fx-accent)" }
+                          : { background: "var(--fx-paper)", color: "var(--fx-accent)", borderColor: "var(--fx-line)" }
+                      }
+                    >
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div
+                      className="flex-1 rounded-xl p-6 sm:p-8"
+                      style={{
+                        background: item.highlight ? "var(--fx-surface)" : "var(--fx-paper)",
+                        border: `1px solid ${item.highlight ? "var(--fx-accent)" : "var(--fx-line)"}`
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[11px] uppercase tracking-wider"
+                          style={{
+                            background: item.highlight ? "var(--fx-accent-soft)" : "var(--fx-surface)",
+                            color: item.highlight ? "var(--fx-accent)" : "var(--fx-muted)"
+                          }}
+                        >
+                          <Calendar className="h-3 w-3" />
+                          {item.year}
+                        </span>
+                        {item.highlight ? (
+                          <span className="font-mono text-xs font-semibold" style={{ color: "var(--fx-accent)" }}>
+                            • Em andamento
+                          </span>
+                        ) : null}
+                      </div>
+                      <h3 className="mt-3 font-display text-xl font-bold" style={{ color: "var(--fx-ink)" }}>
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                </EditorialReveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefícios */}
+      <section className="border-t py-16 sm:py-20" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
+        <div className="mx-auto w-full max-w-[1180px] px-6 sm:px-10">
+          <EditorialReveal>
+            <div className="max-w-2xl space-y-3">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+                Alavanca para Você
+              </p>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+                O que você encontra aqui
+              </h2>
+              <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                A diferença entre um membro passivo e um membro ativo é o que você constrói com as conexões disponíveis.
+              </p>
+            </div>
+          </EditorialReveal>
+
+          <div className="mt-12 grid gap-6 lg:grid-cols-3">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <MotionCard
+                  key={benefit.title}
+                  delay={index * 0.08}
+                  className="flex flex-col gap-5 rounded-xl p-8"
+                  style={{ background: "var(--fx-paper)", border: "1px solid var(--fx-line)" }}
+                >
+                  <div
+                    className="flex h-12 w-12 items-center justify-center rounded-xl"
+                    style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-lg font-bold" style={{ color: "var(--fx-ink)" }}>
+                      {benefit.title}
+                    </h3>
+                    <p className="mt-1 font-body text-xs font-semibold italic" style={{ color: "var(--fx-accent)" }}>
+                      &ldquo;{benefit.tagline}&rdquo;
+                    </p>
+                    <p className="mt-3 font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                      {benefit.description}
+                    </p>
+                  </div>
+                </MotionCard>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Comunidade */}
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-16 sm:px-10 sm:py-20">
+        <EditorialReveal>
+          <div className="max-w-2xl space-y-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+              Nossa Rede
+            </p>
+            <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+              A cara do ecossistema
+            </h2>
+            <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+              Somos feitos de pessoas reais, com projetos reais. Cada participante representa uma iniciativa transformando Betim.
+            </p>
+          </div>
+        </EditorialReveal>
+
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {teamMembers.map((member) => (
+            <div
+              key={member.name}
+              className="flex flex-col items-center rounded-xl p-6 text-center"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+            >
+              <div
+                className="flex h-14 w-14 items-center justify-center rounded-full font-display font-bold"
+                style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+              >
+                {member.initials}
+              </div>
+              <p className="mt-4 font-display text-sm font-bold" style={{ color: "var(--fx-ink)" }}>
+                {member.name}
+              </p>
+              <p className="mt-1 font-body text-xs" style={{ color: "var(--fx-muted)" }}>
+                {member.role}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section className="border-t py-16 sm:py-20" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
+        <div className="mx-auto w-full max-w-[1180px] px-6 text-center sm:px-10">
+          <EditorialReveal>
+            <div className="mx-auto max-w-2xl space-y-4">
+              <p className="font-mono text-[11px] uppercase tracking-[0.24em]" style={{ color: "var(--fx-accent)" }}>
+                O Convite
+              </p>
+              <h2 className="font-display text-3xl font-bold sm:text-4xl" style={{ color: "var(--fx-ink)" }}>
+                O próximo capítulo precisa de você.
+              </h2>
+              <p className="font-body text-base leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                Venha cocriar, aprender e escalar conosco. Betim está aberta para a inovação.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                <Link
+                  href="/faca-parte"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.16em] text-white transition-opacity hover:opacity-90"
+                  style={{ background: "var(--fx-accent)" }}
+                >
+                  Quero fazer parte
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/#oportunidades"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-8 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur transition-all hover:bg-white/10 hover:border-white/25"
+                  href="/oportunidades"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 font-mono text-xs uppercase tracking-[0.16em] transition-colors"
+                  style={{ border: "1px solid var(--fx-line)", color: "var(--fx-ink)", background: "var(--fx-paper)" }}
                 >
-                  Conhecer nossos eventos
+                  Ver oportunidades
+                  <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
-
-      <SiteFooter />
-    </>
+          </EditorialReveal>
+        </div>
+      </section>
+    </EditorialShell>
   );
 }

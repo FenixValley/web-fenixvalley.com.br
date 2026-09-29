@@ -17,8 +17,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FavoriteList } from "@/components/member/favorite-list";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import {
   challengeProposals,
   challenges,
@@ -86,9 +87,9 @@ export default async function MemberDashboardPage() {
   ]);
 
   const statusColors: Record<string, string> = {
-    pending: "border-amber-500/30 bg-amber-500/10 text-amber-400",
-    approved: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
-    rejected: "border-rose-500/30 bg-rose-500/10 text-rose-400"
+    pending: "border-amber-500/30 bg-amber-500/10 text-amber-700",
+    approved: "border-emerald-500/30 bg-emerald-500/10 text-emerald-700",
+    rejected: "border-rose-500/30 bg-rose-500/10 text-rose-700"
   };
 
   const statusLabels: Record<string, string> = {
@@ -98,69 +99,98 @@ export default async function MemberDashboardPage() {
   };
 
   return (
-    <>
-      <SiteHeader />
-      <main id="main-content" tabIndex={-1} className="outline-none py-10 sm:py-16">
-        <div className="section-shell space-y-10">
-          {/* Header de Boas-vindas */}
-          <div className="surface-panel flex flex-col gap-6 rounded-2xl p-6 sm:p-8 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary font-bold text-xl ring-2 ring-primary/20">
-                {user.name.charAt(0).toUpperCase()}
-              </div>
-              <div className="space-y-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h1 className="font-[var(--font-space)] text-2xl font-black text-foreground">
-                    {user.name}
-                  </h1>
-                  <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary">
-                    {user.role === "admin" ? "Gestor / Admin" : "Membro do Ecossistema"}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">{user.email}</p>
-              </div>
-            </div>
+    <EditorialShell active="/membro">
+      <PageHeader
+        kicker="Painel Pessoal"
+        title="Área do Membro Fênix Valley."
+        accent="Membro"
+        lede={`Bem-vindo(a), ${user.name}. Acompanhe aqui suas oportunidades salvas, candidaturas e participação no ecossistema.`}
+      />
 
-            <div className="flex flex-wrap items-center gap-3">
-              {user.role === "admin" ? (
-                <Button asChild variant="outline" size="sm" className="gap-2 border-border">
-                  <Link href="/admin">
-                    <Shield className="h-4 w-4 text-primary" />
-                    Painel Admin
-                  </Link>
-                </Button>
-              ) : null}
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/" });
-                }}
-              >
-                <Button type="submit" variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground">
-                  <LogOut className="h-4 w-4" />
-                  Sair
-                </Button>
-              </form>
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-12 sm:px-10 sm:py-16">
+        <div className="space-y-12">
+          {/* Header do Usuário */}
+          <EditorialReveal>
+            <div
+              className="flex flex-col gap-6 rounded-2xl p-6 sm:p-8 md:flex-row md:items-center md:justify-between"
+              style={{
+                background: "var(--fx-surface)",
+                border: "1px solid var(--fx-line)"
+              }}
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className="flex h-14 w-14 items-center justify-center rounded-full font-display text-xl font-bold"
+                  style={{
+                    background: "var(--fx-accent-soft)",
+                    color: "var(--fx-accent)"
+                  }}
+                >
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="space-y-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="font-display text-2xl font-bold" style={{ color: "var(--fx-ink)" }}>
+                      {user.name}
+                    </h2>
+                    <Badge variant="outline" className="border-primary/30 bg-primary/10 text-primary">
+                      {user.role === "admin" ? "Gestor / Admin" : "Membro da Rede"}
+                    </Badge>
+                  </div>
+                  <p className="font-body text-sm" style={{ color: "var(--fx-muted)" }}>{user.email}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                {user.role === "admin" ? (
+                  <Button asChild variant="outline" size="sm" className="gap-2 font-mono text-xs uppercase tracking-[0.16em]">
+                    <Link href="/admin">
+                      <Shield className="h-4 w-4" style={{ color: "var(--fx-accent)" }} />
+                      Painel Admin
+                    </Link>
+                  </Button>
+                ) : null}
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/" });
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sair
+                  </Button>
+                </form>
+              </div>
             </div>
-          </div>
+          </EditorialReveal>
 
           {/* Atalhos Rápidos */}
           <div className="space-y-4">
-            <h2 className="font-[var(--font-space)] text-lg font-bold text-foreground">
+            <h2 className="font-display text-xl font-bold" style={{ color: "var(--fx-ink)" }}>
               Ações Rápidas
             </h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Link
                 href="/mapa"
-                className="surface-panel group flex items-center justify-between rounded-xl p-4 transition-transform hover:-translate-y-0.5"
+                className="group flex items-center justify-between rounded-xl p-5 transition-transform hover:-translate-y-0.5"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-lg"
+                    style={{ background: "rgba(16, 185, 129, 0.12)", color: "rgb(5, 150, 105)" }}
+                  >
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Mapa do Ecossistema</p>
-                    <p className="text-xs text-muted-foreground">Cadastre sua organização</p>
+                    <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>Mapa</p>
+                    <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Cadastrar organização</p>
                   </div>
                 </div>
                 <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -168,15 +198,19 @@ export default async function MemberDashboardPage() {
 
               <Link
                 href="/desafios"
-                className="surface-panel group flex items-center justify-between rounded-xl p-4 transition-transform hover:-translate-y-0.5"
+                className="group flex items-center justify-between rounded-xl p-5 transition-transform hover:-translate-y-0.5"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500/10 text-orange-400">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-lg"
+                    style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+                  >
                     <Sparkles className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Inovação Aberta</p>
-                    <p className="text-xs text-muted-foreground">Ver desafios e soluções</p>
+                    <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>Desafios</p>
+                    <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Inovação aberta</p>
                   </div>
                 </div>
                 <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -184,15 +218,19 @@ export default async function MemberDashboardPage() {
 
               <Link
                 href="/eventos"
-                className="surface-panel group flex items-center justify-between rounded-xl p-4 transition-transform hover:-translate-y-0.5"
+                className="group flex items-center justify-between rounded-xl p-5 transition-transform hover:-translate-y-0.5"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500/10 text-sky-400">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-lg"
+                    style={{ background: "rgba(14, 165, 233, 0.12)", color: "rgb(2, 132, 199)" }}
+                  >
                     <Calendar className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Agenda de Eventos</p>
-                    <p className="text-xs text-muted-foreground">Meetups e encontros</p>
+                    <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>Eventos</p>
+                    <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Agenda e meetups</p>
                   </div>
                 </div>
                 <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -200,15 +238,19 @@ export default async function MemberDashboardPage() {
 
               <Link
                 href="/oportunidades"
-                className="surface-panel group flex items-center justify-between rounded-xl p-4 transition-transform hover:-translate-y-0.5"
+                className="group flex items-center justify-between rounded-xl p-5 transition-transform hover:-translate-y-0.5"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500/10 text-purple-400">
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-lg"
+                    style={{ background: "rgba(147, 51, 234, 0.12)", color: "rgb(126, 34, 206)" }}
+                  >
                     <Compass className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">Oportunidades</p>
-                    <p className="text-xs text-muted-foreground">Editais, vagas e fundos</p>
+                    <p className="font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>Oportunidades</p>
+                    <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Editais, vagas e fundos</p>
                   </div>
                 </div>
                 <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -220,12 +262,12 @@ export default async function MemberDashboardPage() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Bookmark className="h-5 w-5 text-primary" />
-                <h2 className="font-[var(--font-space)] text-xl font-bold text-foreground">
+                <Bookmark className="h-5 w-5" style={{ color: "var(--fx-accent)" }} />
+                <h2 className="font-display text-xl font-bold" style={{ color: "var(--fx-ink)" }}>
                   Meus Itens Salvos
                 </h2>
               </div>
-              <span className="text-xs text-muted-foreground">
+              <span className="font-mono text-xs" style={{ color: "var(--fx-muted)" }}>
                 {favorites.length} {favorites.length === 1 ? "item" : "itens"}
               </span>
             </div>
@@ -235,35 +277,38 @@ export default async function MemberDashboardPage() {
           {/* Minhas Inscrições e Submissões */}
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <h2 className="font-[var(--font-space)] text-xl font-bold text-foreground">
+              <FileText className="h-5 w-5" style={{ color: "var(--fx-accent)" }} />
+              <h2 className="font-display text-xl font-bold" style={{ color: "var(--fx-ink)" }}>
                 Minhas Candidaturas e Submissões
               </h2>
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
               {/* Voluntariado */}
-              <div className="surface-panel rounded-xl p-5 space-y-3">
+              <div
+                className="space-y-4 rounded-xl p-6"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <HeartHandshake className="h-4 w-4 text-primary" />
+                  <div className="flex items-center gap-2 font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
+                    <HeartHandshake className="h-4 w-4" style={{ color: "var(--fx-accent)" }} />
                     Voluntariado
                   </div>
-                  <span className="text-xs text-muted-foreground">{myVolunteering.length}</span>
+                  <span className="font-mono text-xs" style={{ color: "var(--fx-muted)" }}>{myVolunteering.length}</span>
                 </div>
                 {myVolunteering.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Nenhuma candidatura de voluntário enviada.</p>
+                  <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Nenhuma candidatura de voluntário enviada.</p>
                 ) : (
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3 font-body">
                     {myVolunteering.map((v) => (
-                      <li key={v.id} className="border-t border-border pt-2 text-xs space-y-1">
+                      <li key={v.id} className="border-t pt-2 text-xs space-y-1" style={{ borderColor: "var(--fx-line)" }}>
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-foreground">{v.area}</span>
+                          <span className="font-semibold" style={{ color: "var(--fx-ink)" }}>{v.area}</span>
                           <span className={`rounded px-1.5 py-0.5 font-medium border ${statusColors[v.status] ?? ""}`}>
                             {statusLabels[v.status] ?? v.status}
                           </span>
                         </div>
-                        <p className="text-muted-foreground truncate">{v.availability}</p>
+                        <p className="truncate" style={{ color: "var(--fx-muted)" }}>{v.availability}</p>
                       </li>
                     ))}
                   </ul>
@@ -271,29 +316,32 @@ export default async function MemberDashboardPage() {
               </div>
 
               {/* Inscrições em Programas */}
-              <div className="surface-panel rounded-xl p-5 space-y-3">
+              <div
+                className="space-y-4 rounded-xl p-6"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <Compass className="h-4 w-4 text-primary" />
+                  <div className="flex items-center gap-2 font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
+                    <Compass className="h-4 w-4" style={{ color: "var(--fx-accent)" }} />
                     Programas
                   </div>
-                  <span className="text-xs text-muted-foreground">{myApplications.length}</span>
+                  <span className="font-mono text-xs" style={{ color: "var(--fx-muted)" }}>{myApplications.length}</span>
                 </div>
                 {myApplications.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Nenhuma inscrição em programas por enquanto.</p>
+                  <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Nenhuma inscrição em programas por enquanto.</p>
                 ) : (
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3 font-body">
                     {myApplications.map((app) => (
-                      <li key={app.id} className="border-t border-border pt-2 text-xs space-y-1">
+                      <li key={app.id} className="border-t pt-2 text-xs space-y-1" style={{ borderColor: "var(--fx-line)" }}>
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-foreground capitalize">
+                          <span className="font-semibold capitalize" style={{ color: "var(--fx-ink)" }}>
                             {app.programSlug.replace("-", " ")}
                           </span>
                           <span className={`rounded px-1.5 py-0.5 font-medium border ${statusColors[app.status] ?? ""}`}>
                             {statusLabels[app.status] ?? app.status}
                           </span>
                         </div>
-                        <p className="text-muted-foreground truncate">{app.organization ?? "Individual"}</p>
+                        <p className="truncate" style={{ color: "var(--fx-muted)" }}>{app.organization ?? "Individual"}</p>
                       </li>
                     ))}
                   </ul>
@@ -301,29 +349,32 @@ export default async function MemberDashboardPage() {
               </div>
 
               {/* Propostas de Desafios */}
-              <div className="surface-panel rounded-xl p-5 space-y-3">
+              <div
+                className="space-y-4 rounded-xl p-6"
+                style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+              >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                    <Sparkles className="h-4 w-4 text-primary" />
+                  <div className="flex items-center gap-2 font-display text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
+                    <Sparkles className="h-4 w-4" style={{ color: "var(--fx-accent)" }} />
                     Propostas de Desafios
                   </div>
-                  <span className="text-xs text-muted-foreground">{myProposals.length}</span>
+                  <span className="font-mono text-xs" style={{ color: "var(--fx-muted)" }}>{myProposals.length}</span>
                 </div>
                 {myProposals.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">Nenhuma proposta enviada para desafios abertos.</p>
+                  <p className="font-body text-xs" style={{ color: "var(--fx-muted)" }}>Nenhuma proposta enviada para desafios abertos.</p>
                 ) : (
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3 font-body">
                     {myProposals.map((prop) => (
-                      <li key={prop.id} className="border-t border-border pt-2 text-xs space-y-1">
+                      <li key={prop.id} className="border-t pt-2 text-xs space-y-1" style={{ borderColor: "var(--fx-line)" }}>
                         <div className="flex items-center justify-between">
-                          <span className="font-semibold text-foreground truncate max-w-[140px]">
+                          <span className="font-semibold truncate max-w-[140px]" style={{ color: "var(--fx-ink)" }}>
                             {prop.challengeTitle ?? "Desafio"}
                           </span>
                           <span className={`rounded px-1.5 py-0.5 font-medium border ${statusColors[prop.status] ?? ""}`}>
                             {statusLabels[prop.status] ?? prop.status}
                           </span>
                         </div>
-                        <p className="text-muted-foreground truncate">{prop.solution}</p>
+                        <p className="truncate" style={{ color: "var(--fx-muted)" }}>{prop.solution}</p>
                       </li>
                     ))}
                   </ul>
@@ -332,8 +383,7 @@ export default async function MemberDashboardPage() {
             </div>
           </div>
         </div>
-      </main>
-      <SiteFooter />
-    </>
+      </section>
+    </EditorialShell>
   );
 }

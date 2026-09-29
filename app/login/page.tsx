@@ -6,8 +6,7 @@ import { LogIn, UserPlus } from "lucide-react";
 import { useActionState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { memberLoginAction, type MemberLoginState } from "./actions";
 
 function LoginForm() {
@@ -20,19 +19,31 @@ function LoginForm() {
   );
 
   return (
-    <div className="surface-panel w-full max-w-md space-y-6 rounded-2xl p-8 sm:p-10">
+    <div
+      className="w-full max-w-md space-y-6 rounded-2xl p-8 sm:p-10"
+      style={{
+        background: "var(--fx-paper)",
+        border: "1px solid var(--fx-line)",
+        boxShadow: "0 10px 40px rgba(10, 16, 32, 0.06)"
+      }}
+    >
       <div className="space-y-2 text-center">
-        <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Comunidade</p>
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-foreground">
+        <p className="font-mono text-xs font-bold uppercase tracking-[0.18em]" style={{ color: "var(--fx-accent)" }}>
+          Comunidade
+        </p>
+        <h1 className="font-display text-2xl font-bold" style={{ color: "var(--fx-ink)" }}>
           Entrar na Área do Membro
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="font-body text-sm" style={{ color: "var(--fx-muted)" }}>
           Acesse suas oportunidades salvas, acompanhe inscrições e gerencie seu perfil.
         </p>
       </div>
 
       {registered ? (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-center text-xs text-emerald-400 font-medium">
+        <div
+          className="rounded-lg border p-3.5 text-center font-body text-xs font-medium"
+          style={{ borderColor: "rgba(16, 185, 129, 0.3)", background: "rgba(16, 185, 129, 0.08)", color: "rgb(5, 150, 105)" }}
+        >
           Conta criada com sucesso! Faça login com seu e-mail e senha.
         </div>
       ) : null}
@@ -40,7 +51,7 @@ function LoginForm() {
       <form action={formAction} className="space-y-4">
         <input type="hidden" name="callbackUrl" value={callbackUrl} />
 
-        <label className="block space-y-2 text-sm font-semibold text-foreground">
+        <label className="block space-y-1.5 font-body text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
           E-mail
           <Input
             name="email"
@@ -52,7 +63,7 @@ function LoginForm() {
           />
         </label>
 
-        <label className="block space-y-2 text-sm font-semibold text-foreground">
+        <label className="block space-y-1.5 font-body text-sm font-semibold" style={{ color: "var(--fx-ink)" }}>
           Senha
           <Input
             name="password"
@@ -65,20 +76,20 @@ function LoginForm() {
         </label>
 
         {state.error ? (
-          <p className="rounded-md border border-destructive/30 bg-destructive/10 p-3 text-xs font-medium text-destructive">
+          <p className="rounded-md border border-destructive/30 bg-destructive/10 p-3 font-body text-xs font-medium text-destructive">
             {state.error}
           </p>
         ) : null}
 
-        <Button type="submit" className="w-full gap-2" disabled={isPending}>
+        <Button type="submit" className="w-full gap-2 font-mono text-xs uppercase tracking-[0.16em]" disabled={isPending}>
           <LogIn className="h-4 w-4" />
           {isPending ? "Entrando..." : "Entrar"}
         </Button>
       </form>
 
-      <div className="border-t border-border pt-5 text-center text-xs text-muted-foreground space-y-2">
+      <div className="border-t pt-5 text-center font-body text-xs space-y-3" style={{ borderColor: "var(--fx-line)", color: "var(--fx-muted)" }}>
         <p>Ainda não tem conta no Fênix Valley?</p>
-        <Button asChild variant="outline" size="sm" className="w-full gap-2 border-border">
+        <Button asChild variant="outline" size="sm" className="w-full gap-2 font-mono text-xs uppercase tracking-[0.16em]">
           <Link href="/cadastro">
             <UserPlus className="h-4 w-4" />
             Criar conta de membro gratuitamente
@@ -91,18 +102,16 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <>
-      <SiteHeader />
+    <EditorialShell active="/login">
       <main
         id="main-content"
         tabIndex={-1}
-        className="flex min-h-[calc(100vh-140px)] items-center justify-center px-4 py-16 outline-none"
+        className="flex min-h-[calc(100vh-160px)] items-center justify-center px-4 py-16 outline-none"
       >
-        <Suspense fallback={<div className="text-muted-foreground">Carregando...</div>}>
+        <Suspense fallback={<div className="font-body text-sm text-muted-foreground">Carregando...</div>}>
           <LoginForm />
         </Suspense>
       </main>
-      <SiteFooter />
-    </>
+    </EditorialShell>
   );
 }

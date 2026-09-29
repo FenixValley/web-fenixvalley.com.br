@@ -8,14 +8,13 @@ import { ChevronRight, ExternalLink, HandHeart, Star } from "lucide-react";
 import { partners } from "@/db/schema";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-// generateMetadata e a página buscam o mesmo parceiro: o cache() da request evita
-// as duas idas ao D1.
 const getPublishedPartner = cache(async (slug: string) =>
   getDb().query.partners.findFirst({
     where: and(eq(partners.slug, slug), eq(partners.status, "published"))
@@ -43,80 +42,100 @@ export default async function PartnerProfilePage({ params }: { params: Promise<{
   if (!partner) notFound();
 
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-14 sm:py-18">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative max-w-4xl space-y-10">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-400">
-              <Link href="/" className="hover:text-orange-200">
+    <EditorialShell active="/parceiros">
+      <PageHeader kicker={partner.category} title={partner.name} lede={partner.description} />
+
+      <section className="mx-auto w-full max-w-[1180px] px-6 py-12 sm:px-10 sm:py-16">
+        <div className="max-w-3xl space-y-10">
+          <EditorialReveal>
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em]"
+              style={{ color: "var(--fx-muted)" }}
+            >
+              <Link href="/" className="hover:underline" style={{ color: "var(--fx-muted)" }}>
                 Início
               </Link>
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <Link href="/parceiros" className="hover:text-orange-200">
+              <Link href="/parceiros" className="hover:underline" style={{ color: "var(--fx-muted)" }}>
                 Parceiros
               </Link>
               <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="font-semibold text-slate-200">{partner.name}</span>
+              <span style={{ color: "var(--fx-ink)" }}>{partner.name}</span>
             </nav>
+          </EditorialReveal>
 
-            <div className="space-y-4">
+          <EditorialReveal delay={0.1}>
+            <div className="space-y-5">
               {partner.logoUrl ? (
-                <Image
-                  src={partner.logoUrl}
-                  alt={partner.name}
-                  width={200}
-                  height={64}
-                  className="h-16 w-auto object-contain"
-                />
+                <div className="rounded-xl border p-4 w-fit" style={{ borderColor: "var(--fx-line)", background: "#ffffff" }}>
+                  <Image
+                    src={partner.logoUrl}
+                    alt={partner.name}
+                    width={200}
+                    height={64}
+                    className="h-14 w-auto object-contain"
+                  />
+                </div>
               ) : null}
+
               <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="border-orange-300/40 bg-orange-500/10 text-orange-300">
+                <Badge variant="outline" className="border-primary/30 bg-primary/10 text-primary">
                   {partner.category}
                 </Badge>
                 {partner.founding ? (
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-300">
-                    <Star className="h-3.5 w-3.5 fill-amber-300" />
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em]"
+                    style={{ background: "var(--fx-accent-soft)", color: "var(--fx-accent)" }}
+                  >
+                    <Star className="h-3 w-3 fill-current" />
                     Parceiro fundador
                   </span>
                 ) : null}
-                {partner.since ? <span className="text-xs text-slate-400">Parceiro desde {partner.since}</span> : null}
+                {partner.since ? (
+                  <span className="font-mono text-xs" style={{ color: "var(--fx-muted)" }}>
+                    Parceiro desde {partner.since}
+                  </span>
+                ) : null}
               </div>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                {partner.name}
-              </h1>
-              <p className="text-lg leading-8 text-slate-300">{partner.description}</p>
             </div>
+          </EditorialReveal>
 
-            <article className="surface-panel space-y-4 rounded-lg p-6">
-              <h2 className="inline-flex items-center gap-2 font-[var(--font-space)] text-lg font-bold text-white">
-                <HandHeart className="h-5 w-5 text-orange-300" />
+          <EditorialReveal delay={0.15}>
+            <article
+              className="space-y-4 rounded-xl p-6 sm:p-8"
+              style={{ background: "var(--fx-surface)", border: "1px solid var(--fx-line)" }}
+            >
+              <h2 className="inline-flex items-center gap-2 font-display text-lg font-bold" style={{ color: "var(--fx-ink)" }}>
+                <HandHeart className="h-5 w-5" style={{ color: "var(--fx-accent)" }} />
                 Como apoia o Fênix Valley
               </h2>
-              <p className="whitespace-pre-line text-sm leading-7 text-slate-300">{partner.contribution}</p>
+              <p className="whitespace-pre-line font-body text-sm leading-relaxed" style={{ color: "var(--fx-muted)" }}>
+                {partner.contribution}
+              </p>
             </article>
+          </EditorialReveal>
 
-            <div className="flex flex-wrap gap-3">
+          <EditorialReveal delay={0.2}>
+            <div className="flex flex-wrap gap-4 pt-2">
               {partner.site ? (
-                <Button asChild>
+                <Button asChild className="font-mono text-xs uppercase tracking-[0.16em]">
                   <Link href={partner.site} target="_blank" rel="noreferrer">
                     Visitar site
                     <ExternalLink className="h-4 w-4" />
                   </Link>
                 </Button>
               ) : null}
-              <Button asChild variant="ghost">
+              <Button asChild variant="outline" className="font-mono text-xs uppercase tracking-[0.16em]">
                 <Link href="/parceiros">Ver todos os parceiros</Link>
               </Button>
-              <Button asChild variant="ghost">
+              <Button asChild variant="ghost" className="font-mono text-xs uppercase tracking-[0.16em]">
                 <Link href="/seja-parceiro">Seja um parceiro</Link>
               </Button>
             </div>
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+          </EditorialReveal>
+        </div>
+      </section>
+    </EditorialShell>
   );
 }

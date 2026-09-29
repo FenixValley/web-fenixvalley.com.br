@@ -78,7 +78,7 @@ export function FavoriteList({ initialFavorites }: { initialFavorites: MemberFav
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
-            <h4 className="font-[var(--font-space)] text-base font-bold text-foreground">
+            <h4 className="font-display text-base font-bold text-foreground">
               {item.title}
             </h4>
             {item.subtitle ? (

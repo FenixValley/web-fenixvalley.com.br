@@ -19,7 +19,7 @@ export default async function EditImpactIndicatorPage({ params }: { params: Prom
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Editar indicador</h1>
+      <h1 className="font-display text-2xl font-black text-foreground">Editar indicador</h1>
       <ImpactIndicatorForm action={upsertImpactIndicator.bind(null, indicatorId)} initialValues={indicator} />
     </div>
   );

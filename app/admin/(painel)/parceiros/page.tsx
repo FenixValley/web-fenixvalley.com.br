@@ -32,8 +32,8 @@ export default async function AdminPartnersPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Parceiros</h1>
-            <p className="text-sm text-slate-400">Só parceiros publicados aparecem em /parceiros.</p>
+            <h1 className="font-display text-2xl font-black text-foreground">Parceiros</h1>
+            <p className="text-sm text-muted-foreground">Só parceiros publicados aparecem em /parceiros.</p>
           </div>
           <Button asChild size="sm">
             <Link href="/admin/parceiros/nova">
@@ -43,9 +43,9 @@ export default async function AdminPartnersPage() {
           </Button>
         </div>
         {rows.length === 0 ? (
-          <p className="text-sm text-slate-400">Nenhum parceiro cadastrado.</p>
+          <p className="text-sm text-muted-foreground">Nenhum parceiro cadastrado.</p>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-white/10">
+          <div className="overflow-hidden rounded-xl border border-border">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -59,13 +59,13 @@ export default async function AdminPartnersPage() {
                 {rows.map((partner) => (
                   <TableRow key={partner.id}>
                     <TableCell>
-                      <p className="font-semibold text-white">
+                      <p className="font-semibold text-foreground">
                         {partner.name}
-                        {partner.founding ? <span className="ml-2 text-xs text-amber-300">fundador</span> : null}
+                        {partner.founding ? <span className="ml-2 text-xs text-primary font-medium">fundador</span> : null}
                       </p>
-                      <p className="text-xs text-slate-400">/parceiros/{partner.slug}</p>
+                      <p className="text-xs text-muted-foreground">/parceiros/{partner.slug}</p>
                     </TableCell>
-                    <TableCell className="text-sm text-slate-300">{partner.category}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">{partner.category}</TableCell>
                     <TableCell>
                       <StatusBadge status={partner.status} />
                     </TableCell>
@@ -78,7 +78,7 @@ export default async function AdminPartnersPage() {
                               await setPartnerStatus(partner.id, "draft");
                             }}
                           >
-                            <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                            <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                               <EyeOff className="h-4 w-4" />
                               Ocultar
                             </Button>
@@ -90,13 +90,13 @@ export default async function AdminPartnersPage() {
                               await setPartnerStatus(partner.id, "published");
                             }}
                           >
-                            <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                            <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300">
                               <Upload className="h-4 w-4" />
                               Publicar
                             </Button>
                           </form>
                         )}
-                        <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                        <Button asChild size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                           <Link href={`/admin/parceiros/${partner.id}/editar`}>
                             <Pencil className="h-4 w-4" />
                             Editar
@@ -108,7 +108,7 @@ export default async function AdminPartnersPage() {
                             await deletePartner(partner.id);
                           }}
                         >
-                          <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                          <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300">
                             <Trash2 className="h-4 w-4" />
                             Excluir
                           </Button>
@@ -125,35 +125,35 @@ export default async function AdminPartnersPage() {
 
       <div className="space-y-6">
         <div className="space-y-1">
-          <h2 className="font-[var(--font-space)] text-xl font-bold text-white">
+          <h2 className="font-display text-xl font-bold text-foreground">
             Candidaturas a parceria ({applications.length})
           </h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-muted-foreground">
             Propostas enviadas em /seja-parceiro. Aprovar aqui registra a decisão — o parceiro em si é cadastrado
             acima, com a contribuição acordada.
           </p>
         </div>
         {applications.length === 0 ? (
-          <p className="text-sm text-slate-400">Nenhuma candidatura recebida.</p>
+          <p className="text-sm text-muted-foreground">Nenhum candidatura recebida.</p>
         ) : (
           <div className="space-y-4">
             {applications.map((application) => (
-              <article key={application.id} className="surface-panel space-y-3 rounded-lg p-5">
+              <article key={application.id} className="rounded-lg border border-border bg-card p-5 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <p className="font-semibold text-white">{application.organization}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="font-semibold text-foreground">{application.organization}</p>
+                    <p className="text-xs text-muted-foreground">
                       {application.category} · {application.contactName} · {application.createdAt}
                     </p>
                   </div>
                   <StatusBadge status={application.status} gender="f" />
                 </div>
-                <p className="whitespace-pre-line text-sm leading-6 text-slate-300">{application.message}</p>
+                <p className="whitespace-pre-line text-sm leading-6 text-foreground">{application.message}</p>
                 <ul className="flex flex-wrap gap-2">
                   {parseSupportTypes(application.supportTypes).map((type) => (
                     <li
                       key={type}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300"
+                      className="rounded-full border border-border bg-muted/50 px-3 py-1 text-xs text-muted-foreground"
                     >
                       {type}
                     </li>
@@ -162,13 +162,13 @@ export default async function AdminPartnersPage() {
                 <div className="flex flex-wrap items-center gap-4 text-sm">
                   <a
                     href={`mailto:${application.email}`}
-                    className="inline-flex items-center gap-1.5 font-semibold text-orange-300 hover:text-orange-200"
+                    className="inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
                   >
                     <Mail className="h-4 w-4" />
                     {application.email}
                   </a>
                   {application.phone ? (
-                    <span className="text-slate-400">{application.phone}</span>
+                    <span className="text-muted-foreground">{application.phone}</span>
                   ) : null}
                 </div>
                 <div className="flex items-center gap-2">
@@ -179,7 +179,7 @@ export default async function AdminPartnersPage() {
                         await setPartnerApplicationStatus(application.id, "approved");
                       }}
                     >
-                      <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                      <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300">
                         <Check className="h-4 w-4" />
                         Aprovar
                       </Button>
@@ -192,7 +192,7 @@ export default async function AdminPartnersPage() {
                         await setPartnerApplicationStatus(application.id, "rejected");
                       }}
                     >
-                      <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                      <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300">
                         <X className="h-4 w-4" />
                         Rejeitar
                       </Button>

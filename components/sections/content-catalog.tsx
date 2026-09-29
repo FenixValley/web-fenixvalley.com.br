@@ -103,7 +103,7 @@ export function ContentCatalog({ articles }: { articles: ContentArticle[] }) {
 
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">{article.kicker}</p>
-                  <h2 className="mt-1 font-[var(--font-space)] text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+                  <h2 className="mt-1 font-display text-xl font-bold text-foreground group-hover:text-primary transition-colors">
                     <Link href={`/conteudos/${article.slug}`}>{article.title}</Link>
                   </h2>
                 </div>

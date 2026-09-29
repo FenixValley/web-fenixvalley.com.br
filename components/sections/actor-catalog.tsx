@@ -197,7 +197,7 @@ export function ActorCatalog({
               role="group"
               aria-label={`Filtrar por ${DETAIL_FACET_LABELS[key]}`}
             >
-              <span className="text-xs font-bold uppercase tracking-[0.1em] text-slate-500">
+              <span className="text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
                 {DETAIL_FACET_LABELS[key]}
               </span>
               <button
@@ -234,7 +234,7 @@ export function ActorCatalog({
         </p>
       ) : filtered.length === 0 ? (
         <div className="surface-panel max-w-2xl rounded-lg p-8">
-          <h2 className="font-[var(--font-space)] text-xl font-bold text-foreground">{emptyTitle}</h2>
+          <h2 className="font-display text-xl font-bold text-foreground">{emptyTitle}</h2>
           <p className="mt-3 text-sm leading-7 text-muted-foreground">{emptyDescription}</p>
         </div>
       ) : (
@@ -254,11 +254,11 @@ export function ActorCatalog({
                     </span>
                   ) : null}
                 </div>
-                <h3 className="font-[var(--font-space)] text-lg font-bold text-foreground">{actor.name}</h3>
+                <h3 className="font-display text-lg font-bold text-foreground">{actor.name}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">{actor.segment}</p>
                 <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground line-clamp-3">{actor.description}</p>
                 <p className="mt-4 flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <MapPin className="h-3.5 w-3.5 text-emerald-400" />
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
                   {actor.neighborhood}
                 </p>
                 {actor.slug ? (

@@ -17,31 +17,6 @@ const whatsappUrl = "https://chat.whatsapp.com/EtCfWvncoQZ6tx7I8obFzX";
 
 export const sitePages: SitePage[] = [
   {
-    slug: "sobre",
-    title: "Sobre o Fênix Valley",
-    kicker: "Quem somos",
-    description:
-      "O Fênix Valley é o movimento que conecta pessoas, ideias, instituições e oportunidades para transformar Betim em um polo de inovação, tecnologia e empreendedorismo.",
-    sections: [
-      {
-        title: "Propósito",
-        body: "Transformar Betim em um polo de inovação, tecnologia e empreendedorismo, construindo uma economia local mais diversa, tecnológica e colaborativa."
-      },
-      {
-        title: "Missão",
-        body: "Conectar pessoas, organizações e oportunidades para estimular o surgimento e o crescimento de negócios inovadores na cidade e na região."
-      },
-      {
-        title: "Visão",
-        body: "Tornar Betim referência regional em tecnologia aplicada, startups e desenvolvimento sustentável — uma cidade que renasce pela inovação."
-      }
-    ],
-    ctas: [
-      { label: "Conheça o ecossistema", href: "/ecossistema" },
-      { label: "Faça parte", href: "/#participar" }
-    ]
-  },
-  {
     slug: "ecossistema",
     title: "O ecossistema",
     kicker: "Como nos organizamos",
