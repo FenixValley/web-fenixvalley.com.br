@@ -7,9 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ExternalLink, MapPin, Plus, Search, X } from "lucide-react";
 import { ActorRegisterForm } from "@/components/map/actor-register-form";
 import type { MapActor } from "@/components/map/map-canvas";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { actorTypeLabels, actorTypes } from "@/lib/schemas";
 
 const MapCanvas = dynamic(() => import("@/components/map/map-canvas"), {

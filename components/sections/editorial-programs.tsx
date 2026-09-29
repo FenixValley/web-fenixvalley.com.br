@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Building2, GraduationCap, Lightbulb, Sparkles, type LucideIcon } from "lucide-react";
+import { ArrowUpRight, Building2, GraduationCap, Lightbulb, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { programs } from "@/data/ecosystem";
 import { AnimatedIcon } from "@/components/editorial/animated-icon";
