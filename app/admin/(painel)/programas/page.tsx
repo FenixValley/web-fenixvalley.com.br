@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { desc } from "drizzle-orm";
 import { Check, Lock, LockOpen, X } from "lucide-react";
 import { programsCatalog } from "@/data/programs";
 import { StatusBadge } from "@/components/admin/status-badge";
@@ -109,7 +109,7 @@ export default async function AdminProgramsPage() {
                     </TableCell>
                     <TableCell className="max-w-64 text-sm text-muted-foreground">{application.motivation}</TableCell>
                     <TableCell>
-                      <StatusBadge status={application.status} />
+                      <StatusBadge status={application.status} gender="f" />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">

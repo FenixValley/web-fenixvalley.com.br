@@ -4,6 +4,7 @@ import { events } from "@/db/schema";
 import { getDb } from "@/lib/db";
 import { uniqueEventSlug } from "@/lib/event-slug";
 import { eventSchema } from "@/lib/schemas";
+import { insertWithUniqueSlug } from "@/lib/unique-slug";
 
 export async function GET() {
   const today = new Date().toISOString().slice(0, 10);
@@ -28,14 +29,19 @@ export async function POST(request: Request) {
 
   const { consent: _consent, ...data } = parsed.data;
   const db = getDb();
-  await db.insert(events).values({
-    ...data,
-    slug: await uniqueEventSlug(db, data.title),
-    link: data.link || null,
-    audience: data.audience || null,
-    schedule: data.schedule || null,
-    status: "pending"
-  });
+  await insertWithUniqueSlug(
+    "events",
+    () => uniqueEventSlug(db, data.title),
+    (slug) =>
+      db.insert(events).values({
+        ...data,
+        slug,
+        link: data.link || null,
+        audience: data.audience || null,
+        schedule: data.schedule || null,
+        status: "pending"
+      })
+  );
 
   return NextResponse.json({
     ok: true,

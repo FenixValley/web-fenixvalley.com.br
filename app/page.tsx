@@ -11,10 +11,17 @@ import { EditorialEcosystem } from "@/components/sections/editorial-ecosystem";
 import { EditorialPrograms } from "@/components/sections/editorial-programs";
 import { EditorialContent } from "@/components/sections/editorial-content";
 import { EditorialJoin } from "@/components/sections/editorial-join";
+import { OpportunitiesSection } from "@/components/sections/opportunities-section";
+import { FacaParteSection } from "@/components/sections/faca-parte-section";
+import { opportunities } from "@/data/opportunities";
+import { todayInBusinessTimeZone } from "@/lib/date";
 
 const pilares = pillars.map((p) => ({ title: p.title, description: p.description }));
 
 export default function HomePage() {
+  const today = todayInBusinessTimeZone();
+  const activeOpportunities = opportunities.filter((opportunity) => opportunity.date >= today);
+
   return (
     <EditorialShell>
       <EditorialHero />
@@ -53,7 +60,9 @@ export default function HomePage() {
         </div>
       </section>
 
+      <OpportunitiesSection opportunities={activeOpportunities} />
       <EditorialContent />
+      <FacaParteSection />
       <EditorialJoin />
     </EditorialShell>
   );

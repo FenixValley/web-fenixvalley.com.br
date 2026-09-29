@@ -3,14 +3,17 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 
 export function BrandMotion() {
   const ringRef = useRef<HTMLDivElement>(null);
   const pulseRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const ctx = gsap.context(() => {
       gsap.to(ringRef.current, {
         rotate: 360,
@@ -29,7 +32,7 @@ export function BrandMotion() {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[430px]" aria-hidden="true">
@@ -63,13 +66,13 @@ export function BrandMotion() {
       >
         <div className="flex h-52 w-52 items-center justify-center rounded-full bg-white/92 p-5 shadow-crisp ring-1 ring-sky-200/40 backdrop-blur sm:h-64 sm:w-64">
           <Image
-            src="/logo-fenix-valley.png"
-            alt=""
-            width={240}
-            height={240}
-            priority
-            className="h-auto w-full"
-          />
+              src="/logo-vertical.png"
+              alt="Fênix Valley"
+              width={240}
+              height={240}
+              priority
+              className="h-auto w-full"
+            />
         </div>
       </motion.div>
     </div>

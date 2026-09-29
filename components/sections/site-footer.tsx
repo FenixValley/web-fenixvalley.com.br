@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Mail, MapPinned, MessageCircle } from "lucide-react";
+import { Mail, MapPinned, MessageCircle } from "lucide-react";
+import { NewsletterForm } from "./newsletter-form";
 
 const footerGroups = [
   {
@@ -9,6 +10,8 @@ const footerGroups = [
       { label: "Sobre nós", href: "/sobre" },
       { label: "Comunidade", href: "/comunidade" },
       { label: "Impacto", href: "/impacto" },
+      { label: "Governança", href: "/governanca" },
+      { label: "Parceiros", href: "/parceiros" },
       { label: "Contato", href: "/contato" }
     ]
   },
@@ -18,6 +21,7 @@ const footerGroups = [
       { label: "Mapa do ecossistema", href: "/mapa" },
       { label: "Startups", href: "/startups" },
       { label: "Empresas", href: "/empresas" },
+      { label: "Desafios de inovação", href: "/desafios" },
       { label: "Universidades", href: "/universidades" },
       { label: "Espaços", href: "/espacos" }
     ]
@@ -43,9 +47,12 @@ const footerGroups = [
 ];
 
 const legalLinks = [
-  { label: "Privacidade", href: "/privacidade" },
-  { label: "LGPD", href: "/privacidade" },
-  { label: "Código de conduta", href: "/#participar" }
+  { label: "Privacidade e LGPD", href: "/privacidade" },
+  { label: "Termos de uso", href: "/termos" },
+  { label: "Cookies", href: "/cookies" },
+  { label: "Código de conduta", href: "/codigo-de-conduta" },
+  { label: "Política de conteúdo", href: "/politica-de-conteudo" },
+  { label: "Governança", href: "/governanca" }
 ];
 
 export function SiteFooter() {
@@ -62,26 +69,12 @@ export function SiteFooter() {
               Receba eventos, chamadas, editais e convites da comunidade Fênix Valley.
             </p>
           </div>
-          <form className="grid gap-3 sm:grid-cols-[1fr_auto] lg:self-end">
-            <label className="sr-only" htmlFor="footer-email">
-              E-mail para newsletter
-            </label>
-            <input
-              id="footer-email"
-              type="email"
-              placeholder="seu@email.com"
-              className="h-11 rounded-md border border-white/10 bg-slate-900 px-3 text-sm text-white outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-orange-400"
-            />
-            <button type="button" className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-orange-600">
-              Inscrever
-              <ArrowUpRight className="h-4 w-4" />
-            </button>
-          </form>
+          <NewsletterForm />
         </div>
 
         <div className="grid gap-10 py-12 lg:grid-cols-[1.05fr_1.45fr]">
           <div className="space-y-6">
-            <Image src="/logo-fenix-valley.png" alt="Fênix Valley" width={220} height={220} className="h-20 w-auto" />
+            <Image src="/logo-vertical.png" alt="Fênix Valley" width={160} height={200} className="h-24 w-auto" />
             <p className="max-w-md text-sm leading-6 text-slate-300">
               Betim pode criar novos negócios, formar talentos, desenvolver tecnologias e construir
               uma economia mais diversa, inovadora e preparada para o futuro.
@@ -91,9 +84,9 @@ export function SiteFooter() {
                 <MessageCircle className="h-4 w-4 text-orange-300" />
                 Comunidade oficial no WhatsApp
               </Link>
-              <Link href="mailto:contato@fenixvalley.com.br" className="inline-flex items-center gap-2 hover:text-orange-200">
+              <Link href="mailto:betim.fenixvalley2026@gmail.com" className="inline-flex items-center gap-2 hover:text-orange-200">
                 <Mail className="h-4 w-4 text-sky-300" />
-                contato@fenixvalley.com.br
+                betim.fenixvalley2026@gmail.com
               </Link>
               <span className="inline-flex items-center gap-2">
                 <MapPinned className="h-4 w-4 text-emerald-300" />
@@ -121,7 +114,10 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-slate-400 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 Fênix Valley. Betim renascendo pela inovação.</p>
+          <div className="flex items-center gap-3">
+            <Image src="/logo-tipografia.png" alt="Fênix Valley" width={80} height={24} className="h-4 w-auto opacity-60" />
+            <p>© 2026 Fênix Valley. Betim renascendo pela inovação.</p>
+          </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
             {legalLinks.map((link) => (
               <Link key={link.label} href={link.href} className="hover:text-slate-200">

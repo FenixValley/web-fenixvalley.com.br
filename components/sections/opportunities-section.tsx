@@ -6,10 +6,12 @@ import { OpportunitiesTable } from "./opportunities-table";
 
 export function OpportunitiesSection({
   opportunities,
-  heading = "h2"
+  heading = "h2",
+  initialType
 }: {
   opportunities: Opportunity[];
   heading?: "h1" | "h2";
+  initialType?: string | null;
 }) {
   // Quando heading === "h1" o título da página é renderizado via PageHeader na
   // própria rota; aqui exibimos só a lista. Para "h2" mantemos o cabeçalho
@@ -52,7 +54,7 @@ export function OpportunitiesSection({
             </div>
           ) : null}
           <EditorialReveal delay={heading === "h2" ? 0.3 : 0}>
-            <OpportunitiesTable initialData={opportunities} />
+            <OpportunitiesTable initialData={opportunities} initialType={initialType} />
           </EditorialReveal>
         </div>
       </div>

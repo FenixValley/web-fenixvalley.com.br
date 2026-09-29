@@ -63,242 +63,119 @@ export const sitePages: SitePage[] = [
     ]
   },
   {
-    slug: "startups",
-    title: "Startups",
-    kicker: "Para quem constrói",
+    slug: "termos",
+    title: "Termos de uso",
+    kicker: "Regras do portal",
     description:
-      "O portal é vitrine das startups e dos empreendedores de Betim e região: presença no mapa, conexão com programas e acesso a oportunidades.",
+      "Condições de uso do portal do Fênix Valley, responsabilidades de quem publica conteúdo e limites de responsabilidade do movimento.",
     sections: [
       {
-        title: "Apareça no mapa",
-        body: "Cadastre sua startup no mapa do ecossistema para ser encontrada por empresas, investidores, mentores e talentos. O cadastro passa por curadoria antes da publicação."
+        title: "Uso do portal",
+        body: "O portal é aberto e gratuito. Ao navegar, cadastrar uma organização, enviar um evento, um desafio ou uma proposta, você concorda com estes termos e com o código de conduta do movimento."
       },
       {
-        title: "Evolua com os programas",
-        body: "Da pré-aceleração à aceleração, os programas dão ritmo à jornada: validação, tração, conexões com mercado e preparação para investimento."
+        title: "Conteúdo enviado por terceiros",
+        body: "Quem envia é responsável pela veracidade das informações e por ter autorização para publicá-las. A curadoria pode recusar, editar ou remover conteúdo fora do propósito do movimento, sem aviso prévio."
       },
       {
-        title: "Catálogo completo",
-        body: "Um catálogo de startups com filtros por segmento, estágio e tecnologia está no roadmap do portal e será construído sobre os cadastros aprovados do mapa."
+        title: "Conexões entre participantes",
+        body: "O Fênix Valley aproxima empresas, startups, instituições e talentos, mas não é parte dos contratos, negociações ou resultados dessas conexões. Acordos firmados entre participantes são de responsabilidade deles."
+      },
+      {
+        title: "Disponibilidade e mudanças",
+        body: "O portal pode passar por manutenções e evoluções. Alterações relevantes nestes termos são publicadas nesta página, com a data da revisão."
       }
     ],
     ctas: [
-      { label: "Cadastrar startup no mapa", href: "/mapa" },
-      { label: "Conhecer os programas", href: "/programas" }
-    ]
-  },
-  {
-    slug: "empresas",
-    title: "Empresas e indústrias",
-    kicker: "Inovação corporativa",
-    description:
-      "Aproximamos empresas, indústrias e grandes organizações de startups, pesquisadores e talentos locais para resolver desafios reais.",
-    sections: [
-      {
-        title: "Inovação aberta",
-        body: "Sua empresa traz um desafio — automação, logística, eficiência energética, ESG, indústria 4.0 — e o ecossistema responde com pilotos, provas de conceito e parcerias."
-      },
-      {
-        title: "Acesso a talentos",
-        body: "A residência tecnológica e os programas estudantis formam profissionais com experiência prática em projetos reais, prontos para o mercado da região."
-      }
-    ],
-    ctas: [
-      { label: "Conhecer a inovação aberta", href: "/programas/inovacao-aberta" },
+      { label: "Ver a governança do movimento", href: "/governanca" },
       { label: "Falar com a coordenação", href: "/contato" }
     ]
   },
   {
-    slug: "universidades",
-    title: "Universidades e escolas técnicas",
-    kicker: "Educação e pesquisa",
+    slug: "cookies",
+    title: "Política de cookies",
+    kicker: "O que guardamos no seu navegador",
     description:
-      "Universidades, escolas técnicas e estudantes conectados a oportunidades reais de inovação, pesquisa aplicada e mercado.",
+      "O portal usa o mínimo necessário de armazenamento local para funcionar. Não há rastreamento publicitário nem venda de dados de navegação.",
     sections: [
       {
-        title: "Instituições parceiras",
-        body: "Instituições de ensino participam do mapa do ecossistema, conectam laboratórios e pesquisadores a desafios de empresas e levam seus estudantes aos programas."
+        title: "Preferências de interface",
+        body: "A escolha entre tema escuro e claro fica salva no seu próprio navegador (localStorage), apenas para que o site abra do jeito que você prefere. Esse dado não sai do seu dispositivo."
       },
       {
-        title: "Para estudantes",
-        body: "Trilhas de capacitação, hackathons, residência tecnológica e conexão com estágios e vagas: a porta de entrada dos estudantes para o ecossistema."
+        title: "Sessão do painel administrativo",
+        body: "Gestores autenticados recebem um cookie de sessão necessário para manter o login do painel. Sair do painel apaga o cookie do navegador; o token de sessão em si tem validade de 30 dias. Ele não é usado para rastrear navegação no site público."
+      },
+      {
+        title: "Sem rastreadores de terceiros",
+        body: "Não usamos cookies de publicidade nem perfis de comportamento. Serviços externos acionados a partir do site, como mapas e vídeos incorporados, seguem as próprias políticas dos seus provedores."
+      },
+      {
+        title: "Como limpar",
+        body: "Você pode apagar o armazenamento local e os cookies deste site a qualquer momento pelas configurações do navegador, sem perder acesso a nenhuma funcionalidade pública."
       }
     ],
     ctas: [
-      { label: "Programas para estudantes", href: "/programas/programas-estudantis" },
-      { label: "Residência tecnológica", href: "/programas/residencia-tecnologica" }
+      { label: "Ler a política de privacidade", href: "/privacidade" },
+      { label: "Ver a governança", href: "/governanca" }
     ]
   },
   {
-    slug: "mentores",
-    title: "Mentores",
-    kicker: "Quem ajuda a construir",
+    slug: "codigo-de-conduta",
+    title: "Código de conduta",
+    kicker: "Como convivemos",
     description:
-      "Mentores e mentoras compartilham experiência com empreendedores, startups e estudantes em formação — uma das contribuições mais valiosas para o ecossistema.",
+      "O que se espera de quem participa dos canais, eventos e programas do Fênix Valley — e o que fazer quando algo sai do combinado.",
     sections: [
       {
-        title: "Como funciona",
-        body: "Mentorias acontecem dentro dos programas (pré-aceleração, aceleração, residência) e em encontros da comunidade, com temas que vão de produto e vendas a carreira e gestão."
+        title: "Princípios",
+        body: "Respeito às pessoas, foco no desenvolvimento de Betim e da região, colaboração acima da disputa e generosidade com quem está começando. Todo mundo é bem-vindo, independentemente de origem, gênero, raça, religião, orientação sexual ou deficiência."
       },
       {
-        title: "Seja mentor(a)",
-        body: "Profissionais com experiência em tecnologia, negócios, marketing, finanças ou gestão podem se voluntariar para mentorar. A coordenação faz a curadoria e a conexão com os projetos."
-      }
-    ],
-    ctas: [
-      { label: "Quero ser mentor(a)", href: "/voluntarie-se" },
-      { label: "Entrar na comunidade", href: whatsappUrl, external: true }
-    ]
-  },
-  {
-    slug: "investidores",
-    title: "Investidores",
-    kicker: "Capital para a nova economia",
-    description:
-      "Conectamos investidores-anjo, fundos e veículos de investimento às startups de Betim e região que estão construindo negócios com tração.",
-    sections: [
-      {
-        title: "Acesso ao dealflow",
-        body: "Os programas de aceleração e os demo days aproximam investidores de startups preparadas, com métricas organizadas e teses claras."
+        title: "Não é tolerado",
+        body: "Assédio, discriminação, ataque pessoal, discurso de ódio, spam, autopromoção sem contexto, uso indevido de dados de outros participantes e divulgação de conteúdo ilegal ou desalinhado ao propósito do movimento."
       },
       {
-        title: "Participe",
-        body: "Investidores interessados em acompanhar o ecossistema podem entrar em contato com a coordenação para participar de bancas, demo days e conexões diretas."
+        title: "Nos eventos e programas",
+        body: "As mesmas regras valem nos encontros presenciais, nas turmas dos programas e nos espaços dos parceiros. A organização pode encerrar a participação de quem descumprir o código."
+      },
+      {
+        title: "Como relatar",
+        body: "Relatos podem ser enviados à coordenação pelos canais oficiais de contato. Cada caso é tratado com confidencialidade e respondido pela coordenação junto ao comitê de curadoria."
       }
     ],
     ctas: [
       { label: "Falar com a coordenação", href: "/contato" },
-      { label: "Ver oportunidades", href: "/oportunidades" }
+      { label: "Ver a governança", href: "/governanca" }
     ]
   },
   {
-    slug: "espacos",
-    title: "Espaços de inovação",
-    kicker: "Onde as coisas acontecem",
+    slug: "politica-de-conteudo",
+    title: "Política de publicação de conteúdos",
+    kicker: "Critérios de curadoria",
     description:
-      "Coworkings, laboratórios, hubs e espaços públicos e privados que recebem os encontros, programas e projetos do ecossistema.",
+      "O que entra no portal, como a curadoria avalia cada envio e por que alguns conteúdos são recusados.",
     sections: [
       {
-        title: "No mapa",
-        body: "Os espaços de inovação de Betim aparecem no mapa do ecossistema com tipo, localização e descrição — e novos espaços podem se cadastrar."
+        title: "O que publicamos",
+        body: "Organizações do ecossistema, eventos, oportunidades, desafios de inovação aberta, trilhas de capacitação e parcerias com relação direta com Betim e região."
       },
       {
-        title: "Ceda seu espaço",
-        body: "Organizações que queiram receber eventos, mentorias ou turmas de programas podem oferecer seus espaços à comunidade pelo formulário de contato."
+        title: "Como avaliamos",
+        body: "A curadoria confere se o conteúdo é verdadeiro, está completo, tem responsável identificável e é coerente com o propósito do movimento. Cadastros entram como pendentes e só aparecem publicamente após aprovação."
+      },
+      {
+        title: "O que é recusado",
+        body: "Propaganda sem conexão com o ecossistema, conteúdo enganoso, esquemas de pirâmide ou promessa de retorno financeiro, dados de terceiros sem autorização e qualquer material que viole o código de conduta."
+      },
+      {
+        title: "Dados de contato",
+        body: "E-mails e telefones enviados nos formulários servem para a curadoria e para as conexões do movimento. Contatos de empresas que publicam desafios não são exibidos publicamente: as propostas chegam pelo próprio portal."
       }
     ],
     ctas: [
-      { label: "Ver espaços no mapa", href: "/mapa" },
-      { label: "Oferecer um espaço", href: "/contato" }
-    ]
-  },
-  {
-    slug: "conteudos",
-    title: "Conteúdos",
-    kicker: "Aprender com quem constrói",
-    description:
-      "Notícias, guias, trilhas e histórias dão continuidade à comunidade entre eventos, programas e conexões presenciais.",
-    sections: [
-      {
-        title: "Trilhas de conteúdo",
-        body: "Empreendedorismo na prática, tecnologia aplicada e histórias do ecossistema: as trilhas organizam o conteúdo para cada momento da jornada."
-      },
-      {
-        title: "Em construção",
-        body: "O blog com notícias, entrevistas, cases e materiais educativos está no roadmap. Por enquanto, as atualizações circulam na home e na comunidade."
-      }
-    ],
-    ctas: [
-      { label: "Ver atualizações na home", href: "/#conteudo" },
-      { label: "Entrar na comunidade", href: whatsappUrl, external: true }
-    ]
-  },
-  {
-    slug: "comunidade",
-    title: "Comunidade",
-    kicker: "Pessoas antes de tudo",
-    description:
-      "A comunidade Fênix Valley reúne quem acredita que Betim pode construir uma nova economia baseada em tecnologia, inovação e colaboração.",
-    sections: [
-      {
-        title: "Código de colaboração",
-        body: "Respeito, foco em Betim e divulgações alinhadas ao propósito do movimento. Spam, conteúdo ofensivo e autopromoção sem contexto ficam de fora."
-      },
-      {
-        title: "Onde estamos",
-        body: "O ponto de encontro digital é o grupo oficial no WhatsApp; os encontros presenciais acontecem nos espaços parceiros e aparecem na agenda."
-      }
-    ],
-    ctas: [
-      { label: "Entrar no grupo do WhatsApp", href: whatsappUrl, external: true },
-      { label: "Ser voluntário(a)", href: "/voluntarie-se" }
-    ]
-  },
-  {
-    slug: "parceiros",
-    title: "Parceiros",
-    kicker: "Quem sustenta o movimento",
-    description:
-      "Instituições de ensino, empresas, poder público e organizações de apoio dão legitimidade e força ao Fênix Valley.",
-    sections: [
-      {
-        title: "Categorias de apoio",
-        body: "Apoio institucional, tecnológico, acadêmico, empresarial e financeiro — cada parceiro contribui com o que tem de melhor: espaços, mentores, desafios, bolsas ou patrocínio."
-      },
-      {
-        title: "Vitrine de parceiros",
-        body: "Os parceiros aparecem na home e, conforme o portal evolui, terão páginas próprias com sua contribuição para o ecossistema."
-      }
-    ],
-    ctas: [
-      { label: "Seja um parceiro", href: "/seja-parceiro" },
-      { label: "Ver parceiros na home", href: "/#conteudo" }
-    ]
-  },
-  {
-    slug: "impacto",
-    title: "Impacto",
-    kicker: "Transparência",
-    description:
-      "O Fênix Valley se compromete a divulgar apenas indicadores validados — sem números inflados ou métricas de vaidade.",
-    sections: [
-      {
-        title: "O que vamos medir",
-        body: "Startups e organizações no mapa, voluntários ativos, inscrições e turmas dos programas, eventos realizados e conexões geradas — tudo a partir dos dados reais do portal."
-      },
-      {
-        title: "Relatórios",
-        body: "Relatórios periódicos de impacto, com depoimentos e cases, serão publicados aqui conforme o movimento gera resultados mensuráveis."
-      }
-    ],
-    ctas: [
-      { label: "Acompanhar o ecossistema", href: "/mapa" },
-      { label: "Fazer parte", href: "/#participar" }
-    ]
-  },
-  {
-    slug: "seja-parceiro",
-    title: "Seja um parceiro",
-    kicker: "Apoie o movimento",
-    description:
-      "Sua organização pode acelerar o renascimento de Betim pela inovação: com espaços, mentoria, desafios, tecnologia ou patrocínio.",
-    sections: [
-      {
-        title: "Formas de apoiar",
-        body: "Ceder espaços para encontros e turmas, oferecer mentores e especialistas, publicar desafios de inovação aberta, patrocinar eventos e programas ou disponibilizar tecnologia e bolsas."
-      },
-      {
-        title: "Benefícios",
-        body: "Conexão direta com startups e talentos da região, presença na vitrine de parceiros, participação nas bancas e demo days e protagonismo na construção do ecossistema."
-      },
-      {
-        title: "Como começar",
-        body: "Envie uma mensagem para a coordenação contando como sua organização quer contribuir. Retornamos com uma proposta de parceria adequada ao seu momento."
-      }
-    ],
-    ctas: [
-      { label: "Falar com a coordenação", href: "/contato" },
-      { label: "Conhecer a inovação aberta", href: "/programas/inovacao-aberta" }
+      { label: "Ler o código de conduta", href: "/codigo-de-conduta" },
+      { label: "Ler a política de privacidade", href: "/privacidade" }
     ]
   },
   {

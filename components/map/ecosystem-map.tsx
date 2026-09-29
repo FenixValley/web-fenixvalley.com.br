@@ -7,7 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ExternalLink, MapPin, Plus, Search, X } from "lucide-react";
 import { ActorRegisterForm } from "@/components/map/actor-register-form";
 import type { MapActor } from "@/components/map/map-canvas";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { actorTypeLabels, actorTypes } from "@/lib/schemas";
 
 const MapCanvas = dynamic(() => import("@/components/map/map-canvas"), {
@@ -132,10 +134,10 @@ export function EcosystemMap() {
             </DialogTrigger>
             <DialogContent className="max-h-[85vh] overflow-y-auto p-6 sm:max-w-2xl">
               <DialogTitle>Cadastre sua organização no mapa</DialogTitle>
-              <p className="text-sm text-muted-foreground">
+              <DialogDescription>
                 Preencha o mapeamento oficial do ecossistema Fênix Valley (Betim e Contagem). As
                 respostas ajudam a curadoria a conectar os atores da região.
-              </p>
+              </DialogDescription>
               <ActorRegisterForm />
             </DialogContent>
           </Dialog>

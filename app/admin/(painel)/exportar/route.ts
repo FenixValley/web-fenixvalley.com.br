@@ -17,7 +17,7 @@ function toCsv(headers: string[], rows: (string | null)[][]): string {
 
 export async function GET(request: Request) {
   const session = await auth();
-  if (!session?.user) {
+  if (!session?.user || session.user.role !== "admin") {
     return new Response("Não autorizado.", { status: 401 });
   }
 

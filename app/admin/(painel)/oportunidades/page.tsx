@@ -48,7 +48,7 @@ export default async function AdminOpportunitiesPage() {
                   <TableCell className="text-sm text-muted-foreground">{opportunity.type}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{opportunity.date}</TableCell>
                   <TableCell>
-                    <StatusBadge status={opportunity.status} />
+                    <StatusBadge status={opportunity.status} gender="f" />
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">

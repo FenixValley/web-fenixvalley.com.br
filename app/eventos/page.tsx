@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { and, eq, gte } from "drizzle-orm";
+import { and, eq, gte, isNotNull } from "drizzle-orm";
 import { ArrowUpRight, CalendarDays, Clock, MapPin, Plus } from "lucide-react";
 import { events } from "@/db/schema";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { EventSubmitForm } from "@/components/sections/event-submit-form";
 import { EditorialShell } from "@/components/editorial/editorial-shell";
 import { MotionCard } from "@/components/editorial/motion-card";
@@ -12,6 +12,7 @@ import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 import { getDb } from "@/lib/db";
 import { eventCategories, eventModes } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
+import { todayInBusinessTimeZone } from "@/lib/date";
 
 export const dynamic = "force-dynamic";
 
@@ -50,8 +51,8 @@ export default async function EventsPage({
   const category = eventCategories.find((c) => c === categoria) ?? null;
   const mode = eventModes.find((m) => m === modalidade) ?? null;
 
-  const today = new Date().toISOString().slice(0, 10);
-  const conditions = [eq(events.status, "approved"), gte(events.date, today)];
+  const today = todayInBusinessTimeZone();
+  const conditions = [eq(events.status, "approved"), gte(events.date, today), isNotNull(events.slug)];
   if (category) conditions.push(eq(events.category, category));
   if (mode) conditions.push(eq(events.mode, mode));
 
@@ -64,7 +65,12 @@ export default async function EventsPage({
   const byMonth = new Map<string, typeof rows>();
   for (const event of rows) {
     const month = formatMonth(event.date);
-    byMonth.set(month, [...(byMonth.get(month) ?? []), event]);
+    let group = byMonth.get(month);
+    if (!group) {
+      group = [];
+      byMonth.set(month, group);
+    }
+    group.push(event);
   }
 
   return (
@@ -104,9 +110,9 @@ export default async function EventsPage({
                 style={{ background: "var(--fx-paper)", borderColor: "var(--fx-line)", color: "var(--fx-ink)" }}
               >
                 <DialogTitle className="font-display text-2xl">Divulgue seu evento</DialogTitle>
-                <p className="font-body text-sm" style={{ color: "var(--fx-muted)" }}>
+                <DialogDescription className="font-body text-sm" style={{ color: "var(--fx-muted)" }}>
                   Eventos alinhados ao propósito do movimento entram na agenda após curadoria.
-                </p>
+                </DialogDescription>
                 <EventSubmitForm />
               </DialogContent>
             </Dialog>
@@ -195,7 +201,7 @@ export default async function EventsPage({
                     <MotionCard key={event.id} delay={0.06 * eventIndex} className="h-full">
                       <Link
                         href={`/eventos/${event.slug}`}
-                        className="group flex h-full flex-col rounded-2xl border p-5 transition-colors"
+                        className="group flex h-full flex-col rounded-2xl border p-5 transition-colors hover:-translate-y-1"
                         style={{ borderColor: "var(--fx-line)", background: "var(--fx-paper)" }}
                       >
                         <div className="mb-3 flex items-center justify-between gap-2">
@@ -234,7 +240,7 @@ export default async function EventsPage({
                           </p>
                         </div>
                         <span
-                          className="mt-5 inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.16em] transition-colors"
+                          className="mt-5 inline-flex items-center gap-2 font-mono text-[12px] uppercase tracking-[0.16em] transition-colors group-hover:underline"
                           style={{ color: "var(--fx-accent)" }}
                         >
                           Ver evento

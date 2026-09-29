@@ -9,6 +9,10 @@ export const GOOGLE_FORM_ACTION =
 // Campo (radio) que define qual seção de perfil condicional aparece.
 export const ROLE_FIELD = "entry.770153556" as const;
 
+// Valor de ROLE_FIELD que abre a seção condicional de startup — usado para pré-selecionar
+// o papel quando o cadastro é iniciado a partir de uma página já filtrada por tipo (ex.: /startups).
+export const STARTUP_ROLE_VALUE = "Startup ou Empresa de Base Tecnológica/Científica" as const;
+
 export type MapaFieldType = "short" | "paragraph" | "radio" | "checkbox";
 
 export type MapaField = {
@@ -100,7 +104,7 @@ export const MAPA_FORM_SECTIONS: MapaSection[] = [
         type: "radio",
         required: true,
         options: [
-          "Startup ou Empresa de Base Tecnológica/Científica",
+          STARTUP_ROLE_VALUE,
           "Instituição de Ensino / Academia (Universidades, Escolas Técnicas, Faculdades)",
           "Grande Empresa / Indústria (Potencial cliente ou parceira de inovação)",
           "Investidor (Anjo, Fundo de VC, Sindicato de Investimento)",
@@ -112,7 +116,7 @@ export const MAPA_FORM_SECTIONS: MapaSection[] = [
   },
   {
     title: "Perfil: Startup ou Empresa de Base Tecnológica/Científica",
-    showWhenRole: "Startup ou Empresa de Base Tecnológica/Científica",
+    showWhenRole: STARTUP_ROLE_VALUE,
     fields: [
       {
         entry: "entry.23537568",

@@ -1,0 +1,1 @@
+ALTER TABLE `actors` ADD `featured` integer DEFAULT 0 NOT NULL;
