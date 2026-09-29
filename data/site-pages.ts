@@ -100,7 +100,7 @@ export const sitePages: SitePage[] = [
     sections: [
       {
         title: "Preferências de interface",
-        body: "A escolha entre tema escuro e claro fica salva no seu próprio navegador (localStorage), apenas para que o site abra do jeito que você prefere. Esse dado não sai do seu dispositivo."
+        body: "A escolha entre temas fica salva no seu próprio navegador, apenas para que o site abra do jeito que você prefere. Esse dado não sai do seu dispositivo."
       },
       {
         title: "Sessão do painel administrativo",

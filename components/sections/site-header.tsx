@@ -1,20 +1,12 @@
-import re
-
-with open('components/sections/site-header.tsx', 'r', encoding='utf-8') as f:
-    text = f.read()
-
-# We'll just generate the file from scratch because parsing merge conflicts programmatically for such a complex change is harder than just printing the unified code.
-
-new_code = """\"use client\";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ChevronDown, ExternalLink, MapPinned, MessageCircle, Menu, Search, X } from "lucide-react";
+import { ArrowRight, ExternalLink, Menu, Search, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 
 const leftNav = [
   { href: "/sobre", label: "Sobre" },
@@ -38,6 +30,30 @@ interface SearchItem {
 }
 
 const searchItems: SearchItem[] = [
+  {
+    title: "Sobre o Movimento",
+    description: "Conheça o propósito, a missão e a visão do Fênix Valley.",
+    category: "Geral",
+    href: "/sobre"
+  },
+  {
+    title: "Propósito, Missão e Visão",
+    description: "O que impulsiona o ecossistema de Betim.",
+    category: "Geral",
+    href: "/sobre"
+  },
+  {
+    title: "Ecossistema de Inovação",
+    description: "A rede de conexão entre startups, talentos, capital e empresas.",
+    category: "Sobre",
+    href: "/#ecossistema"
+  },
+  {
+    title: "Frentes Práticas (Pilares)",
+    description: "Ideias, projetos, universidades, capital, nova economia e impacto local.",
+    category: "Pilares",
+    href: "/#ecossistema"
+  },
   {
     title: "Programas e Trilhas",
     description: "Inovação aberta, pré-aceleração e residência tecnológica.",
@@ -282,274 +298,322 @@ export function SiteHeader() {
 
   return (
     <div className="sticky top-0 z-40">
-      <header className="relative z-40 border-b border-white/10 bg-slate-950/86 text-white backdrop-blur-xl">
-        <div className="section-shell flex min-h-16 items-center justify-between gap-4 py-2 px-4 md:px-8">
-          {/* mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-300 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
-            aria-label="Menu"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-
-          {/* logo */}
-          <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Fênix Valley">
-            <Image src="/logo-fenix-valley.png" alt="" width={150} height={150} priority className="h-12 w-auto shrink-0" />
-            <span className="hidden max-w-40 text-xs font-semibold leading-5 text-slate-300 xl:block">
-              Ecossistema de inovação de Betim
-            </span>
-          </Link>
-
-          {/* left nav - desktop */}
-          <nav className="hidden items-center gap-6 lg:flex flex-1 ml-8 text-sm font-semibold text-slate-300">
+      {/* ── main header bar ── */}
+      <header
+        className="relative z-40 border-b transition-colors"
+        style={{
+          borderColor: "rgba(10, 16, 32, 0.08)",
+          background: "rgba(255, 255, 255, 0.68)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)"
+        }}
+      >
+        <div className="section-shell flex h-16 items-center justify-between gap-4">
+          {/* left nav — desktop */}
+          <nav className="hidden flex-1 items-center gap-6 text-sm font-semibold text-[#5a647e] lg:flex">
             {leftNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="transition-colors hover:text-white"
-              >
-                {item.label}
-              </Link>
-            ))}
-            {rightNav.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={
-                  item.highlight
-                    ? "rounded-full bg-orange-500 px-4 py-1.5 text-white shadow-sm shadow-orange-500/20 transition-all hover:bg-orange-600 hover:shadow-md hover:shadow-orange-500/25"
-                    : "transition-colors hover:text-white"
-                }
+                className="transition-colors hover:text-[#0a1020]"
               >
                 {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-2">
-            <ThemeToggle className="site-theme-toggle" />
-            <Button onClick={toggleSearch} variant="ghost" size="sm" className="hidden text-slate-200 hover:bg-white/10 hover:text-white md:inline-flex">
-              <Search className="h-4 w-4 mr-2" />
-              Buscar
-            </Button>
-            <Button asChild size="sm">
-              <Link href="https://chat.whatsapp.com/EtCfWvncoQZ6tx7I8obFzX" target="_blank" rel="noreferrer">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                Faça parte
+          {/* hamburger — mobile */}
+          <button
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="flex h-9 w-9 items-center justify-center rounded-md text-[#0a1020] transition-colors hover:bg-slate-100 lg:hidden"
+            aria-label="Menu"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
+          {/* center logo */}
+          <Link
+            href="/"
+            className="flex shrink-0 items-center transition-transform duration-200 hover:scale-105"
+            aria-label="Fênix Valley"
+          >
+            <Image
+              src="/logo-simbolo.png"
+              alt="Fênix Valley"
+              width={44}
+              height={44}
+              priority
+              className="h-10 w-10 object-contain"
+            />
+          </Link>
+
+          {/* right nav — desktop */}
+          <nav className="hidden flex-1 items-center justify-end gap-5 text-sm font-semibold text-[#5a647e] lg:flex">
+            {rightNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={
+                  item.highlight
+                    ? "rounded-full bg-[#1b3bff] px-4 py-1.5 text-white shadow-sm transition-all hover:bg-[#102bcc]"
+                    : "transition-colors hover:text-[#0a1020]"
+                }
+              >
+                {item.label}
               </Link>
-            </Button>
+            ))}
+
+            {/* search button in header bar */}
+            <button
+              onClick={toggleSearch}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(10,16,32,0.12)] bg-white/80 text-[#5a647e] transition-colors hover:bg-white hover:text-[#0a1020] shadow-sm"
+              aria-label="Buscar no ecossistema"
+              title="Buscar no ecossistema (Ctrl+K)"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+          </nav>
+
+          {/* search trigger on mobile */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <button
+              onClick={toggleSearch}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(10,16,32,0.12)] bg-white/80 text-[#5a647e] transition-colors hover:bg-white hover:text-[#0a1020]"
+              aria-label="Buscar"
+            >
+              <Search className="h-4 w-4" />
+            </button>
           </div>
         </div>
       </header>
 
-      {/* ── animated search bar ── */}
+      {/* ── command palette search modal ── */}
       <AnimatePresence>
         {searchOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -100 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="search-overlay fixed inset-x-0 bg-black/40 z-30"
-            style={{ top: "80px", bottom: 0 }}
-            onClick={() => setSearchOpen(false)}
-          >
-            <div 
-              className="border-b border-white/10 bg-slate-950/95 py-4 shadow-lg shadow-black/20 backdrop-blur-xl"
-              onClick={(e) => e.stopPropagation()}
+          <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-16 sm:pt-24">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSearchOpen(false)}
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: -12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 w-full max-w-xl rounded-2xl border border-[rgba(10,16,32,0.12)] bg-white p-4 shadow-2xl"
             >
-              <div className="section-shell px-4 md:px-8">
-                <div className="relative mx-auto max-w-xl">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchVal}
-                    onChange={handleSearchChange}
-                    placeholder="Buscar páginas, atalhos e recursos..."
-                    className="h-12 w-full rounded-xl border border-white/10 bg-slate-900/60 pl-12 pr-4 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-orange-500/40 focus:bg-slate-900 focus:ring-2 focus:ring-orange-500/10"
-                  />
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#5a647e]" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchVal}
+                  onChange={handleSearchChange}
+                  placeholder="Buscar páginas, atalhos, startups e eventos..."
+                  className="h-12 w-full rounded-xl border border-[rgba(10,16,32,0.12)] bg-slate-50 pl-12 pr-10 text-sm text-[#0a1020] outline-none transition-all placeholder:text-[#5a647e] focus:border-[#1b3bff] focus:bg-white focus:ring-2 focus:ring-[#1b3bff]/15"
+                />
+                <button
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchVal("");
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
 
-                  {searchVal.trim() && (
-                    <div className="absolute left-0 right-0 mt-3 rounded-2xl border border-white/10 bg-slate-950/98 p-2.5 shadow-2xl backdrop-blur-2xl max-h-[400px] overflow-y-auto z-50 text-white space-y-3">
-                      {/* Resultados da busca viva no ecossistema */}
-                      {liveResults.actors.length > 0 && (
-                        <div>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
-                            Startups & Organizações
-                          </div>
-                          <div className="mt-1 space-y-1">
-                            {liveResults.actors.map((actor) => (
-                              <button
-                                key={`actor-${actor.id}`}
-                                onClick={() => {
-                                  setSearchOpen(false);
-                                  setSearchVal("");
-                                  router.push(actor.slug ? `/atores/${actor.slug}` : "/mapa");
-                                }}
-                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
-                              >
-                                <div>
-                                  <p className="font-semibold text-sm text-slate-200">{actor.name}</p>
-                                  <p className="text-xs text-slate-400">{actor.segment}</p>
-                                </div>
-                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {liveResults.events.length > 0 && (
-                        <div>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-400">
-                            Eventos
-                          </div>
-                          <div className="mt-1 space-y-1">
-                            {liveResults.events.map((event) => (
-                              <button
-                                key={`event-${event.id}`}
-                                onClick={() => {
-                                  setSearchOpen(false);
-                                  setSearchVal("");
-                                  router.push(`/eventos/${event.slug}`);
-                                }}
-                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
-                              >
-                                <div>
-                                  <p className="font-semibold text-sm text-slate-200">{event.title}</p>
-                                  <p className="text-xs text-slate-400">{event.category}</p>
-                                </div>
-                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {liveResults.challenges.length > 0 && (
-                        <div>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400">
-                            Desafios de Inovação
-                          </div>
-                          <div className="mt-1 space-y-1">
-                            {liveResults.challenges.map((challenge) => (
-                              <button
-                                key={`challenge-${challenge.id}`}
-                                onClick={() => {
-                                  setSearchOpen(false);
-                                  setSearchVal("");
-                                  router.push(`/desafios/${challenge.slug}`);
-                                }}
-                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
-                              >
-                                <div>
-                                  <p className="font-semibold text-sm text-slate-200">{challenge.title}</p>
-                                  <p className="text-xs text-slate-400">{challenge.company}</p>
-                                </div>
-                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {liveResults.contents.length > 0 && (
-                        <div>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                            Conteúdos & Artigos
-                          </div>
-                          <div className="mt-1 space-y-1">
-                            {liveResults.contents.map((content) => (
-                              <button
-                                key={`content-${content.slug}`}
-                                onClick={() => {
-                                  setSearchOpen(false);
-                                  setSearchVal("");
-                                  router.push(`/conteudos/${content.slug}`);
-                                }}
-                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
-                              >
-                                <div>
-                                  <p className="font-semibold text-sm text-slate-200">{content.title}</p>
-                                  <p className="text-xs text-slate-400">{content.category}</p>
-                                </div>
-                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Páginas e atalhos de navegação */}
-                      {filteredItems.length > 0 && (
-                        <div>
-                          <div className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            Páginas e atalhos
-                          </div>
-                          <div className="mt-1 space-y-1">
-                            {filteredItems.map((item, index) => (
-                              <button
-                                key={index}
-                                onClick={() => handleItemClick(item)}
-                                className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-white/5"
-                              >
-                                <div className="flex-1 pr-4">
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-semibold text-slate-200 text-sm">{item.title}</span>
-                                    <span className="rounded bg-orange-950/50 text-orange-400 border border-orange-500/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide">
-                                      {item.category}
-                                    </span>
-                                  </div>
-                                  <p className="mt-0.5 text-xs text-slate-400 line-clamp-1">{item.description}</p>
-                                </div>
-                                {item.target === "_blank" ? (
-                                  <ExternalLink className="h-4 w-4 text-slate-500 shrink-0" />
-                                ) : (
-                                  <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {filteredItems.length === 0 &&
-                        liveResults.actors.length === 0 &&
-                        liveResults.events.length === 0 &&
-                        liveResults.challenges.length === 0 &&
-                        liveResults.contents.length === 0 && (
-                          <div className="px-3 py-8 text-center text-sm text-slate-400 font-medium">
-                            {isSearching
-                              ? "Buscando no ecossistema..."
-                              : `Nenhum resultado encontrado para "${searchVal}"`}
-                          </div>
-                        )}
+              {searchVal.trim() && (
+                <div className="mt-3 max-h-[380px] space-y-3 overflow-y-auto pr-1">
+                  {/* Resultados de startups */}
+                  {liveResults.actors.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#1b3bff]">
+                        Startups & Organizações
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.actors.map((actor) => (
+                          <button
+                            key={`actor-${actor.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(actor.slug ? `/atores/${actor.slug}` : "/mapa");
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{actor.name}</p>
+                              <p className="text-xs text-[#5a647e]">{actor.segment}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
+
+                  {/* Resultados de eventos */}
+                  {liveResults.events.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-600">
+                        Eventos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.events.map((event) => (
+                          <button
+                            key={`event-${event.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(`/eventos/${event.slug}`);
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{event.title}</p>
+                              <p className="text-xs text-[#5a647e]">{event.category}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Oportunidades */}
+                  {liveResults.opportunities.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-600">
+                        Oportunidades
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.opportunities.map((opp) => (
+                          <button
+                            key={`opp-${opp.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(opp.link || "/oportunidades");
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{opp.title}</p>
+                              <p className="text-xs text-[#5a647e]">{opp.type}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Conteúdos */}
+                  {liveResults.contents.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                        Conteúdos & Artigos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.contents.map((content) => (
+                          <button
+                            key={`content-${content.slug}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(`/conteudos/${content.slug}`);
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{content.title}</p>
+                              <p className="text-xs text-[#5a647e]">{content.category}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Páginas e atalhos de navegação */}
+                  {filteredItems.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Páginas e atalhos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {filteredItems.map((item, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleItemClick(item)}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div className="flex-1 pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm text-[#0a1020]">{item.title}</span>
+                                <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#1b3bff]">
+                                  {item.category}
+                                </span>
+                              </div>
+                              <p className="mt-0.5 line-clamp-1 text-xs text-[#5a647e]">{item.description}</p>
+                            </div>
+                            {item.target === "_blank" ? (
+                              <ExternalLink className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                            ) : (
+                              <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {filteredItems.length === 0 &&
+                    liveResults.actors.length === 0 &&
+                    liveResults.events.length === 0 &&
+                    liveResults.opportunities.length === 0 &&
+                    liveResults.contents.length === 0 && (
+                      <div className="px-3 py-8 text-center text-sm font-medium text-[#5a647e]">
+                        {isSearching
+                          ? "Buscando no ecossistema..."
+                          : `Nenhum resultado encontrado para "${searchVal}"`}
+                      </div>
+                    )}
                 </div>
-              </div>
-            </div>
-          </motion.div>
+              )}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
+      {/* ── mobile nav drawer ── */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute inset-x-0 top-full bg-slate-950 border-b border-white/10 z-30 shadow-xl"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden border-b lg:hidden"
+            style={{
+              borderColor: "rgba(10, 16, 32, 0.08)",
+              background: "rgba(255, 255, 255, 0.85)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)"
+            }}
           >
-            <nav className="flex flex-col gap-1 p-4">
+            <nav className="section-shell flex flex-col gap-1 py-4">
               {leftNav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-[#5a647e] transition-colors hover:bg-slate-50 hover:text-[#0a1020]"
                 >
                   {item.label}
                 </Link>
@@ -561,19 +625,14 @@ export function SiteHeader() {
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className={
-                    "highlight" in item && item.highlight
-                      ? "rounded-lg bg-orange-500 px-4 py-2.5 mt-2 text-center text-sm font-semibold text-white transition-colors hover:bg-orange-600"
-                      : "rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                    item.highlight
+                      ? "rounded-lg bg-[#1b3bff] px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-[#102bcc]"
+                      : "rounded-lg px-4 py-2.5 text-sm font-semibold text-[#5a647e] transition-colors hover:bg-slate-50 hover:text-[#0a1020]"
                   }
                 >
                   {item.label}
                 </Link>
               ))}
-              
-              <Button onClick={() => { setMobileOpen(false); toggleSearch(); }} variant="ghost" className="mt-2 text-slate-300 hover:bg-white/5 hover:text-white justify-start px-4">
-                <Search className="h-4 w-4 mr-2" />
-                Buscar
-              </Button>
             </nav>
           </motion.div>
         )}
@@ -581,7 +640,3 @@ export function SiteHeader() {
     </div>
   );
 }
-"""
-
-with open('components/sections/site-header.tsx', 'w', encoding='utf-8') as f:
-    f.write(new_code)

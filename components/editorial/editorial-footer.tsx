@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { editorialNav } from "./theme";
 
@@ -6,6 +7,13 @@ export function EditorialFooter() {
     <footer className="border-t" style={{ borderColor: "var(--fx-line)", background: "var(--fx-surface)" }}>
       <div className="mx-auto grid w-full max-w-[1180px] gap-10 px-6 py-14 sm:px-10 md:grid-cols-[1.4fr_1fr]">
         <div className="max-w-md">
+          <Image
+            src="/logo-vertical-escuro.png"
+            alt="Fênix Valley"
+            width={160}
+            height={160}
+            className="mb-6 h-16 w-auto"
+          />
           <p className="font-display text-[24px] font-semibold leading-tight">
             Betim renascendo pela inovação.
           </p>

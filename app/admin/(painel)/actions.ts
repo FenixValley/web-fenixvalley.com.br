@@ -457,9 +457,6 @@ export async function upsertPartner(id: number | null, _previous: FormState, for
     );
     await logAudit(adminEmail, "create", "partner", created?.id ?? null, data.name);
   } else {
-    // O slug é gerado uma vez, na criação, e não acompanha renomeações — igual a
-    // upsertActor e upsertLearningTrack. Trocá-lo aqui quebraria /parceiros/[slug]
-    // já divulgado.
     await db.update(partners).set(data).where(eq(partners.id, id));
     await logAudit(adminEmail, "update", "partner", id, data.name);
   }
@@ -530,10 +527,6 @@ export async function upsertImpactIndicator(
   redirect("/admin/impacto");
 }
 
-/**
- * Publicar um indicador e o mesmo que atesta-lo: a pagina de impacto so exibe
- * indicadores verificados (criterio de aceite da issue #14).
- */
 export async function setImpactIndicatorVerified(id: number, verified: boolean) {
   const adminEmail = await requireAdmin();
   const db = getDb();

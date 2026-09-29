@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { fraunces } from "@/app/fonts";
 import { PretextHeadline } from "@/components/pretext/pretext-headline";
 import { EditorialReveal } from "@/components/pretext/editorial-reveal";
+import { InfiniteMarquee } from "@/components/ui/infinite-marquee";
 
 export function EditorialHero() {
   return (
@@ -17,16 +18,32 @@ export function EditorialHero() {
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-[1180px] px-6 pb-20 pt-16 sm:px-10 sm:pt-24">
+      <div className="relative z-10 mx-auto w-full max-w-[1180px] px-6 pb-16 pt-16 sm:px-10 sm:pt-24">
         <EditorialReveal>
-          <p
-            className="font-mono text-[11px] uppercase tracking-[0.34em]"
-            style={{ color: "var(--fx-accent)" }}
-          >
-            O ecossistema de inovação de Betim
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p
+              className="font-mono text-[11px] uppercase tracking-[0.34em]"
+              style={{ color: "var(--fx-accent)" }}
+            >
+              O ecossistema de inovação de Betim
+            </p>
+            <div
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] shadow-sm"
+              style={{
+                borderColor: "var(--fx-line)",
+                background: "rgba(255,255,255,0.75)",
+                backdropFilter: "blur(8px)"
+              }}
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#1b3bff] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#1b3bff]" />
+              </span>
+              <span style={{ color: "var(--fx-ink)", fontWeight: 500 }}>Rede Ativa em Betim</span>
+            </div>
+          </div>
           <span
-            className="mt-3 block h-px w-full"
+            className="mt-4 block h-px w-full"
             style={{ background: "var(--fx-line)" }}
           />
         </EditorialReveal>
@@ -52,7 +69,7 @@ export function EditorialHero() {
             >
               <p className="mb-4">
                 Startups, universidades, indústrias, investidores e poder público em um só
-                movimento. O Fênix Valley conecta quem constrói tecnologia no Vale do Aço de
+                movimento. O Fênix Valley conecta quem constrói tecnologia no polo de
                 Betim — e abre caminho para os próximos negócios da região.
               </p>
               <p>
@@ -64,7 +81,7 @@ export function EditorialHero() {
             <div className="flex flex-col gap-3 md:items-end">
               <Link
                 href="/mapa"
-                className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
+                className="group inline-flex items-center justify-between gap-6 rounded-full px-6 py-3.5 font-mono text-[12px] uppercase tracking-[0.18em] shadow-sm transition-all hover:scale-[1.03] hover:shadow-[0_4px_20px_rgba(27,59,255,0.25)]"
                 style={{ background: "var(--fx-accent)", color: "#ffffff" }}
               >
                 Explorar o mapa
@@ -72,8 +89,8 @@ export function EditorialHero() {
               </Link>
               <Link
                 href="/#participar"
-                className="group inline-flex items-center justify-between gap-6 px-5 py-3 font-mono text-[13px] uppercase tracking-[0.18em] transition-colors"
-                style={{ border: "1px solid rgba(10,16,32,0.20)", color: "var(--fx-ink)" }}
+                className="group inline-flex items-center justify-between gap-6 rounded-full border px-6 py-3.5 font-mono text-[12px] uppercase tracking-[0.18em] transition-all hover:scale-[1.03] hover:bg-white"
+                style={{ borderColor: "var(--fx-line)", color: "var(--fx-ink)", background: "var(--fx-paper)" }}
               >
                 Faça parte
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -82,6 +99,8 @@ export function EditorialHero() {
           </div>
         </EditorialReveal>
       </div>
+
+      <InfiniteMarquee />
     </section>
   );
 }

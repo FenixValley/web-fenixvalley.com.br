@@ -17,7 +17,6 @@ export const dynamic = "force-dynamic";
 
 async function getCounts() {
   const db = getDb();
-  // Contagens independentes: em série somariam oito idas ao D1 antes de renderizar.
   const [
     [pendingVolunteers],
     [pendingActors],
@@ -58,27 +57,22 @@ export default async function AdminDashboardPage() {
     { label: "Oportunidades publicadas", value: counts.publishedOpportunities, href: "/admin/oportunidades" },
     { label: "Desafios pendentes", value: counts.pendingChallenges, href: "/admin/desafios" },
     { label: "Propostas a avaliar", value: counts.pendingProposals, href: "/admin/desafios" },
-    {
-      label: "Candidaturas pendentes",
-      value: counts.pendingPartnerApplications,
-      href: "/admin/parceiros"
-    },
+    { label: "Candidaturas parceiros", value: counts.pendingPartnerApplications, href: "/admin/parceiros" },
     { label: "Leads recebidos", value: counts.totalLeads, href: "/admin/leads" }
   ];
 
   return (
     <div className="space-y-6">
-      <h1 className="font-display text-2xl font-black text-foreground">Visão geral</h1>
+      <h1 className="font-[var(--font-fraunces)] text-2xl font-black text-[var(--fx-ink)]">Visão geral</h1>
       <EditorialReveal className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.label}
             href={card.href}
-            className="rounded-lg border p-5 transition-transform hover:-translate-y-0.5"
-            style={{ background: "var(--fx-surface)", borderColor: "var(--fx-line)" }}
+            className="rounded-xl border border-[var(--fx-border)] p-5 transition-transform hover:-translate-y-0.5 bg-[var(--fx-surface)] shadow-sm hover:border-[#1b3bff]"
           >
-            <p className="font-display text-3xl font-black text-primary">{card.value}</p>
-            <p className="mt-1 text-sm font-semibold text-foreground">{card.label}</p>
+            <p className="font-[var(--font-fraunces)] text-3xl font-black text-[#1b3bff]">{card.value}</p>
+            <p className="mt-1 text-sm font-semibold text-[var(--fx-ink)]">{card.label}</p>
           </Link>
         ))}
       </EditorialReveal>
