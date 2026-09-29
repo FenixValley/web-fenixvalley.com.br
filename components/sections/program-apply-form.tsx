@@ -69,8 +69,8 @@ export function ProgramApplyForm({ programSlug }: { programSlug: string }) {
           <span className="block text-xs text-destructive">{errors.motivation.message}</span>
         ) : null}
       </label>
-      <label className="flex items-start gap-3 text-sm leading-6 text-slate-300">
-        <input type="checkbox" className="mt-1 h-4 w-4" {...register("consent")} />
+      <label className="flex items-start gap-3 text-sm leading-6 text-muted-foreground">
+        <input type="checkbox" className="mt-1 h-4 w-4 accent-[var(--fx-accent)]" {...register("consent")} />
         Autorizo o uso dos meus dados para contato sobre este programa.
       </label>
       {errors.consent ? <span className="block text-xs text-destructive">{errors.consent.message}</span> : null}

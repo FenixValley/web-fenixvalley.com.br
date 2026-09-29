@@ -68,11 +68,12 @@ export const programs = [
 ];
 
 export const ecosystemActors = [
-  { name: "Startups", count: "cadastro aberto", x: "18%", y: "28%" },
-  { name: "Universidades", count: "parcerias", x: "68%", y: "22%" },
-  { name: "Empresas", count: "desafios", x: "76%", y: "62%" },
-  { name: "Mentores", count: "curadoria", x: "34%", y: "70%" },
-  { name: "Investidores", count: "conexões", x: "48%", y: "43%" }
+  { name: "Startups", count: "cadastro aberto", x: "22%", y: "34%" },
+  { name: "Universidades", count: "parcerias", x: "50%", y: "20%" },
+  { name: "Empresas", count: "desafios", x: "78%", y: "34%" },
+  { name: "Hubs", count: "espaços & inovação", x: "50%", y: "52%" },
+  { name: "Mentores", count: "curadoria", x: "24%", y: "72%" },
+  { name: "Investidores", count: "conexões", x: "76%", y: "72%" }
 ];
 
 export const newsItems = [
@@ -95,28 +96,28 @@ export const audienceJourneys = [
     title: "Quero empreender",
     description: "Valide uma ideia, encontre mentores, monte time e publique sua startup no mapa.",
     cta: "Cadastrar startup",
-    href: "#participar",
+    href: "/faca-parte",
     icon: Rocket
   },
   {
     title: "Quero inovar na empresa",
     description: "Publique desafios, encontre soluções locais e conecte pesquisadores e startups.",
     cta: "Divulgar desafio",
-    href: "#participar",
+    href: "/empresas",
     icon: Factory
   },
   {
     title: "Quero formar talentos",
     description: "Conecte cursos, estudantes, laboratórios e projetos aplicados ao mercado.",
     cta: "Conectar instituição",
-    href: "#participar",
+    href: "/universidades",
     icon: GraduationCap
   },
   {
     title: "Quero apoiar",
     description: "Atue como mentor, investidor, parceiro institucional ou patrocinador de programas.",
     cta: "Ser parceiro",
-    href: "#participar",
+    href: "/seja-parceiro",
     icon: Handshake
   }
 ];

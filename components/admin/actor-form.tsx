@@ -29,7 +29,7 @@ const INVESTOR_TYPES = ["investidor", "aceleradora"];
 const SPACE_TYPES = ["coworking", "laboratorio", "hub"];
 
 const selectClassName =
-  "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+  "flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
 
 type ActorFormValues = {
   name: string;
@@ -71,12 +71,12 @@ export function ActorForm({
 
   return (
     <form action={formAction} className="max-w-2xl space-y-4">
-      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+      <label className="block space-y-2 text-sm font-semibold text-foreground">
         Nome
         <Input name="name" required defaultValue={initialValues?.name} />
       </label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Tipo
           <select
             name="type"
@@ -93,67 +93,67 @@ export function ActorForm({
             ))}
           </select>
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Segmento
           <Input name="segment" required defaultValue={initialValues?.segment} />
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Bairro/Região
           <Input name="neighborhood" required defaultValue={initialValues?.neighborhood} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Latitude
           <Input name="lat" type="number" step="any" defaultValue={initialValues?.lat} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Longitude
           <Input name="lng" type="number" step="any" defaultValue={initialValues?.lng} />
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           Site (opcional)
           <Input name="site" type="url" placeholder="https://" defaultValue={initialValues?.site ?? ""} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           E-mail de contato (opcional)
           <Input name="email" type="email" placeholder="contato@organizacao.com.br" defaultValue={initialValues?.email ?? ""} />
         </label>
-        <label className="block space-y-2 text-sm font-semibold text-slate-200">
+        <label className="block space-y-2 text-sm font-semibold text-foreground">
           WhatsApp (opcional)
           <Input name="whatsapp" type="tel" placeholder="(31) 91234-5678" defaultValue={initialValues?.whatsapp ?? ""} />
         </label>
       </div>
-      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+      <label className="block space-y-2 text-sm font-semibold text-foreground">
         Descrição
         <Textarea name="description" required defaultValue={initialValues?.description} />
       </label>
 
-      <label className="block space-y-2 text-sm font-semibold text-slate-200">
+      <label className="block space-y-2 text-sm font-semibold text-foreground">
         Rótulo de destaque (opcional)
         <Input
           name="highlightLabel"
           placeholder='Ex.: "Startup do mês", "Aberta para investimento", "Case de sucesso"'
           defaultValue={initialValues?.highlightLabel ?? ""}
         />
-        <span className="block text-xs font-normal text-slate-400">
+        <span className="block text-xs font-normal text-muted-foreground">
           Aparece no lugar do rótulo genérico &quot;Destaque&quot; quando o ator estiver marcado como destaque.
         </span>
       </label>
 
       {type === "startup" ? (
-        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
-          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+        <fieldset className="space-y-4 rounded-lg border border-border p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-accent">
             Detalhes de startup
           </legend>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Ano de fundação
               <Input name="foundedYear" defaultValue={startupDetails?.foundedYear ?? ""} />
             </label>
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Estágio
               <select name="stage" defaultValue={startupDetails?.stage ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
@@ -165,7 +165,7 @@ export function ActorForm({
               </select>
             </label>
           </div>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Modelo de negócio
             <select name="businessModel" defaultValue={startupDetails?.businessModel ?? ""} className={selectClassName}>
               <option value="">Não informado</option>
@@ -178,16 +178,16 @@ export function ActorForm({
           </label>
           <CheckboxGroup label="Foco tecnológico" name="techFocus" options={startupTechFocus} defaultValues={startupDetails?.techFocus} />
           <CheckboxGroup label="Principais necessidades" name="needs" options={startupNeeds} defaultValues={startupDetails?.needs} />
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Fundadores
             <Textarea name="founders" placeholder="Um por linha" defaultValue={startupDetails?.founders ?? ""} />
           </label>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Vídeo do pitch (opcional)
               <Input name="pitchVideoUrl" type="url" placeholder="https://" defaultValue={startupDetails?.pitchVideoUrl ?? ""} />
             </label>
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               LinkedIn (opcional)
               <Input name="linkedin" type="url" placeholder="https://" defaultValue={startupDetails?.linkedin ?? ""} />
             </label>
@@ -196,19 +196,19 @@ export function ActorForm({
       ) : null}
 
       {INSTITUTION_TYPES.includes(type) ? (
-        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
-          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+        <fieldset className="space-y-4 rounded-lg border border-border p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-accent">
             Detalhes da instituição
           </legend>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Cursos
             <Textarea name="courses" placeholder="Um por linha" defaultValue={institutionDetails?.courses ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Laboratórios
             <Textarea name="labs" placeholder="Um por linha" defaultValue={institutionDetails?.labs ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Linhas de pesquisa
             <Textarea
               name="researchLines"
@@ -216,7 +216,7 @@ export function ActorForm({
               defaultValue={institutionDetails?.researchLines ?? ""}
             />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Programas de extensão
             <Textarea
               name="extensionPrograms"
@@ -224,7 +224,7 @@ export function ActorForm({
               defaultValue={institutionDetails?.extensionPrograms ?? ""}
             />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Parcerias
             <Textarea
               name="partnerships"
@@ -236,20 +236,20 @@ export function ActorForm({
       ) : null}
 
       {type === "mentor" ? (
-        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
-          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+        <fieldset className="space-y-4 rounded-lg border border-border p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-accent">
             Detalhes do mentor
           </legend>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Especialidades / temas
             <Textarea name="specialties" placeholder="Um por linha" defaultValue={mentorDetails?.specialties ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Experiência
             <Textarea name="experience" defaultValue={mentorDetails?.experience ?? ""} />
           </label>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Formato
               <select name="format" defaultValue={mentorDetails?.format ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
@@ -260,7 +260,7 @@ export function ActorForm({
                 ))}
               </select>
             </label>
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Disponibilidade
               <select name="availability" defaultValue={mentorDetails?.availability ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
@@ -272,7 +272,7 @@ export function ActorForm({
               </select>
             </label>
           </div>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Projetos apoiados
             <Textarea
               name="supportedProjects"
@@ -280,7 +280,7 @@ export function ActorForm({
               defaultValue={mentorDetails?.supportedProjects ?? ""}
             />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             LinkedIn (opcional)
             <Input name="linkedin" type="url" placeholder="https://" defaultValue={mentorDetails?.linkedin ?? ""} />
           </label>
@@ -288,16 +288,16 @@ export function ActorForm({
       ) : null}
 
       {INVESTOR_TYPES.includes(type) ? (
-        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
-          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+        <fieldset className="space-y-4 rounded-lg border border-border p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-accent">
             Detalhes do investidor
           </legend>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Tese de investimento
             <Textarea name="thesis" defaultValue={investorDetails?.thesis ?? ""} />
           </label>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Estágio de interesse
               <select name="stage" defaultValue={investorDetails?.stage ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
@@ -308,20 +308,20 @@ export function ActorForm({
                 ))}
               </select>
             </label>
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Região de atuação
               <Input name="region" defaultValue={investorDetails?.region ?? ""} />
             </label>
           </div>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Segmentos de interesse
             <Textarea name="segments" placeholder="Um por linha" defaultValue={investorDetails?.segments ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Requisitos para aplicar
             <Textarea name="requirements" defaultValue={investorDetails?.requirements ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             LinkedIn (opcional)
             <Input name="linkedin" type="url" placeholder="https://" defaultValue={investorDetails?.linkedin ?? ""} />
           </label>
@@ -329,16 +329,16 @@ export function ActorForm({
       ) : null}
 
       {SPACE_TYPES.includes(type) ? (
-        <fieldset className="space-y-4 rounded-lg border border-white/10 p-4">
-          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-orange-300">
+        <fieldset className="space-y-4 rounded-lg border border-border p-4">
+          <legend className="px-1 text-sm font-bold uppercase tracking-[0.1em] text-accent">
             Detalhes do espaço
           </legend>
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Capacidade
               <Input name="capacity" placeholder="Ex.: até 40 pessoas" defaultValue={spaceDetails?.capacity ?? ""} />
             </label>
-            <label className="block space-y-2 text-sm font-semibold text-slate-200">
+            <label className="block space-y-2 text-sm font-semibold text-foreground">
               Tipo de uso
               <select name="usageType" defaultValue={spaceDetails?.usageType ?? ""} className={selectClassName}>
                 <option value="">Não informado</option>
@@ -350,15 +350,15 @@ export function ActorForm({
               </select>
             </label>
           </div>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Horário de funcionamento
             <Input name="hours" placeholder="Ex.: seg. a sex., 8h-18h" defaultValue={spaceDetails?.hours ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Estrutura disponível
             <Textarea name="amenities" placeholder="Um por linha" defaultValue={spaceDetails?.amenities ?? ""} />
           </label>
-          <label className="block space-y-2 text-sm font-semibold text-slate-200">
+          <label className="block space-y-2 text-sm font-semibold text-foreground">
             Regras de uso
             <Textarea name="rules" defaultValue={spaceDetails?.rules ?? ""} />
           </label>
@@ -386,10 +386,10 @@ function CheckboxGroup({
 }) {
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold text-slate-200">{label}</p>
+      <p className="text-sm font-semibold text-foreground">{label}</p>
       <div className="grid gap-2 sm:grid-cols-2">
         {options.map((option) => (
-          <label key={option} className="flex items-start gap-2 text-sm leading-6 text-slate-300">
+          <label key={option} className="flex items-start gap-2 text-sm leading-6 text-muted-foreground">
             <input
               type="checkbox"
               name={name}

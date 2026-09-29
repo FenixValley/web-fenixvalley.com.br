@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter } from "@/components/sections/site-footer";
-import { SiteHeader } from "@/components/sections/site-header";
+import { EditorialShell } from "@/components/editorial/editorial-shell";
+import { PageHeader } from "@/components/editorial/page-header";
+import { EditorialReveal } from "@/components/pretext/editorial-reveal";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade | Fênix Valley",
@@ -38,43 +39,43 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <>
-      <SiteHeader />
-      <main>
-        <section className="relative overflow-hidden py-16 sm:py-20">
-          <div className="brand-grid absolute inset-x-0 top-0 h-72 opacity-50" aria-hidden="true" />
-          <div className="section-shell relative max-w-3xl space-y-10">
-            <div className="space-y-4">
-              <p className="text-sm font-bold uppercase tracking-[0.16em] text-orange-300">
-                Privacidade e LGPD
-              </p>
-              <h1 className="font-[var(--font-space)] text-3xl font-black leading-tight text-white sm:text-4xl">
-                Política de Privacidade
-              </h1>
-              <p className="text-lg leading-8 text-slate-300">
-                Transparência faz parte do código de colaboração do Fênix Valley. Esta página explica
-                o que coletamos, por quê, e como exercer seus direitos.
-              </p>
-            </div>
-            <div className="space-y-8">
-              {sections.map((section) => (
-                <article key={section.title} className="space-y-2">
-                  <h2 className="font-[var(--font-space)] text-xl font-bold text-white">{section.title}</h2>
-                  <p className="text-sm leading-7 text-slate-300">{section.body}</p>
-                </article>
-              ))}
-            </div>
-            <p className="text-sm leading-6 text-slate-400">
-              Dúvidas? Escreva para{" "}
-              <Link href="mailto:contato@fenixvalley.com.br" className="text-orange-300 hover:text-orange-200">
-                contato@fenixvalley.com.br
-              </Link>
-              .
-            </p>
-          </div>
-        </section>
-      </main>
-      <SiteFooter />
-    </>
+    <EditorialShell>
+      <PageHeader
+        kicker="Privacidade e LGPD"
+        title="Política de Privacidade"
+        lede="Transparência faz parte do código de colaboração do Fênix Valley. Esta página explica o que coletamos, por quê, e como exercer seus direitos."
+      />
+
+      <section className="relative mx-auto w-full max-w-[820px] px-6 py-16 sm:px-10 sm:py-20">
+        <div className="space-y-10">
+          {sections.map((section, index) => (
+            <EditorialReveal key={section.title} delay={index * 0.06}>
+              <article className="space-y-3">
+                <h2 className="font-display text-xl font-semibold" style={{ color: "var(--fx-ink)" }}>
+                  {section.title}
+                </h2>
+                <p className="font-body text-[15px] leading-[1.7]" style={{ color: "var(--fx-muted)" }}>
+                  {section.body}
+                </p>
+              </article>
+            </EditorialReveal>
+          ))}
+        </div>
+
+        <EditorialReveal delay={0.2}>
+          <p className="mt-12 font-body text-[15px] leading-[1.6]" style={{ color: "var(--fx-muted)" }}>
+            Dúvidas? Escreva para{" "}
+            <Link
+              href="mailto:contato@fenixvalley.com.br"
+              className="underline-offset-4 transition-colors hover:underline"
+              style={{ color: "var(--fx-accent)" }}
+            >
+              contato@fenixvalley.com.br
+            </Link>
+            .
+          </p>
+        </EditorialReveal>
+      </section>
+    </EditorialShell>
   );
 }

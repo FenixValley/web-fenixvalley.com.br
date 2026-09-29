@@ -15,7 +15,9 @@ const leftNav = [
 ];
 
 const rightNav = [
+  { href: "/conteudos", label: "Conteúdos" },
   { href: "/eventos", label: "Eventos" },
+  { href: "/membro", label: "Área do Membro" },
   { href: "/faca-parte", label: "Faça Parte", highlight: true }
 ];
 
@@ -144,9 +146,27 @@ const searchItems: SearchItem[] = [
   },
   {
     title: "Faça Parte (Formulário)",
-    description: "Inscreva seu interesse no Google Forms para participar da curadoria.",
+    description: "Inscreva seu interesse no formulário para participar da curadoria.",
     category: "Ações",
     href: "/faca-parte"
+  },
+  {
+    title: "Conteúdos e Notícias",
+    description: "Artigos, guias práticos, cases de sucesso e editais do ecossistema.",
+    category: "Conteúdos",
+    href: "/conteudos"
+  },
+  {
+    title: "Comunidade Fênix Valley",
+    description: "Canais oficiais, encontros e regras de convivência para membros.",
+    category: "Comunidade",
+    href: "/comunidade"
+  },
+  {
+    title: "Área do Membro",
+    description: "Acesse seu perfil, itens salvos e acompanhe inscrições e candidaturas.",
+    category: "Membro",
+    href: "/membro"
   },
   {
     title: "Comunidade no WhatsApp",
@@ -157,7 +177,6 @@ const searchItems: SearchItem[] = [
   }
 ];
 
-
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
@@ -165,6 +184,58 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const [liveResults, setLiveResults] = useState<{
+    actors: { id: number; name: string; segment: string; slug: string }[];
+    opportunities: { id: number; title: string; type: string; link: string | null }[];
+    events: { id: number; title: string; category: string; slug: string }[];
+    challenges: { id: number; title: string; company: string; slug: string }[];
+    partners: { id: number; name: string; category: string; slug: string }[];
+    contents: { slug: string; title: string; category: string; summary: string }[];
+  }>({
+    actors: [],
+    opportunities: [],
+    events: [],
+    challenges: [],
+    partners: [],
+    contents: []
+  });
+  const [isSearching, setIsSearching] = useState(false);
+
+  useEffect(() => {
+    const q = searchVal.trim();
+    if (!q || q.length < 2) {
+      setLiveResults({
+        actors: [],
+        opportunities: [],
+        events: [],
+        challenges: [],
+        partners: [],
+        contents: []
+      });
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+        if (res.ok) {
+          const data = (await res.json()) as { results?: typeof liveResults };
+          if (data.results) {
+            setLiveResults(data.results);
+          }
+        }
+      } catch {
+        // Fallback
+      } finally {
+        setIsSearching(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [searchVal]);
 
   const toggleSearch = useCallback(() => {
     setSearchOpen((prev) => !prev);
@@ -228,15 +299,23 @@ export function SiteHeader() {
   return (
     <div className="sticky top-0 z-40">
       {/* ── main header bar ── */}
-      <header className="relative z-40 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
+      <header
+        className="relative z-40 border-b transition-colors"
+        style={{
+          borderColor: "rgba(10, 16, 32, 0.08)",
+          background: "rgba(255, 255, 255, 0.68)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)"
+        }}
+      >
         <div className="section-shell flex h-16 items-center justify-between gap-4">
           {/* left nav — desktop */}
-          <nav className="hidden flex-1 items-center gap-6 text-sm font-semibold text-slate-300 lg:flex">
+          <nav className="hidden flex-1 items-center gap-6 text-sm font-semibold text-[#5a647e] lg:flex">
             {leftNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-[#0a1020]"
               >
                 {item.label}
               </Link>
@@ -246,126 +325,269 @@ export function SiteHeader() {
           {/* hamburger — mobile */}
           <button
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-300 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-[#0a1020] transition-colors hover:bg-slate-100 lg:hidden"
             aria-label="Menu"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
 
           {/* center logo */}
-          <Link href="/" className="flex shrink-0 items-center" aria-label="Fênix Valley">
+          <Link
+            href="/"
+            className="flex shrink-0 items-center transition-transform duration-200 hover:scale-105"
+            aria-label="Fênix Valley"
+          >
             <Image
               src="/logo-simbolo.png"
               alt="Fênix Valley"
               width={44}
               height={44}
               priority
-              className="h-11 w-11"
+              className="h-10 w-10 object-contain"
             />
           </Link>
 
           {/* right nav — desktop */}
-          <nav className="hidden flex-1 items-center justify-end gap-6 text-sm font-semibold text-slate-300 lg:flex">
+          <nav className="hidden flex-1 items-center justify-end gap-5 text-sm font-semibold text-[#5a647e] lg:flex">
             {rightNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={
                   item.highlight
-                    ? "rounded-full bg-orange-500 px-4 py-1.5 text-white shadow-sm shadow-orange-500/20 transition-all hover:bg-orange-600 hover:shadow-md hover:shadow-orange-500/25"
-                    : "transition-colors hover:text-white"
+                    ? "rounded-full bg-[#1b3bff] px-4 py-1.5 text-white shadow-sm transition-all hover:bg-[#102bcc]"
+                    : "transition-colors hover:text-[#0a1020]"
                 }
               >
                 {item.label}
               </Link>
             ))}
+
+            {/* search button in header bar */}
+            <button
+              onClick={toggleSearch}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(10,16,32,0.12)] bg-white/80 text-[#5a647e] transition-colors hover:bg-white hover:text-[#0a1020] shadow-sm"
+              aria-label="Buscar no ecossistema"
+              title="Buscar no ecossistema (Ctrl+K)"
+            >
+              <Search className="h-4 w-4" />
+            </button>
           </nav>
 
-          {/* placeholder for mobile to balance flexbox */}
-          <div className="w-9 lg:hidden" />
+          {/* search trigger on mobile */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <button
+              onClick={toggleSearch}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(10,16,32,0.12)] bg-white/80 text-[#5a647e] transition-colors hover:bg-white hover:text-[#0a1020]"
+              aria-label="Buscar"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* ── search trigger — centered below header ── */}
-      <div className="relative z-40 flex justify-center">
-        <button
-          onClick={toggleSearch}
-          className={`-mt-[18px] flex h-9 w-9 items-center justify-center rounded-full border shadow-sm transition-all duration-300 ${
-            searchOpen
-              ? "bg-white text-slate-950 border-white shadow-lg"
-              : "bg-slate-900 text-slate-300 border-white/10 hover:bg-slate-800 hover:text-white hover:shadow-md"
-          }`}
-          aria-label={searchOpen ? "Fechar busca" : "Abrir busca"}
-        >
-          {searchOpen ? <X className="h-4 w-4" /> : <Search className="h-4 w-4" />}
-        </button>
-      </div>
-
-      {/* ── animated search bar ── */}
+      {/* ── command palette search modal ── */}
       <AnimatePresence>
         {searchOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -100 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="search-overlay"
-            style={{ top: "64px" }}
-          >
-            <div className="border-b border-white/10 bg-slate-950/95 py-4 shadow-lg shadow-black/20 backdrop-blur-xl">
-              <div className="section-shell">
-                <div className="relative mx-auto max-w-xl">
-                  <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchVal}
-                    onChange={handleSearchChange}
-                    placeholder="Buscar páginas, atalhos e recursos..."
-                    className="h-12 w-full rounded-xl border border-white/10 bg-slate-900/60 pl-12 pr-4 text-sm text-white outline-none transition-all placeholder:text-slate-500 focus:border-orange-500/40 focus:bg-slate-900 focus:ring-2 focus:ring-orange-500/10"
-                  />
+          <div className="fixed inset-0 z-50 flex items-start justify-center px-4 pt-16 sm:pt-24">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSearchOpen(false)}
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: -12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: -12 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 w-full max-w-xl rounded-2xl border border-[rgba(10,16,32,0.12)] bg-white p-4 shadow-2xl"
+            >
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#5a647e]" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchVal}
+                  onChange={handleSearchChange}
+                  placeholder="Buscar páginas, atalhos, startups e eventos..."
+                  className="h-12 w-full rounded-xl border border-[rgba(10,16,32,0.12)] bg-slate-50 pl-12 pr-10 text-sm text-[#0a1020] outline-none transition-all placeholder:text-[#5a647e] focus:border-[#1b3bff] focus:bg-white focus:ring-2 focus:ring-[#1b3bff]/15"
+                />
+                <button
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchVal("");
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
 
-                  {searchVal.trim() && (
-                    <div className="absolute left-0 right-0 mt-3 rounded-2xl border border-white/10 bg-slate-950/98 p-2.5 shadow-2xl backdrop-blur-2xl max-h-[350px] overflow-y-auto z-50 text-white">
-                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                        Páginas e atalhos encontrados
+              {searchVal.trim() && (
+                <div className="mt-3 max-h-[380px] space-y-3 overflow-y-auto pr-1">
+                  {/* Resultados de startups */}
+                  {liveResults.actors.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-[#1b3bff]">
+                        Startups & Organizações
                       </div>
-                      <div className="mt-1.5 space-y-1">
-                        {filteredItems.length > 0 ? (
-                          filteredItems.map((item, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleItemClick(item)}
-                              className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition-colors hover:bg-white/5 border border-transparent hover:border-white/5"
-                            >
-                              <div className="flex-1 pr-4">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-semibold text-slate-200 text-sm">{item.title}</span>
-                                  <span className="rounded bg-orange-950/50 text-orange-400 border border-orange-500/20 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide">
-                                    {item.category}
-                                  </span>
-                                </div>
-                                <p className="mt-0.5 text-xs text-slate-400 line-clamp-1">{item.description}</p>
-                              </div>
-                              {item.target === "_blank" ? (
-                                <ExternalLink className="h-4 w-4 text-slate-500 shrink-0" />
-                              ) : (
-                                <ArrowRight className="h-4 w-4 text-slate-500 shrink-0" />
-                              )}
-                            </button>
-                          ))
-                        ) : (
-                          <div className="px-3 py-8 text-center text-sm text-slate-400 font-medium">
-                            Nenhum recurso ou atalho encontrado para &ldquo;{searchVal}&rdquo;
-                          </div>
-                        )}
+                      <div className="mt-1 space-y-1">
+                        {liveResults.actors.map((actor) => (
+                          <button
+                            key={`actor-${actor.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(actor.slug ? `/atores/${actor.slug}` : "/mapa");
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{actor.name}</p>
+                              <p className="text-xs text-[#5a647e]">{actor.segment}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
                       </div>
                     </div>
                   )}
+
+                  {/* Resultados de eventos */}
+                  {liveResults.events.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-sky-600">
+                        Eventos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.events.map((event) => (
+                          <button
+                            key={`event-${event.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(`/eventos/${event.slug}`);
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{event.title}</p>
+                              <p className="text-xs text-[#5a647e]">{event.category}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Oportunidades */}
+                  {liveResults.opportunities.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-amber-600">
+                        Oportunidades
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.opportunities.map((opp) => (
+                          <button
+                            key={`opp-${opp.id}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(opp.link || "/oportunidades");
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{opp.title}</p>
+                              <p className="text-xs text-[#5a647e]">{opp.type}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Conteúdos */}
+                  {liveResults.contents.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+                        Conteúdos & Artigos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {liveResults.contents.map((content) => (
+                          <button
+                            key={`content-${content.slug}`}
+                            onClick={() => {
+                              setSearchOpen(false);
+                              setSearchVal("");
+                              router.push(`/conteudos/${content.slug}`);
+                            }}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div>
+                              <p className="font-semibold text-sm text-[#0a1020]">{content.title}</p>
+                              <p className="text-xs text-[#5a647e]">{content.category}</p>
+                            </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Páginas e atalhos de navegação */}
+                  {filteredItems.length > 0 && (
+                    <div>
+                      <div className="px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Páginas e atalhos
+                      </div>
+                      <div className="mt-1 space-y-1">
+                        {filteredItems.map((item, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleItemClick(item)}
+                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-left transition-colors hover:bg-slate-50"
+                          >
+                            <div className="flex-1 pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm text-[#0a1020]">{item.title}</span>
+                                <span className="rounded bg-blue-50 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[#1b3bff]">
+                                  {item.category}
+                                </span>
+                              </div>
+                              <p className="mt-0.5 line-clamp-1 text-xs text-[#5a647e]">{item.description}</p>
+                            </div>
+                            {item.target === "_blank" ? (
+                              <ExternalLink className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                            ) : (
+                              <ArrowRight className="h-4 w-4 shrink-0 text-[#5a647e]" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {filteredItems.length === 0 &&
+                    liveResults.actors.length === 0 &&
+                    liveResults.events.length === 0 &&
+                    liveResults.opportunities.length === 0 &&
+                    liveResults.contents.length === 0 && (
+                      <div className="px-3 py-8 text-center text-sm font-medium text-[#5a647e]">
+                        {isSearching
+                          ? "Buscando no ecossistema..."
+                          : `Nenhum resultado encontrado para "${searchVal}"`}
+                      </div>
+                    )}
                 </div>
-              </div>
-            </div>
-          </motion.div>
+              )}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
@@ -377,7 +599,13 @@ export function SiteHeader() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-b border-white/10 bg-slate-950/95 backdrop-blur-xl lg:hidden"
+            className="overflow-hidden border-b lg:hidden"
+            style={{
+              borderColor: "rgba(10, 16, 32, 0.08)",
+              background: "rgba(255, 255, 255, 0.85)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)"
+            }}
           >
             <nav className="section-shell flex flex-col gap-1 py-4">
               {leftNav.map((item) => (
@@ -385,7 +613,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                  className="rounded-lg px-4 py-2.5 text-sm font-semibold text-[#5a647e] transition-colors hover:bg-slate-50 hover:text-[#0a1020]"
                 >
                   {item.label}
                 </Link>
@@ -397,9 +625,9 @@ export function SiteHeader() {
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
                   className={
-                    "highlight" in item && item.highlight
-                      ? "rounded-lg bg-orange-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-orange-600"
-                      : "rounded-lg px-4 py-2.5 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/5 hover:text-white"
+                    item.highlight
+                      ? "rounded-lg bg-[#1b3bff] px-4 py-2.5 text-center text-sm font-semibold text-white transition-colors hover:bg-[#102bcc]"
+                      : "rounded-lg px-4 py-2.5 text-sm font-semibold text-[#5a647e] transition-colors hover:bg-slate-50 hover:text-[#0a1020]"
                   }
                 >
                   {item.label}

@@ -15,8 +15,8 @@ export default async function AdminVolunteersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Voluntários</h1>
-        <Button asChild size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+        <h1 className="font-display text-2xl font-black text-foreground">Voluntários</h1>
+        <Button asChild size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
           <a href="/admin/exportar?type=volunteers" download>
             <Download className="h-4 w-4" />
             Exportar CSV
@@ -24,9 +24,9 @@ export default async function AdminVolunteersPage() {
         </Button>
       </div>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-400">Nenhuma inscrição recebida ainda.</p>
+        <p className="text-sm text-muted-foreground">Nenhuma inscrição recebida ainda.</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -42,13 +42,13 @@ export default async function AdminVolunteersPage() {
               {rows.map((volunteer) => (
                 <TableRow key={volunteer.id}>
                   <TableCell>
-                    <p className="font-semibold text-white">{volunteer.name}</p>
-                    <p className="text-xs text-slate-400">{volunteer.email}</p>
-                    {volunteer.phone ? <p className="text-xs text-slate-400">{volunteer.phone}</p> : null}
+                    <p className="font-semibold text-foreground">{volunteer.name}</p>
+                    <p className="text-xs text-muted-foreground">{volunteer.email}</p>
+                    {volunteer.phone ? <p className="text-xs text-muted-foreground">{volunteer.phone}</p> : null}
                   </TableCell>
-                  <TableCell className="text-sm text-slate-300">{volunteer.area}</TableCell>
-                  <TableCell className="text-sm text-slate-300">{volunteer.availability}</TableCell>
-                  <TableCell className="max-w-64 text-sm text-slate-300">{volunteer.motivation}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{volunteer.area}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{volunteer.availability}</TableCell>
+                  <TableCell className="max-w-64 text-sm text-muted-foreground">{volunteer.motivation}</TableCell>
                   <TableCell>
                     <StatusBadge status={volunteer.status} />
                   </TableCell>
@@ -60,7 +60,7 @@ export default async function AdminVolunteersPage() {
                           await setVolunteerStatus(volunteer.id, "approved");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                        <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                           <Check className="h-4 w-4" />
                           Aprovar
                         </Button>
@@ -71,7 +71,7 @@ export default async function AdminVolunteersPage() {
                           await setVolunteerStatus(volunteer.id, "rejected");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                        <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                           <X className="h-4 w-4" />
                           Rejeitar
                         </Button>

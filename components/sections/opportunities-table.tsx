@@ -61,13 +61,16 @@ function SortIcon({ sorted }: { sorted: false | "asc" | "desc" }) {
 }
 
 function StageBadge({ stage }: { stage: string }) {
-  const styles: Record<string, string> = {
-    Aberto: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-    Curadoria: "bg-sky-500/15 text-sky-400 border-sky-500/30",
-    "Em breve": "bg-slate-500/15 text-slate-400 border-slate-500/30"
-  };
+  const isOpen = stage === "Aberto";
   return (
-    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${styles[stage] ?? "bg-slate-500/15 text-slate-400 border-slate-500/30"}`}>
+    <span
+      className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em]"
+      style={
+        isOpen
+          ? { background: "var(--fx-accent-soft)", color: "var(--fx-accent)", borderColor: "rgba(27,59,255,0.3)" }
+          : { background: "var(--fx-surface)", color: "var(--fx-muted)", borderColor: "var(--fx-line)" }
+      }
+    >
       {stage}
     </span>
   );
@@ -75,7 +78,10 @@ function StageBadge({ stage }: { stage: string }) {
 
 function TypeBadge({ type }: { type: string }) {
   return (
-    <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+    <span
+      className="inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em]"
+      style={{ background: "var(--fx-paper)", color: "var(--fx-muted)", borderColor: "var(--fx-line)" }}
+    >
       {type}
     </span>
   );
@@ -189,7 +195,8 @@ export function OpportunitiesTable({
               href={row.original.link}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-orange-400"
+              className="inline-flex items-center gap-1 text-sm font-bold transition-opacity hover:opacity-70"
+              style={{ color: "var(--fx-accent)" }}
               aria-label={`Inscrever-se em ${row.original.title}`}
             >
               Inscrever
@@ -237,7 +244,7 @@ export function OpportunitiesTable({
       </div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm">
-          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500" />
+          <Search className="pointer-events-none absolute left-3 top-3 h-4 w-4" style={{ color: "var(--fx-muted)" }} />
           <Input
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}

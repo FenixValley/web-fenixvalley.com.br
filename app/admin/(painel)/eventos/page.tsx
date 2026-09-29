@@ -14,11 +14,11 @@ export default async function AdminEventsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-[var(--font-space)] text-2xl font-black text-white">Eventos</h1>
+      <h1 className="font-display text-2xl font-black text-foreground">Eventos</h1>
       {rows.length === 0 ? (
-        <p className="text-sm text-slate-400">Nenhum evento enviado ainda.</p>
+        <p className="text-sm text-muted-foreground">Nenhum evento enviado ainda.</p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
+        <div className="overflow-hidden rounded-xl border border-border">
           <Table>
             <TableHeader>
               <TableRow>
@@ -33,17 +33,17 @@ export default async function AdminEventsPage() {
               {rows.map((event) => (
                 <TableRow key={event.id}>
                   <TableCell>
-                    <p className="font-semibold text-white">{event.title}</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="font-semibold text-foreground">{event.title}</p>
+                    <p className="text-xs text-muted-foreground">
                       {event.category} · {event.mode} · {event.location}
                     </p>
                   </TableCell>
-                  <TableCell className="text-sm text-slate-300">
+                  <TableCell className="text-sm text-muted-foreground">
                     {event.date} {event.time}
                   </TableCell>
                   <TableCell>
-                    <p className="text-sm text-slate-300">{event.organizer}</p>
-                    <p className="text-xs text-slate-400">{event.organizerEmail}</p>
+                    <p className="text-sm text-muted-foreground">{event.organizer}</p>
+                    <p className="text-xs text-muted-foreground">{event.organizerEmail}</p>
                   </TableCell>
                   <TableCell>
                     <StatusBadge status={event.status} />
@@ -56,7 +56,7 @@ export default async function AdminEventsPage() {
                           await setEventStatus(event.id, "approved");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-emerald-400 hover:text-emerald-300">
+                        <Button size="sm" variant="ghost" className="text-emerald-600 hover:text-emerald-700">
                           <Check className="h-4 w-4" />
                           Aprovar
                         </Button>
@@ -67,7 +67,7 @@ export default async function AdminEventsPage() {
                           await setEventStatus(event.id, "rejected");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-rose-400 hover:text-rose-300">
+                        <Button size="sm" variant="ghost" className="text-rose-600 hover:text-rose-700">
                           <X className="h-4 w-4" />
                           Rejeitar
                         </Button>
@@ -78,7 +78,7 @@ export default async function AdminEventsPage() {
                           await setEventStatus(event.id, "archived");
                         }}
                       >
-                        <Button size="sm" variant="ghost" className="text-slate-300 hover:text-white">
+                        <Button size="sm" variant="ghost" className="text-muted-foreground hover:text-foreground">
                           <Archive className="h-4 w-4" />
                           Arquivar
                         </Button>

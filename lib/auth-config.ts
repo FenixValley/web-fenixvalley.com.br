@@ -7,11 +7,17 @@ export const authConfig = {
   providers: [],
   callbacks: {
     jwt({ token, user }) {
-      if (user && "role" in user) token.role = user.role as string;
+      if (user) {
+        if ("role" in user) token.role = user.role as string;
+        if ("id" in user) token.id = user.id as string;
+      }
       return token;
     },
     session({ session, token }) {
-      if (token.role && session.user) session.user.role = token.role as string;
+      if (session.user) {
+        if (token.role) session.user.role = token.role as string;
+        if (token.id) session.user.id = token.id as string;
+      }
       return session;
     }
   }

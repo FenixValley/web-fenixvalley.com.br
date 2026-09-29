@@ -9,8 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { EventInput, eventCategories, eventModes, eventSchema } from "@/lib/schemas";
 
-const selectClassName =
-  "flex h-11 w-full rounded-md border bg-background px-3 py-2 text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring";
+const fieldClassName =
+  "flex h-11 w-full rounded-md border bg-[var(--fx-paper)] px-3 py-2 font-body text-sm text-[var(--fx-ink)] outline-none transition-colors focus-visible:border-[var(--fx-accent)] focus-visible:ring-2 focus-visible:ring-[var(--fx-accent)]/30";
+
+const labelClassName =
+  "block space-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--fx-muted)]";
 
 export function EventSubmitForm() {
   const [message, setMessage] = useState<string | null>(null);
@@ -56,15 +59,15 @@ export function EventSubmitForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <label className="block space-y-2 text-sm font-semibold">
+      <label className={labelClassName}>
         Nome do evento
-        <Input placeholder="Ex.: Meetup Betim Tech" {...register("title")} />
-        {errors.title ? <span className="block text-xs text-destructive">{errors.title.message}</span> : null}
+        <Input className={fieldClassName} placeholder="Ex.: Meetup Betim Tech" {...register("title")} />
+        {errors.title ? <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.title.message}</span> : null}
       </label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Categoria
-          <select className={selectClassName} {...register("category")}>
+          <select className={fieldClassName} {...register("category")}>
             <option value="">Selecione</option>
             {eventCategories.map((category) => (
               <option key={category} value={category}>
@@ -73,12 +76,12 @@ export function EventSubmitForm() {
             ))}
           </select>
           {errors.category ? (
-            <span className="block text-xs text-destructive">{errors.category.message}</span>
+            <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.category.message}</span>
           ) : null}
         </label>
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Modalidade
-          <select className={selectClassName} {...register("mode")}>
+          <select className={fieldClassName} {...register("mode")}>
             <option value="">Selecione</option>
             {eventModes.map((mode) => (
               <option key={mode} value={mode}>
@@ -86,77 +89,86 @@ export function EventSubmitForm() {
               </option>
             ))}
           </select>
-          {errors.mode ? <span className="block text-xs text-destructive">{errors.mode.message}</span> : null}
+          {errors.mode ? <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.mode.message}</span> : null}
         </label>
       </div>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Data
-          <Input type="date" {...register("date")} />
-          {errors.date ? <span className="block text-xs text-destructive">{errors.date.message}</span> : null}
+          <Input className={fieldClassName} type="date" {...register("date")} />
+          {errors.date ? <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.date.message}</span> : null}
         </label>
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Horário
-          <Input type="time" {...register("time")} />
-          {errors.time ? <span className="block text-xs text-destructive">{errors.time.message}</span> : null}
+          <Input className={fieldClassName} type="time" {...register("time")} />
+          {errors.time ? <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.time.message}</span> : null}
         </label>
       </div>
-      <label className="block space-y-2 text-sm font-semibold">
+      <label className={labelClassName}>
         Local (ou link da transmissão)
-        <Input placeholder="Endereço em Betim ou plataforma online" {...register("location")} />
+        <Input className={fieldClassName} placeholder="Endereço em Betim ou plataforma online" {...register("location")} />
         {errors.location ? (
-          <span className="block text-xs text-destructive">{errors.location.message}</span>
+          <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.location.message}</span>
         ) : null}
       </label>
-      <label className="block space-y-2 text-sm font-semibold">
+      <label className={labelClassName}>
         Descrição
-        <Textarea placeholder="O que acontece no evento e por que participar" {...register("description")} />
+        <Textarea className={fieldClassName.replace("h-11 ", "")} placeholder="O que acontece no evento e por que participar" {...register("description")} />
         {errors.description ? (
-          <span className="block text-xs text-destructive">{errors.description.message}</span>
+          <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.description.message}</span>
         ) : null}
       </label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Link de inscrição (opcional)
-          <Input placeholder="https://" {...register("link")} />
-          {errors.link ? <span className="block text-xs text-destructive">{errors.link.message}</span> : null}
+          <Input className={fieldClassName} placeholder="https://" {...register("link")} />
+          {errors.link ? <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.link.message}</span> : null}
         </label>
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Público (opcional)
-          <Input placeholder="Ex.: estudantes, fundadores, geral" {...register("audience")} />
+          <Input className={fieldClassName} placeholder="Ex.: estudantes, fundadores, geral" {...register("audience")} />
         </label>
       </div>
-      <label className="block space-y-2 text-sm font-semibold">
+      <label className={labelClassName}>
         Programação (opcional)
-        <Textarea placeholder="Agenda resumida do evento" {...register("schedule")} />
+        <Textarea className={fieldClassName.replace("h-11 ", "")} placeholder="Agenda resumida do evento" {...register("schedule")} />
       </label>
       <div className="grid gap-4 md:grid-cols-2">
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           Organizador(a)
-          <Input placeholder="Nome da organização ou pessoa" {...register("organizer")} />
+          <Input className={fieldClassName} placeholder="Nome da organização ou pessoa" {...register("organizer")} />
           {errors.organizer ? (
-            <span className="block text-xs text-destructive">{errors.organizer.message}</span>
+            <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.organizer.message}</span>
           ) : null}
         </label>
-        <label className="block space-y-2 text-sm font-semibold">
+        <label className={labelClassName}>
           E-mail do organizador
-          <Input type="email" placeholder="voce@email.com" {...register("organizerEmail")} />
+          <Input className={fieldClassName} type="email" placeholder="voce@email.com" {...register("organizerEmail")} />
           {errors.organizerEmail ? (
-            <span className="block text-xs text-destructive">{errors.organizerEmail.message}</span>
+            <span className="block font-body text-xs normal-case tracking-normal text-destructive">{errors.organizerEmail.message}</span>
           ) : null}
         </label>
       </div>
-      <label className="flex items-start gap-3 text-sm leading-6 text-muted-foreground">
-        <input type="checkbox" className="mt-1 h-4 w-4" {...register("consent")} />
+      <label className="flex items-start gap-3 font-body text-sm leading-6" style={{ color: "var(--fx-muted)" }}>
+        <input type="checkbox" className="mt-1 h-4 w-4 accent-[var(--fx-accent)]" {...register("consent")} />
         Autorizo a publicação destes dados na agenda pública após aprovação da curadoria.
       </label>
-      {errors.consent ? <span className="block text-xs text-destructive">{errors.consent.message}</span> : null}
+      {errors.consent ? <span className="block font-body text-xs text-destructive">{errors.consent.message}</span> : null}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="font-mono text-[13px] uppercase tracking-[0.18em]"
+          style={{ background: "var(--fx-accent)", color: "#ffffff" }}
+        >
           <Send className="h-4 w-4" />
           {isPending ? "Enviando..." : "Enviar para curadoria"}
         </Button>
-        {message ? <p className="text-sm font-medium text-secondary">{message}</p> : null}
+        {message ? (
+          <p className="font-body text-sm font-medium" style={{ color: "var(--fx-accent)" }}>
+            {message}
+          </p>
+        ) : null}
       </div>
     </form>
   );

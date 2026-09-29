@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { fontVariables } from "./fonts";
 import { Providers } from "@/components/providers/providers";
 
 export const metadata: Metadata = {
@@ -8,16 +9,18 @@ export const metadata: Metadata = {
     "Comunidade para conectar talentos, startups, universidades, empresas e investidores que querem transformar Betim em um polo de inovação.",
   metadataBase: new URL("https://fenixvalley.com.br"),
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/logo-simbolo.png",
-    apple: "/logo-simbolo.png"
+    icon: "/logo-fenix-valley.png",
+    shortcut: "/logo-fenix-valley.png",
+    apple: "/logo-fenix-valley.png"
   },
   openGraph: {
     title: "Fênix Valley",
     description: "Betim renascendo pela inovação.",
-    images: ["/logo-simbolo.png"]
+    images: ["/logo-fenix-valley.png"]
   }
 };
+
+import { VLibras } from "@/components/accessibility/vlibras";
 
 export default function RootLayout({
   children
@@ -25,14 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning className={fontVariables}>
       <body className="min-h-screen font-sans antialiased">
         <script
           dangerouslySetInnerHTML={{
             __html: `try{if(localStorage.getItem("fenix-theme")==="light"){document.documentElement.classList.add("theme-light")}}catch(e){}`
           }}
         />
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <VLibras />
+        </Providers>
       </body>
     </html>
   );

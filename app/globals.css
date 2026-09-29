@@ -254,3 +254,10 @@ html.theme-light .site-header .bg-slate-950\/96 {
     transform: none !important;
   }
 }
+
+/* Indicadores de foco visível consistentes (Acessibilidade WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+

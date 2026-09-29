@@ -31,9 +31,12 @@ const hash = `pbkdf2$${ITERATIONS}$${b64(salt)}$${b64(new Uint8Array(bits))}`;
 const escape = (value) => value.replaceAll("'", "''");
 const sql = `INSERT INTO users (name, email, password_hash, role) VALUES ('${escape(name)}', '${escape(email)}', '${hash}', 'admin') ON CONFLICT(email) DO UPDATE SET password_hash = excluded.password_hash, name = excluded.name;`;
 
+const yarnCmd = process.platform === "win32" ? "yarn.cmd" : "yarn";
+
 execFileSync(
-  "yarn",
+  yarnCmd,
   ["wrangler", "d1", "execute", "fenixvalley-db", remote ? "--remote" : "--local", "--command", sql],
   { stdio: "inherit" }
 );
 console.log(`Gestor ${email} criado/atualizado (${remote ? "remote" : "local"}).`);
+
