@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     title: "Comunidade | Fênix Valley",
     description:
       "Espaço de encontro, regras de colaboração, canal oficial no WhatsApp e conexões entre empreendedores, estudantes e empresas de Betim.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

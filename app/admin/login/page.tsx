@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { LogIn } from "lucide-react";
 import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ export default function AdminLoginPage() {
         style={{ background: "var(--fx-paper)", borderColor: "var(--fx-line)" }}
       >
         <div className="space-y-2">
+          <Image src="/logo-fenix-valley-cor.png" alt="Fênix Valley" width={896} height={339} priority className="mb-4 h-12 w-auto" />
           <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary">Área dos gestores</p>
           <h1 className="font-display text-2xl font-black text-foreground">Fênix Valley Admin</h1>
         </div>

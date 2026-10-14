@@ -33,7 +33,7 @@ export async function generateMetadata({
     openGraph: {
       title: challenge.title,
       description: challenge.description.slice(0, 160),
-      images: ["/logo-simbolo.png"]
+      images: ["/og-image.png"]
     }
   };
 }

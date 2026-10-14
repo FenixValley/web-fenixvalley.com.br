@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "Startups | Fênix Valley",
     description:
       "Vitrine das startups do ecossistema de inovação de Betim e região: segmentos, estágio e formas de conectar com cada negócio.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

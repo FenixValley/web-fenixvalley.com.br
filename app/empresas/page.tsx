@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "Empresas e inovação corporativa | Fênix Valley",
     description:
       "Publique desafios de inovação aberta e conecte sua empresa a startups, pesquisadores e talentos de Betim.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

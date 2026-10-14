@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${partner.name} | Fênix Valley`,
       description: partner.description,
-      images: ["/logo-simbolo.png"]
+      images: ["/og-image.png"]
     }
   };
 }

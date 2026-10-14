@@ -179,8 +179,8 @@ export default function SobrePage() {
           <EditorialReveal delay={0.15}>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border" style={{ borderColor: "var(--fx-line)" }}>
               <Image
-                src="/community-event.png"
-                alt="Comunidade Fênix Valley em ação"
+                src="/brainstorm-session.png"
+                alt="Empreendedores do Fênix Valley colaborando em uma sessão de ideação"
                 fill
                 className="object-cover"
               />

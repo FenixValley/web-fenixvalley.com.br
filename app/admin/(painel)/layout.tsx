@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LogOut } from "lucide-react";
@@ -17,8 +18,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <header className="border-b" style={{ borderColor: "var(--fx-line)", background: "var(--fx-paper)" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
           <div>
-            <Link href="/admin" className="font-display text-lg font-black text-foreground">
-              Fênix Valley <span className="text-primary">Admin</span>
+            <Link href="/admin" className="flex items-center gap-2 font-display text-lg font-black text-foreground">
+              <Image src="/logo-simbolo.png" alt="" width={32} height={32} className="h-7 w-auto" />
+              <span>
+                Fênix Valley <span className="text-primary">Admin</span>
+              </span>
             </Link>
             <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">{session.user.email}</p>
           </div>

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Seja um parceiro | Fênix Valley",
     description: "Apoie o movimento que transforma Betim em polo de inovação, tecnologia e empreendedorismo.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

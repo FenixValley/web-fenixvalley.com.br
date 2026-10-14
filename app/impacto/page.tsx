@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Impacto | Fênix Valley",
     description: "Transparência sobre os resultados do ecossistema de inovação de Betim.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Parceiros e patrocinadores | Fênix Valley",
     description: "Quem sustenta o movimento de inovação de Betim, por categoria de apoio.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "Desafios de inovação | Fênix Valley",
     description:
       "Desafios de inovação aberta publicados por empresas de Betim e região, abertos a startups, pesquisadores e talentos.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

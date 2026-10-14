@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${actor.name} | Fênix Valley`,
       description: actor.description,
-      images: ["/logo-simbolo.png"]
+      images: ["/og-image.png"]
     }
   };
 }

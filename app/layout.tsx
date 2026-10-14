@@ -9,14 +9,17 @@ export const metadata: Metadata = {
     "Comunidade para conectar talentos, startups, universidades, empresas e investidores que querem transformar Betim em um polo de inovação.",
   metadataBase: new URL("https://fenixvalley.com.br"),
   icons: {
-    icon: "/logo-fenix-valley.png",
-    shortcut: "/logo-fenix-valley.png",
-    apple: "/logo-fenix-valley.png"
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo-simbolo.png", type: "image/png" }
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png"
   },
   openGraph: {
     title: "Fênix Valley",
     description: "Betim renascendo pela inovação.",
-    images: ["/logo-fenix-valley.png"]
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Fênix Valley" }]
   }
 };
 

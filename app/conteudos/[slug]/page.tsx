@@ -33,7 +33,7 @@ export async function generateMetadata({
       publishedTime: article.publishedAt,
       authors: [article.author.name],
       tags: article.tags,
-      images: ["/logo-simbolo.png"]
+      images: ["/og-image.png"]
     }
   };
 }

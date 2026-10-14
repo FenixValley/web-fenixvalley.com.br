@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: "Conteúdos e Notícias | Fênix Valley",
     description:
       "Notícias, artigos práticos, cases de sucesso e editais para impulsionar a inovação e o empreendedorismo em Betim e região.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

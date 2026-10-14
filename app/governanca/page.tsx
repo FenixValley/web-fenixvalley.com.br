@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Governança | Fênix Valley",
     description: "Estrutura, políticas e compromissos de transparência do movimento.",
-    images: ["/logo-simbolo.png"]
+    images: ["/og-image.png"]
   }
 };
 

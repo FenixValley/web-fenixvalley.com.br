@@ -62,7 +62,7 @@ export function SiteFooter() {
       <div className="section-shell py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.05fr_1.45fr]">
           <div className="space-y-6">
-            <Image src="/logo-vertical-escuro.png" alt="Fênix Valley" width={160} height={160} className="h-20 w-auto" />
+            <Image src="/logo-fenix-valley-cor.png" alt="Fênix Valley" width={896} height={339} className="h-16 w-auto" />
             <p className="max-w-md text-sm leading-6 text-[#5a647e]">
               Betim pode criar novos negócios, formar talentos, desenvolver tecnologias e construir
               uma economia mais diversa, inovadora e preparada para o futuro.
@@ -103,7 +103,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col gap-4 border-t border-[rgba(10,16,32,0.08)] pt-6 text-xs text-[#5a647e] md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <Image src="/logo-vertical-escuro.png" alt="Fênix Valley" width={80} height={80} className="h-5 w-auto opacity-80" />
+            <Image src="/logo-simbolo.png" alt="" width={32} height={32} className="h-5 w-auto opacity-80" />
             <p>© 2026 Fênix Valley. Betim renascendo pela inovação.</p>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
